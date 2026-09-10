@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Saif Eldin Ayman - Frontend Engineer</title>
+    <meta
+      name="description"
+      content="Portfolio of Saif Eldin Ayman - frontend engineer crafting fast, expressive interfaces with React, TypeScript, and WebGL."
+    />
+    <meta name="author" content="Saif Eldin Ayman" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="canonical" href="https://saifayman23.github.io/portfolio/" />
+    <link rel="icon" type="image/x-icon" href="/logo.ico" />
+    <link rel="apple-touch-icon" href="/logo.ico" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Saif Eldin Ayman" />
+    <meta name="msapplication-TileColor" content="#E10600" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Saif Eldin Ayman" />
+    <meta property="og:title" content="Saif Eldin Ayman - Full-Stack Engineer" />
+    <meta
+      property="og:description"
+      content="Portfolio of Saif Eldin Ayman - full-stack engineer shipping production-grade products end to end: Django APIs, real-time systems, and React interfaces."
+    />
+    <meta property="og:url" content="https://saifayman23.github.io/portfolio/" />
+    <meta property="og:image" content="https://saifayman23.github.io/portfolio/logo.webp" />
+    <meta property="og:image:width" content="256" />
+    <meta property="og:image:height" content="256" />
+    <meta property="og:image:alt" content="Saif Eldin Ayman" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Saif Eldin Ayman - Full-Stack Engineer" />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Saif Eldin Ayman - full-stack engineer shipping production-grade products end to end: Django APIs, real-time systems, and React interfaces."
+    />
+    <meta name="twitter:image" content="https://saifayman23.github.io/portfolio/logo.webp" />
+    <meta name="twitter:image:alt" content="Saif Eldin Ayman" />
+
+    <!-- Fonts: Neo Tokyo — Orbitron (display) + Exo 2 (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@400;500;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    /></noscript>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Saif Eldin Ayman",
+        "jobTitle": "Full Stack Software Engineer",
+        "url": "https://saifayman23.github.io/portfolio/",
+        "description": "Full-stack engineer building production-grade products end to end - Django APIs, real-time systems, and React interfaces."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Saif Eldin Ayman",
+        "url": "https://saifayman23.github.io/portfolio/",
+        "description": "Portfolio of Saif Eldin Ayman - frontend engineer.",
+        "inLanguage": "en"
+      }
+    </script>
+    <style>
+      #loading-skeleton {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        font-family: 'Orbitron', sans-serif;
+        transition: opacity 0.3s ease;
+      }
+      #loading-skeleton .brand {
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #000000;
+        margin-bottom: 24px;
+      }
+      #loading-skeleton .loader-bar {
+        width: 160px;
+        height: 3px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      #loading-skeleton .loader-bar-inner {
+        width: 40%;
+        height: 100%;
+        background: #e10600;
+        border-radius: 4px;
+        animation: splash-loader 1.4s ease-in-out infinite;
+      }
+      @keyframes splash-loader {
+        0% {
+          transform: translateX(0);
+          width: 20%;
+        }
+        50% {
+          width: 60%;
+          transform: translateX(100px);
+        }
+        100% {
+          transform: translateX(280px);
+          width: 20%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #loading-skeleton .loader-bar-inner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading-skeleton">
+      <div class="brand" dir="ltr">S.E.A</div>
+      <div class="loader-bar"><div class="loader-bar-inner"></div></div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+  </body>
+</html>
