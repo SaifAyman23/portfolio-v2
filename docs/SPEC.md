@@ -8,15 +8,15 @@
 
 ## 0. Core Concept
 
-* Single 3D jet — visual protagonist.
-* Scroll controls: jet position / scale / rotation, camera, particles, environment, section content, transitions.
-* **Section titles are different:** entry-triggered, not scroll-driven.
+- Single 3D jet — visual protagonist.
+- Scroll controls: jet position / scale / rotation, camera, particles, environment, section content, transitions.
+- **Section titles are different:** entry-triggered, not scroll-driven.
 
 ### Two types of motion
 
-| Type | Behavior |
-| --- | --- |
-| **Scroll-driven** | Continuous with `scrollProgress` — jet, camera, clouds, wind, content, orbits, transitions |
+| Type                | Behavior                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| **Scroll-driven**   | Continuous with `scrollProgress` — jet, camera, clouds, wind, content, orbits, transitions    |
 | **Entry-triggered** | Plays once when section hits activation point — scrambled → red blur → sharp foreground title |
 
 **Titles are section names:** `ABOUT` / `EXPERIENCE` / `PROJECTS` / `TOOLS` / `HOBBIES` / `CONTACT`
@@ -27,9 +27,9 @@
 
 ## 1. Visual Identity
 
-* **Palette:** White + Black + Red. Page background = **White**.
-* **No dark mode.**
-* **Exception:** `Experience` = black nighttime environment with cyber-Tokyo atmosphere.
+- **Palette:** White + Black + Red. Page background = **White**.
+- **No dark mode.**
+- **Exception:** `Experience` = black nighttime environment with cyber-Tokyo atmosphere.
 
 ---
 
@@ -47,14 +47,14 @@ Inspiration: neon Tokyo + futuristic tech + cyber UI + Japanese visual language 
 
 **Only 3D allowed:**
 
-* Jet
-* Runway / platform
-* Surfaces genuinely required for jet
-* Very simple geometry for an effect
+- Jet
+- Runway / platform
+- Surfaces genuinely required for jet
+- Very simple geometry for an effect
 
 **Forbidden:**
 
-* ❌ Buildings / skyline / cars / characters / 3D signs / floating 3D objects / decorative models
+- ❌ Buildings / skyline / cars / characters / 3D signs / floating 3D objects / decorative models
 
 Tokyo is 2D design + effects, not 3D construction.
 
@@ -70,10 +70,10 @@ Reusable shape system (e.g. `<CyberPanel chamfer="...">`), not hand-drawn border
 
 ## 5. Architecture Philosophy
 
-* **Reusable:** section title, cyber panel, image frame, experience/project item, tool orbit, particles, jet controller — all reusable.
-* **Data-driven:** `experiences.map()`, `projects.map()`, `tools.map()` — never `<Experience1/><Experience2/>`.
-* **Configurable:** colors, fonts, timings, section config, jet settings, border geometry, title animation — centralized, no magic values.
-* **Documented:** every major system notes what it does / where it lives / what controls it / how to modify / data consumed / assumptions.
+- **Reusable:** section title, cyber panel, image frame, experience/project item, tool orbit, particles, jet controller — all reusable.
+- **Data-driven:** `experiences.map()`, `projects.map()`, `tools.map()` — never `<Experience1/><Experience2/>`.
+- **Configurable:** colors, fonts, timings, section config, jet settings, border geometry, title animation — centralized, no magic values.
+- **Documented:** every major system notes what it does / where it lives / what controls it / how to modify / data consumed / assumptions.
 
 ---
 
@@ -85,7 +85,7 @@ Top-of-screen meter:
 01 ABOUT ─── 02 EXPERIENCE ─── 03 PROJECTS ─── 04 TOOLS ─── 05 HOBBIES ─── 06 CONTACT
 ```
 
-* Always visible, animates between sections, fits cyber aesthetic, smooth. Reusable, decoupled from section logic.
+- Always visible, animates between sections, fits cyber aesthetic, smooth. Reusable, decoupled from section logic.
 
 ---
 
@@ -103,41 +103,43 @@ Top-of-screen meter:
 
 ### SECTION 1 — ABOUT
 
-* **Title `ABOUT`:** right → center, scrambled red blur → sharp. Holds center, then moves up / shrinks to make room for content.
-* **Jet:** only right half, below → left side (deliberate crop).
-* **Exit:** text blurs → disappears, jet → top + particles → to Experience.
+- **Title `ABOUT`:** right → center, scrambled red blur → sharp. Holds center, then moves up / shrinks to make room for content.
+- **Jet:** only right half, below → left side (deliberate crop).
+- **Exit:** text blurs → disappears, jet → top + particles → to Experience.
 
 ---
 
 ### SECTION 2 — EXPERIENCE — First Flight Sequence (Black Night)
 
-* **Title `EXPERIENCE`:** from below, standard animation → jet rises from bottom, large enough to **cover title** (cinematic).
-* **Flight:** large/close → smaller → toward horizon; camera flies with jet.
-* **Infinite effects (recycled):** clouds `A→B→C→reposition→A`, wind lines — infinite feel without infinite objects. Perf critical.
-* **Content:** tiny/blurred far → approach → clear → pass viewer, slightly rotated. Layout data-driven:
+- **Title `EXPERIENCE`:** from below, standard animation → jet rises from bottom, large enough to **cover title** (cinematic).
+- **Flight:** large/close → smaller → toward horizon; camera flies with jet.
+- **Infinite effects (recycled):** clouds `A→B→C→reposition→A`, wind lines — infinite feel without infinite objects. Perf critical.
+- **Content:** tiny/blurred far → approach → clear → pass viewer, slightly rotated. Layout data-driven:
 
   ```ts
-  layout: "text-image" | "image-text"  // data decides order, not markup
+  layout: 'text-image' | 'image-text' // data decides order, not markup
   ```
 
   Images use same chamfered cyber shape. Hold period: enter → readable → dwell → exit. Data in `experiences[]`. Architecture allows N items (currently 2).
-* **Exit:** jet accelerates → horizon + particles/clouds/blur → into Projects.
+
+- **Exit:** jet accelerates → horizon + particles/clouds/blur → into Projects.
 
 ---
 
 ### SECTION 3 — PROJECTS — Blur Morph
 
-* Starts **inside Experience blur** — no hard cut. Jet/textures already present.
-* **Title `PROJECTS`:** standard animation + special exit effect (designed in phase), then projects dominate.
-* **Project = `IMAGE + TEXT + TAGS`**
+- Starts **inside Experience blur** — no hard cut. Jet/textures already present.
+- **Title `PROJECTS`:** standard animation + special exit effect (designed in phase), then projects dominate.
+- **Project = `IMAGE + TEXT + TAGS`**
 
   ```ts
   { image, text, tags: string[] }
   ```
 
   Tags font = centrally configurable, single source of truth.
-* **Entrance:** blurred → resolves. **Project→Project:** `P1 → blur/distortion → morph → P2` (blur is transition, not cut/fade).
-* **Composition:** jet at bottom, only left half, facing right. Slight left tilt of **section/composition** (not individual pieces):
+
+- **Entrance:** blurred → resolves. **Project→Project:** `P1 → blur/distortion → morph → P2` (blur is transition, not cut/fade).
+- **Composition:** jet at bottom, only left half, facing right. Slight left tilt of **section/composition** (not individual pieces):
 
   ```
   ┌─────────────────────┐
@@ -153,13 +155,14 @@ Top-of-screen meter:
 
 ### SECTION 4 — TOOLS — Orbital System
 
-* **Title `TOOLS`:** standard entry → moves to top-left corner and stays.
-* **Jet:** top → center descent.
-* **Orbits:** staggered `Orbit1 → Orbit2 → Orbit3`; all formed by center arrival.
+- **Title `TOOLS`:** standard entry → moves to top-left corner and stays.
+- **Jet:** top → center descent.
+- **Orbits:** staggered `Orbit1 → Orbit2 → Orbit3`; all formed by center arrival.
 
-  * Categories: `Backend / Frontend / Tools`
-  * Skills = electrons orbiting jet (jet is center of system). Add subtle particles / trails / pulses / red energy — supportive, not noise.
-* **Exit:** title blur→gone, skills blur→gone, orbits `expand → expand →消失`, jet ↓ to Hobbies.
+  - Categories: `Backend / Frontend / Tools`
+  - Skills = electrons orbiting jet (jet is center of system). Add subtle particles / trails / pulses / red energy — supportive, not noise.
+
+- **Exit:** title blur→gone, skills blur→gone, orbits `expand → expand →消失`, jet ↓ to Hobbies.
 
 ---
 
@@ -173,36 +176,36 @@ Left completely open. **You define interaction when we reach this phase.** No in
 
 Echoes Hero but not copy. Name + brief + links.
 
-* **Jet:** right → left, lands on platform near left. Narrative closure: `Hero: runway start → journey → Contact: landing`.
+- **Jet:** right → left, lands on platform near left. Narrative closure: `Hero: runway start → journey → Contact: landing`.
 
 ---
 
 ## 8. Hard Restrictions
 
-* ❌ No unnecessary 3D (jet is hero)
-* ❌ No 3D Tokyo city
-* ❌ No sharp rectangles (chamfered but softened)
-* ❌ No hardcoded content (data-driven)
-* ❌ No duplicated components (reuse)
-* ❌ No animation spaghetti (controlled scroll architecture)
-* ❌ No monolithic component (clear responsibilities)
-* ❌ No title tied to scroll (triggered vs driven — most important)
+- ❌ No unnecessary 3D (jet is hero)
+- ❌ No 3D Tokyo city
+- ❌ No sharp rectangles (chamfered but softened)
+- ❌ No hardcoded content (data-driven)
+- ❌ No duplicated components (reuse)
+- ❌ No animation spaghetti (controlled scroll architecture)
+- ❌ No monolithic component (clear responsibilities)
+- ❌ No title tied to scroll (triggered vs driven — most important)
 
 ---
 
 ## 9. Development Phases
 
-| Phase | Scope |
-| --- | --- |
+| Phase              | Scope                                                                                                                                                                                                     |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **0 — Foundation** | Arch, theme/config, fonts, global styles, scroll system, section tracking, meter, cyber shape system, title animation, R3F/Three foundation, jet loading, perf foundation. **Gate before anything else.** |
-| **1 — Hero** | Only Hero |
-| **2 — About** | About + Hero→About transition |
-| **3 — Experience** | Flight system + infinite clouds/wind + experiences + exit |
-| **4 — Projects** | Blur morph + tag system + tilted composition |
-| **5 — Tools** | Orbit system |
-| **6 — Hobbies** | You define first |
-| **7 — Contact** | Landing + closure |
-| **8 — Polish** | Perf, responsive/mobile, loading, a11y, refinement, cross-browser, cleanup, docs, visual consistency |
+| **1 — Hero**       | Only Hero                                                                                                                                                                                                 |
+| **2 — About**      | About + Hero→About transition                                                                                                                                                                             |
+| **3 — Experience** | Flight system + infinite clouds/wind + experiences + exit                                                                                                                                                 |
+| **4 — Projects**   | Blur morph + tag system + tilted composition                                                                                                                                                              |
+| **5 — Tools**      | Orbit system                                                                                                                                                                                              |
+| **6 — Hobbies**    | You define first                                                                                                                                                                                          |
+| **7 — Contact**    | Landing + closure                                                                                                                                                                                         |
+| **8 — Polish**     | Perf, responsive/mobile, loading, a11y, refinement, cross-browser, cleanup, docs, visual consistency                                                                                                      |
 
 ---
 
@@ -240,8 +243,8 @@ You asked me to be explicit — here is the checklist. **We do not proceed witho
 
 ### 5. Decisions to Defer
 
-* Hobbies: intentionally blank until Phase 6.
-* Any section-specific title direction tweaks — we keep engine reusable, you approve per-section overrides later.
+- Hobbies: intentionally blank until Phase 6.
+- Any section-specific title direction tweaks — we keep engine reusable, you approve per-section overrides later.
 
 ---
 
@@ -253,13 +256,13 @@ For every major system we answer:
 
 So later you can change:
 
-* "Make jet red" → `config/jet.ts`
-* "Swap Experience 2 to image-left" → `data/experiences.ts: layout`
-* "Title 300ms faster" → `config/titleAnimation.ts`
-* "Add a project" → `data/projects.ts`
+- "Make jet red" → `config/jet.ts`
+- "Swap Experience 2 to image-left" → `data/experiences.ts: layout`
+- "Title 300ms faster" → `config/titleAnimation.ts`
+- "Add a project" → `data/projects.ts`
 
 ...without hunting hardcoded values.
 
 ---
 
-*Last updated: 2026-09-10 — Master spec is mindmap. Next step: you confirm/attach jet + fonts + red hex → we lock Phase 0 foundation.*
+_Last updated: 2026-09-10 — Master spec is mindmap. Next step: you confirm/attach jet + fonts + red hex → we lock Phase 0 foundation._

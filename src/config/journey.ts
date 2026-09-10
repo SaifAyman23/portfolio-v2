@@ -18,7 +18,9 @@ export function getSectionProgress(journeyProgress: number, section: SectionId):
 }
 
 export function getActiveSection(journeyProgress: number): SectionId {
-  for (const [id, [start, end]] of Object.entries(JOURNEY_RANGES) as Array<[SectionId, [number, number]]>) {
+  for (const [id, [start, end]] of Object.entries(JOURNEY_RANGES) as Array<
+    [SectionId, [number, number]]
+  >) {
     if (journeyProgress >= start && journeyProgress < end) return id
   }
   return 'contact'

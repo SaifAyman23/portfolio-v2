@@ -1,5 +1,5 @@
 export const JET = {
-  modelPath: '/models/jet.glb',
+  modelPath: `${import.meta.env.BASE_URL}models/jet.glb`,
   colors: {
     body: '#ffffff',
     accent: '#E10600',

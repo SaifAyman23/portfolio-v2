@@ -10,13 +10,13 @@
 
 These are the field metrics Google and Lighthouse use. Optimize for **field** data (real users), verify with **lab** tools.
 
-| Metric | Measures | Good | Needs work | Bad |
-|---|---|---|---|---|
-| **LCP** (Largest Contentful Paint) | Loading — when the main content is visible | ≤ 2.5 s | 2.5–4.0 s | > 4.0 s |
-| **INP** (Interaction to Next Paint) | Interactivity — responsiveness to input | ≤ 200 ms | 200–500 ms | > 500 ms |
-| **CLS** (Cumulative Layout Shift) | Visual stability | ≤ 0.1 | 0.1–0.25 | > 0.25 |
-| **TBT** (Total Blocking Time) | Main-thread blocking (lab proxy for INP) | ≤ 200 ms | 200–600 ms | > 600 ms |
-| **Speed Index** | How quickly content is visually complete | ≤ 3.4 s | 3.4–5.8 s | > 5.8 s |
+| Metric                              | Measures                                   | Good     | Needs work | Bad      |
+| ----------------------------------- | ------------------------------------------ | -------- | ---------- | -------- |
+| **LCP** (Largest Contentful Paint)  | Loading — when the main content is visible | ≤ 2.5 s  | 2.5–4.0 s  | > 4.0 s  |
+| **INP** (Interaction to Next Paint) | Interactivity — responsiveness to input    | ≤ 200 ms | 200–500 ms | > 500 ms |
+| **CLS** (Cumulative Layout Shift)   | Visual stability                           | ≤ 0.1    | 0.1–0.25   | > 0.25   |
+| **TBT** (Total Blocking Time)       | Main-thread blocking (lab proxy for INP)   | ≤ 200 ms | 200–600 ms | > 600 ms |
+| **Speed Index**                     | How quickly content is visually complete   | ≤ 3.4 s  | 3.4–5.8 s  | > 5.8 s  |
 
 > **Standardized measurement loop:** Lighthouse (lab) for regressions in CI + CrUX / RUM (field) for reality. Never tune to Lighthouse alone — a dev build lies. See [Chrome UX Report](https://developer.chrome.com/docs/crux).
 
@@ -24,16 +24,16 @@ These are the field metrics Google and Lighthouse use. Optimize for **field** da
 
 ## 2. LCP — make the biggest element arrive instantly
 
-The LCP element is usually a hero image, a headline, or a video poster. Your job: make *that one element* load first.
+The LCP element is usually a hero image, a headline, or a video poster. Your job: make _that one element_ load first.
 
 ### 2.1 Ship modern image formats — never PNG/JPEG on the critical path
 
-| Format | Use for | Notes |
-|---|---|---|
-| **AVIF** | Photos, complex images | Best compression; ~50% smaller than JPEG. Check browser support (all modern browsers since 2022). |
-| **WebP** | Photos, illustrations | Broad support, solid compression. Safe default. |
-| **SVG** | Icons, logos, line art | Vector, tiny, crisp. No raster needed. |
-| **PNG** | Transparency where WebP/AVIF unsupported | Use only when required; compress with `pngquant`. |
+| Format   | Use for                                  | Notes                                                                                             |
+| -------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **AVIF** | Photos, complex images                   | Best compression; ~50% smaller than JPEG. Check browser support (all modern browsers since 2022). |
+| **WebP** | Photos, illustrations                    | Broad support, solid compression. Safe default.                                                   |
+| **SVG**  | Icons, logos, line art                   | Vector, tiny, crisp. No raster needed.                                                            |
+| **PNG**  | Transparency where WebP/AVIF unsupported | Use only when required; compress with `pngquant`.                                                 |
 
 > **Standardized:** for photographic content use **AVIF with a WebP fallback**; for icons/logos use **SVG**. PNG is the exception, not the default.
 
@@ -44,8 +44,13 @@ Every image needs `width` + `height` **or** a fixed aspect-ratio container (`asp
 ```html
 <img src="hero.avif" width="1600" height="900" alt="..." fetchpriority="high" />
 <!-- or responsive -->
-<img src="hero.avif" srcset="hero-480.avif 480w, hero-1600.avif 1600w"
-     sizes="(max-width: 768px) 100vw, 1600px" alt="..." fetchpriority="high" />
+<img
+  src="hero.avif"
+  srcset="hero-480.avif 480w, hero-1600.avif 1600w"
+  sizes="(max-width: 768px) 100vw, 1600px"
+  alt="..."
+  fetchpriority="high"
+/>
 ```
 
 ### 2.3 Prioritize the LCP resource
@@ -82,6 +87,7 @@ This is the decision most teams get wrong.
 - **Situation B — simple content, or you want the whole page present immediately and accept a heavier initial load:** Load everything eagerly, and cover the heavier load with a branded loading screen that hides only after `window.load`. Trade-off: larger initial JS/CSS → higher TBT on slow devices, but zero scroll-time surprises and simplest mental model.
 
 **When to use each:**
+
 - Use **A** when a Lighthouse/field-performance budget is a hard requirement (most production marketing/commerce sites).
 - Use **B** when the experience must be perfectly smooth with zero conditional loading, and you can hide the cost behind a full-page loader (internal tools, portfolios where the owner accepts a lower score).
 
@@ -135,12 +141,12 @@ WebGL contexts are expensive. Load them lazily, cap devicePixelRatio (e.g. `min(
 
 ## 7. Measure like a pro
 
-| Tool | Type | Use |
-|---|---|---|
-| [Lighthouse](https://developer.chrome.com/docs/lighthouse) | Lab | CI regressions, per-commit budgets |
-| [Chrome UX Report](https://developer.chrome.com/docs/crux) | Field | Real-user Core Web Vitals |
-| [WebPageTest](https://www.webpagetest.org/) | Lab | Deep waterfalls, TBT, filmstrips |
-| Chrome DevTools | Both | Flame charts, layout-shift regions, long tasks |
+| Tool                                                       | Type  | Use                                            |
+| ---------------------------------------------------------- | ----- | ---------------------------------------------- |
+| [Lighthouse](https://developer.chrome.com/docs/lighthouse) | Lab   | CI regressions, per-commit budgets             |
+| [Chrome UX Report](https://developer.chrome.com/docs/crux) | Field | Real-user Core Web Vitals                      |
+| [WebPageTest](https://www.webpagetest.org/)                | Lab   | Deep waterfalls, TBT, filmstrips               |
+| Chrome DevTools                                            | Both  | Flame charts, layout-shift regions, long tasks |
 
 > **Standardized:** Run Lighthouse in **CI on a throttled mobile profile** (e.g., Fast 4G + 4× CPU) with a **performance budget** that fails the build on regression. Pair with field data (CrUX/RUM) for the truth.
 

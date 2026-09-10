@@ -64,6 +64,42 @@ export function JetModel({ colors, scale = JET.scale, position, rotation }: JetM
         else if (mat) apply(mat)
       }
     })
+
+    cloned.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh
+        if ((mesh as unknown as { __outlined?: boolean }).__outlined) return
+        ;(mesh as unknown as { __outlined: boolean }).__outlined = true
+
+        const key = ((mesh.material as THREE.MeshStandardMaterial)?.name ?? '').toLowerCase()
+        const isMetal = key === 'black'
+        const isEmissive = key === 'glow'
+        if (isEmissive) return
+
+        const edgeColor = isMetal ? '#ffffff' : '#0a0a0a'
+        const edges = new THREE.EdgesGeometry(mesh.geometry, 20)
+        const lineMat = new THREE.LineBasicMaterial({
+          color: new THREE.Color(edgeColor),
+          transparent: true,
+          opacity: isMetal ? 0.55 : 0.95,
+        })
+        const line = new THREE.LineSegments(edges, lineMat)
+        line.renderOrder = 1
+        mesh.add(line)
+
+        if (!isMetal) {
+          const redEdges = new THREE.EdgesGeometry(mesh.geometry, 35)
+          const redMat = new THREE.LineBasicMaterial({
+            color: new THREE.Color('#E10600'),
+            transparent: true,
+            opacity: 0.18,
+          })
+          const redLine = new THREE.LineSegments(redEdges, redMat)
+          redLine.scale.set(1.001, 1.001, 1.001)
+          mesh.add(redLine)
+        }
+      }
+    })
   }, [cloned, colors])
 
   return <primitive object={cloned} scale={scale} position={position} rotation={rotation} />

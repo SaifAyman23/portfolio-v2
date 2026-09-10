@@ -9,7 +9,7 @@ export function SectionMeter({ active }: { active?: SectionId }) {
   return (
     <nav
       aria-label="Section progress"
-      className="pointer-events-none fixed top-0 inset-x-0 z-50 flex justify-center"
+      className="pointer-events-none fixed top-0 inset-x-0 z-50 flex justify-center bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/60"
     >
       <div className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-3 max-sm:px-3">
         <div className="flex flex-1 items-center gap-1 sm:gap-2">

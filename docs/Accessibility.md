@@ -8,19 +8,26 @@
 ## 1. Structural accessibility (must-haves)
 
 ### 1.1 Skip link
+
 First focusable element: `<a href="#main-content" class="sr-only focus:not-sr-only">Skip to content</a>`, with `<main id="main-content" tabindex="-1">`.
 
 ### 1.2 Landmarks & semantic HTML
+
 Use real elements: `<header> <nav> <main> <article> <section> <aside> <footer>`. Never fake a button with `<div onClick>` — use `<button>`. Screen readers navigate by landmark.
 
 ### 1.3 Visible focus
+
 Every keyboard-focused element needs a clear `:focus-visible` outline. Never remove focus styles without a replacement.
 
 ```css
-:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 ```
 
 ### 1.4 Heading order
+
 One `<h1>` per page; never skip levels (`h1` → `h2` → `h3`). Headings describe structure, not size.
 
 ---
@@ -33,7 +40,9 @@ One `<h1>` per page; never skip levels (`h1` → `h2` → `h3`). Headings descri
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
@@ -61,6 +70,7 @@ One `<h1>` per page; never skip levels (`h1` → `h2` → `h3`). Headings descri
 - Never omit `alt` — an empty string is correct for decoration; a missing attribute is a failure.
 
 ### 4.2 SVG & media
+
 - Inline SVG that conveys meaning needs `<title>` + `aria-labelledby`, or `role="img"` + `aria-label`.
 - Video: provide captions (`<track kind="captions">`). Audio: provide a transcript.
 - `prefers-reduced-motion`-style care: don't autoplay media with sound.
@@ -91,6 +101,7 @@ One `<h1>` per page; never skip levels (`h1` → `h2` → `h3`). Headings descri
 - **Situation B — you need a widget HTML can't express** (custom combobox, slider, tree): add ARIA roles/states/properties per the [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/), and manage focus yourself.
 
 **When to use each:**
+
 - Default to **A**. Most UI is expressible in native HTML.
 - Reach for **B** only when no native equivalent exists, and follow the APG pattern exactly.
 
@@ -102,12 +113,12 @@ One `<h1>` per page; never skip levels (`h1` → `h2` → `h3`). Headings descri
 
 Automated tests catch ~30–50% of issues. Combine tools:
 
-| Tool | Use |
-|---|---|
-| [axe-core](https://github.com/dequelabs/axe-core) | Unit/integration a11y assertions |
-| [Lighthouse a11y audit](https://developer.chrome.com/docs/lighthouse/accessibility/) | CI score |
-| [pa11y](https://pa11y.org/) | Scripted page audits |
-| Manual + assistive tech | Real screen-reader testing (NVDA/VoiceOver) for the rest |
+| Tool                                                                                 | Use                                                      |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| [axe-core](https://github.com/dequelabs/axe-core)                                    | Unit/integration a11y assertions                         |
+| [Lighthouse a11y audit](https://developer.chrome.com/docs/lighthouse/accessibility/) | CI score                                                 |
+| [pa11y](https://pa11y.org/)                                                          | Scripted page audits                                     |
+| Manual + assistive tech                                                              | Real screen-reader testing (NVDA/VoiceOver) for the rest |
 
 > **Standardized:** Run axe-core in the test suite and Lighthouse a11y in CI on every PR. Treat serious violations as build failures. Pair with periodic manual screen-reader testing.
 

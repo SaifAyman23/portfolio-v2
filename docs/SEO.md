@@ -21,10 +21,11 @@ Search engines render JavaScript, but **do not rely on it**. The safest path is 
 
 ### 2.1 CSR vs SSR/SSG for crawlability
 
-- **Situation A — Single-Page App (client-rendered):** Content is injected by JS. Google *can* render it, but it's slower, uses more crawl budget, and risks key content being missed if JS fails. Requires extra care (prerender or dynamic rendering) to be safe.
+- **Situation A — Single-Page App (client-rendered):** Content is injected by JS. Google _can_ render it, but it's slower, uses more crawl budget, and risks key content being missed if JS fails. Requires extra care (prerender or dynamic rendering) to be safe.
 - **Situation B — Server-Side Rendered / Static (SSR/SSG):** HTML arrives complete. Crawlers and users get content immediately. Best for SEO and Core Web Vitals.
 
 **When to use each:**
+
 - Use **B** for marketing, content, e-commerce, and any page that must rank. This is the recommendation for the vast majority of sites.
 - Use **A** only when the app is behind auth, highly interactive, or when paired with prerendering/SSR hydration (modern meta-frameworks do this automatically).
 
@@ -46,6 +47,7 @@ Each URL needs unique, accurate meta. How you set it depends on rendering:
 - **Client-rendered SPA:** update them on route change (e.g., a `SeoUpdater` that writes `document.title` and upserts meta/OG/canonical tags via JS). Must run before paint to avoid flashes, and must also work for crawlers (hence prefer the SSR route).
 
 Meta essentials per page:
+
 - `<title>` — unique, descriptive, ≤ ~60 chars, primary keyword first.
 - `<meta name="description">` — unique, compelling, ≤ ~155 chars.
 - `<link rel="canonical">` — absolute canonical URL.
@@ -84,13 +86,13 @@ Common types: `Organization`, `WebSite`, `Article`, `Product`, `BreadcrumbList`,
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Example Co",
-  "url": "https://example.com",
-  "logo": "https://example.com/logo.png"
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Example Co",
+    "url": "https://example.com",
+    "logo": "https://example.com/logo.png"
+  }
 </script>
 ```
 

@@ -13,7 +13,12 @@ export function JetCanvas({
   fixed?: boolean
 }) {
   const canvas = (
-    <Canvas shadows dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} style={{ background: 'transparent' }}>
+    <Canvas
+      shadows
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
       <PortfolioScene jetProps={jetProps} />
     </Canvas>
   )

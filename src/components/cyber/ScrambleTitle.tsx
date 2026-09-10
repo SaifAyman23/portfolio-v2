@@ -22,9 +22,16 @@ type ScrambleTitleProps = {
   className?: string
   as?: 'h1' | 'h2'
   trigger?: boolean
+  from?: 'center' | 'left' | 'right' | 'bottom'
 }
 
-export function ScrambleTitle({ title, className, as: Tag = 'h2', trigger = true }: ScrambleTitleProps) {
+export function ScrambleTitle({
+  title,
+  className,
+  as: Tag = 'h2',
+  trigger = true,
+  from = 'center',
+}: ScrambleTitleProps) {
   const ref = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
   const [display, setDisplay] = useState(title)
@@ -59,7 +66,11 @@ export function ScrambleTitle({ title, className, as: Tag = 'h2', trigger = true
 
     let raf = 0
     const start = performance.now()
-    const total = (TIMINGS.title.scrambleDuration + TIMINGS.title.redBlurDuration + TIMINGS.title.resolveDuration) * 1000
+    const total =
+      (TIMINGS.title.scrambleDuration +
+        TIMINGS.title.redBlurDuration +
+        TIMINGS.title.resolveDuration) *
+      1000
 
     const tick = (now: number) => {
       const elapsed = now - start
@@ -83,6 +94,15 @@ export function ScrambleTitle({ title, className, as: Tag = 'h2', trigger = true
     return () => cancelAnimationFrame(raf)
   }, [visible, title])
 
+  const fromOffset =
+    from === 'right'
+      ? 'translateX(36px)'
+      : from === 'left'
+        ? 'translateX(-36px)'
+        : from === 'bottom'
+          ? 'translateY(28px)'
+          : 'none'
+
   return (
     <Tag
       ref={ref as never}
@@ -91,7 +111,9 @@ export function ScrambleTitle({ title, className, as: Tag = 'h2', trigger = true
         filter: phase === 'red' ? 'blur(6px)' : phase === 'scramble' ? 'blur(2px)' : 'blur(0)',
         color: phase === 'red' ? '#E10600' : undefined,
         opacity: visible ? 1 : 0,
-        transition: 'filter 0.35s ease, color 0.3s ease',
+        transform: visible ? 'translate(0,0)' : fromOffset,
+        transition:
+          'filter 0.35s ease, color 0.3s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease',
       }}
       aria-label={title}
     >

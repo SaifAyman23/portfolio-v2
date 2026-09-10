@@ -33,8 +33,12 @@ One continuous world: **Runway → Takeoff → Flight → Projects → Orbits �
 
 ```tsx
 <App>
-  <Scene />          // <Canvas><PortfolioScene /></Canvas> mounted ONCE
-  <PortfolioUI />    // DOM sections
+  <Scene /> //{' '}
+  <Canvas>
+    <PortfolioScene />
+  </Canvas>{' '}
+  mounted ONCE
+  <PortfolioUI /> // DOM sections
 </App>
 ```
 
@@ -58,7 +62,7 @@ Good:
 Scroll → ScrollController → Normalized Portfolio Progress → SceneController → Jet/Camera/Clouds/Particles
 ```
 
-Sections only emit: *"We're in Experience, 65% through it."* Scene decides visuals. Decouples DOM from 3D.
+Sections only emit: _"We're in Experience, 65% through it."_ Scene decides visuals. Decouples DOM from 3D.
 
 ---
 
@@ -77,13 +81,13 @@ Stored in `config/sections.ts` / `config/journey.ts`, not scattered. Changing le
 ```ts
 // config/journey.ts
 export const JOURNEY_RANGES = {
-  hero: [0.00, 0.14],
+  hero: [0.0, 0.14],
   about: [0.14, 0.28],
   experience: [0.28, 0.48],
   projects: [0.48, 0.67],
   tools: [0.67, 0.82],
   hobbies: [0.82, 0.92],
-  contact: [0.92, 1.00],
+  contact: [0.92, 1.0],
 } as const
 ```
 
@@ -235,7 +239,7 @@ Don't: 500 React particle components, `new Geometry()` per frame, `new Material(
 
 ## 13. Don't Make Everything Scroll-Linked — Feel Travel, Not Drag
 
-Scroll → title activation → title plays → jet enters → covers title → flies to horizon → content approaches → dwell → next. User scrolls but feels *traveling*, not *dragging frames*. Dwell time matters.
+Scroll → title activation → title plays → jet enters → covers title → flies to horizon → content approaches → dwell → next. User scrolls but feels _traveling_, not _dragging frames_. Dwell time matters.
 
 ---
 
@@ -256,4 +260,4 @@ React
 
 ---
 
-*Keep this file as enforcement. Every new controller must state: What it is → Where it lives → What controls it → What data it receives → How to customize it.*
+_Keep this file as enforcement. Every new controller must state: What it is → Where it lives → What controls it → What data it receives → How to customize it._

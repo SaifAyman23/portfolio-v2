@@ -7,7 +7,7 @@
 
 ## 1. Code health (what Lighthouse Best Practices checks)
 
-Lighthouse's *Best Practices* audit fails on concrete, detectable issues. Keep these clean:
+Lighthouse's _Best Practices_ audit fails on concrete, detectable issues. Keep these clean:
 
 - No browser console errors/warnings in the critical path.
 - No use of deprecated APIs (e.g., `document.write`, deprecated `IntersectionObserver`/`Permissions` patterns).
@@ -41,6 +41,7 @@ A consistent pattern prevents scattered, inconsistent network code.
 > **Standardized three-file pattern** (adapt to your framework): `endpoints.ts` (calls + types) · `hooks.ts` (queries/mutations) · `index.ts` (barrel). Normalize errors into a single `extractErrorMessage` so the UI can surface them consistently.
 
 Cross-cutting rules:
+
 - Never commit secrets/keys to the client bundle. Use environment variables; keep server secrets server-side.
 - Intercept responses to normalize errors; surface failures to the user — never fail silently.
 
@@ -67,13 +68,13 @@ Cross-cutting rules:
 
 ## 6. Testing — proof it works
 
-| Layer | What | Tooling examples |
-|---|---|---|
-| Unit | Pure functions, hooks, utils | Vitest, Jest, RTL |
-| Component | Render + interaction | React Testing Library, Testing Library |
-| Accessibility | axe-core assertions | jest-axe, vitest-axe |
-| E2E | Critical user flows | Playwright, Cypress |
-| Performance budget | Fail on regression | Lighthouse CI |
+| Layer              | What                         | Tooling examples                       |
+| ------------------ | ---------------------------- | -------------------------------------- |
+| Unit               | Pure functions, hooks, utils | Vitest, Jest, RTL                      |
+| Component          | Render + interaction         | React Testing Library, Testing Library |
+| Accessibility      | axe-core assertions          | jest-axe, vitest-axe                   |
+| E2E                | Critical user flows          | Playwright, Cypress                    |
+| Performance budget | Fail on regression           | Lighthouse CI                          |
 
 > **Standardized:** Unit + component + a11y tests in CI on every PR. Add E2E for the critical path (login, checkout, submit). Enforce a performance budget. No code merges with failing tests.
 
