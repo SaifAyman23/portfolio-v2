@@ -75,11 +75,11 @@ Guides often describe `what the code offers` but don't show `how to use it`. The
 
 Pick the 2–3 features that make your template more than a basic starter (the ones a user wouldn't expect from a minimal setup). For each, create a **single deep guide** that serves **two separate jobs** without mixing them:
 
-| Job | What the reader needs | Section to read |
-|---|---|---|
+| Job                                 | What the reader needs                            | Section to read                                               |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | **A. Understand the existing code** | How it works and if it already solves their need | `File Map` + `Architecture` + `What It Offers / When to Skip` |
-| **B. Build it from zero** | Step-by-step setup as if it didn't exist | `Setup From Scratch` |
-| **C. Change it** | How to tune, extend, or replace it | `How to Adjust / Enhance` |
+| **B. Build it from zero**           | Step-by-step setup as if it didn't exist         | `Setup From Scratch`                                          |
+| **C. Change it**                    | How to tune, extend, or replace it               | `How to Adjust / Enhance`                                     |
 
 ### Required sections for each deep guide
 

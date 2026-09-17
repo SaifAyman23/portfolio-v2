@@ -83,7 +83,6 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-slot',
               '@radix-ui/react-label',
             ],
-            'vendor-motion': ['motion'],
             'vendor-gsap': ['gsap'],
             'vendor-three': ['three'],
           },
