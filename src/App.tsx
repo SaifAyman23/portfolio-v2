@@ -1,29 +1,30 @@
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import MainLayout from './MainLayout'
 
-import { JetCanvas } from '@/components/jet'
 import { SeoUpdater } from '@/components/SeoUpdater'
 import { ROUTES } from '@/lib/constants'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const Home = lazy(() => import('@/pages/Home'))
 
 function App() {
   return (
-    <>
-      <JetCanvas fixed />
-      <Router basename={import.meta.env.BASE_URL}>
-        <SeoUpdater />
-        <Suspense fallback={null}>
-          <Routes>
-            <Route element={<MainLayout />}>
-              <Route path={ROUTES.HOME} element={<Home />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </Router>
-    </>
+    <Router>
+      <SeoUpdater />
+      <Suspense fallback={null}>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            {/* Future authenticated routes go here */}
+          </Route>
+        </Routes>
+      </Suspense>
+    </Router>
   )
 }
 

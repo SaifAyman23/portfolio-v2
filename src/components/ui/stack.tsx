@@ -4,8 +4,6 @@ import { useLayoutEffect, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 
-gsap.registerPlugin(ScrollTrigger)
-
 interface StackProps {
   children: React.ReactNode
   className?: string

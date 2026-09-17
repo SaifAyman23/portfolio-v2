@@ -2,18 +2,58 @@
 @import 'tw-animate-css';
 
 /* ============================================================
-    THEME TOKENS — Cyber-Tokyo: White + Black + Red
-    ============================================================ */
-@theme inline {
-  /* Typography — Neo Tokyo */
-  --font-heading: 'Orbitron', sans-serif;
-  --font-body: 'Exo 2', sans-serif;
-  --font-display: 'Orbitron', sans-serif;
+   TAILWIND CUSTOM VARIANT
+   ============================================================ */
+@custom-variant dark (&:is(.dark *));
 
-  /* Cyber Red */
-  --color-red: #e10600;
-  --color-red-bright: #ff1a14;
-  --color-red-soft: #ff3b30;
+/* ============================================================
+   FONTS — self-hosted WOFF2 (full glyph sets, no subsetting).
+   font-display: swap avoids invisible text while fonts load.
+   ============================================================ */
+@font-face {
+  font-family: 'Cyberform';
+  src: url('./assets/fonts/Cyberform.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ticking';
+  src: url('./assets/fonts/Ticking.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Universa';
+  src: url('./assets/fonts/Universa.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   THEME TOKENS
+   ============================================================ */
+@theme inline {
+  /* Typography — h1: Cyberform · h2–h6: Ticking · everything else: Universa.
+     CJK fallbacks included so 最強 renders even though the custom
+     faces are Latin-only. */
+  --font-heading: 'Ticking', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-body:
+    'Universa', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
+    sans-serif;
+  --font-display: 'Cyberform', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-cyberform: 'Cyberform', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-ticking: 'Ticking', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-universa:
+    'Universa', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
+    sans-serif;
+
+  /* Accent */
+  --color-accent-sky: #68bdf2;
 
   /* Radius scale */
   --radius-sm: calc(var(--radius) - 4px);
@@ -39,6 +79,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-darker: var(--accent-darker);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -59,42 +100,79 @@
 }
 
 /* ============================================================
-    LIGHT THEME — White page, Black text, Red accent
-    No dark mode per SPEC §2
-    ============================================================ */
+   LIGHT THEME  (unchanged colors)
+   ============================================================ */
 :root {
   --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.14 0 0);
+  --background: oklch(1 0 89.9);
+  --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0 0);
-  --primary: #e10600;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.14 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: #e10600;
-  --accent-foreground: oklch(1 0 0);
-  --destructive: #e10600;
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.92 0 0);
-  --ring: #e10600;
-  --chart-1: #e10600;
-  --chart-2: #ff1a14;
-  --chart-3: oklch(0.14 0 0);
-  --chart-4: oklch(0.55 0 0);
-  --chart-5: oklch(0.97 0 0);
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.14 0 0);
-  --sidebar-primary: #e10600;
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.14 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: #e10600;
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: #b50000;
+  --accent-darker: #8b0606;
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* ============================================================
+   DARK THEME  (unchanged colors)
+   ============================================================ */
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.174 0.004 286);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.215 0.008 285.7);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(0.1 0.005 286);
+  --input: oklch(0.1 0.005 286);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
 /* ============================================================
@@ -116,15 +194,22 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── Headings — Orbitron ── */
-  h1,
+  /* ── Headings — h1: Cyberform · h2–h6: Ticking ── */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--foreground);
+  }
+
   h2,
   h3,
   h4,
   h5,
   h6 {
     font-family: var(--font-heading);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--foreground);
@@ -132,7 +217,6 @@
 
   h1 {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1.1;
   }
 
   h2 {
@@ -162,10 +246,10 @@
     font-weight: 600;
   }
 
-  /* ── Paragraphs — Exo 2 ── */
+  /* ── Paragraphs — Universa (single cut, so weight 400 to avoid faux rendering) ── */
   p {
     font-family: var(--font-body);
-    font-weight: 200;
+    font-weight: 400;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--foreground);
@@ -174,12 +258,13 @@
   /* ── Eyebrow — small lead-in text above headings ── */
   .eyebrow {
     font-family: var(--font-body);
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     font-size: 0.8125rem;
     line-height: 1.4;
-    color: var(--color-red);
+    color: var(--muted-foreground);
+    @apply text-accent-sky dark:text-accent-sky;
   }
 
   /* ── Small text ── */
@@ -189,15 +274,23 @@
     line-height: 1.5;
   }
 
-  /* ── Links ── */
+  /* ── Links — high-contrast mono ── */
   a {
-    color: var(--primary);
+    color: inherit;
     text-decoration: none;
-    transition: opacity 0.15s ease;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      transform 0.15s ease;
   }
 
   a:hover {
-    opacity: 0.8;
+    opacity: 1;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
   }
 
   /* ── Strong / Bold ── */
@@ -284,6 +377,36 @@
 }
 .animate-fade-in-scale {
   animation: fade-in-scale 0.4s ease forwards;
+}
+
+@keyframes topbar-name-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--enter-dir, 1) * 14px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.topbar-name {
+  animation: topbar-name-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   FREE-USE FONT CLASSES — apply any face anywhere, e.g.
+   className="font-cyberform" (Tailwind v4 also generates these
+   from the --font-* theme tokens above)
+   ============================================================ */
+.font-cyberform {
+  font-family: var(--font-cyberform);
+}
+.font-ticking {
+  font-family: var(--font-ticking);
+}
+.font-universa {
+  font-family: var(--font-universa);
 }
 
 * {

@@ -1,35 +1,46 @@
-import { useEffect, useState } from 'react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef, useState } from 'react'
 
 import { SECTION_IDS, type SectionId } from '@/config/sections'
 
-export function useSectionTracker(ids: readonly string[] = SECTION_IDS): SectionId {
-  const [active, setActive] = useState<SectionId>(ids[0] as SectionId)
+export type SectionTracker = {
+  active: SectionId
+  direction: 1 | -1
+  progressRef: React.RefObject<Record<SectionId, number>>
+}
+
+export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): SectionTracker {
+  const [active, setActive] = useState<SectionId>(ids[0])
+  const [direction, setDirection] = useState<1 | -1>(1)
+  const progressRef = useRef(
+    Object.fromEntries(ids.map((id) => [id, 0])) as Record<SectionId, number>
+  )
 
   useEffect(() => {
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el))
+    const triggers = ids.map((id) => {
+      const el = document.getElementById(id)
+      if (!el) return null
 
-    if (elements.length === 0) return
+      return ScrollTrigger.create({
+        trigger: el,
+        start: 'top center',
+        end: 'bottom center',
+        onToggle: (self) => {
+          if (self.isActive) {
+            setActive(id)
+            setDirection(self.direction === -1 ? -1 : 1)
+          }
+        },
+        onUpdate: (self) => {
+          progressRef.current[id] = self.progress
+        },
+      })
+    })
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]) {
-          setActive(visible[0].target.id as SectionId)
-        }
-      },
-      {
-        rootMargin: '-45% 0px -45% 0px',
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      }
-    )
-
-    elements.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
+    return () => {
+      triggers.forEach((trigger) => trigger?.kill())
+    }
   }, [ids])
 
-  return active
+  return { active, direction, progressRef }
 }

@@ -1,263 +1,84 @@
-# Architecture Guidelines — Persistent Jet World
+# Architecture — 最強 Portfolio
 
-> Single source for how the portfolio stays smooth, maintainable, and cinematic. Companion to `SPEC.md`. Phase 0 must satisfy this before any Hero work.
-
----
-
-## 0. Mental Model — One World, Not Six Scenes
-
-```
-                    ┌─────────────────────────┐
-                    │     React Application   │
-                    │  Sections / UI / Text   │
-                    │  Navigation / Effects   │
-                    └────────────┬────────────┘
-                                 │ scroll state
-                    ┌────────────▼────────────┐
-                    │   Central Scene State   │
-                    │ section / progress /    │
-                    │ velocity / transition   │
-                    └────────────┬────────────┘
-                    ┌────────────▼────────────┐
-                    │     ONE R3F CANVAS      │
-                    │ Jet / Runway / Clouds / │
-                    │ Particles / Wind / Orbs │
-                    └─────────────────────────┘
-```
-
-One continuous world: **Runway → Takeoff → Flight → Projects → Orbits → Landing**. Jet never unmounts.
+> Single source of truth for how this site is built. Aesthetic: white + black + red (`#B50000`, darker `#8B0606`), modern cyber-Japanese. Motion: GSAP everywhere, **one persistent jet**.
 
 ---
 
-## 1. One Persistent Canvas
+## 0. Big picture
 
-```tsx
-<App>
-  <Scene /> //{' '}
-  <Canvas>
-    <PortfolioScene />
-  </Canvas>{' '}
-  mounted ONCE
-  <PortfolioUI /> // DOM sections
-</App>
+```
+App.tsx                      registers GSAP plugins once
+  └─ Home.tsx                owns section state (useSectionTracker, called once)
+       ├─ TopBar             reads { active, direction } — indicator only
+       ├─ sections/*         six section components, each owns its own animation
+       └─ (jet layer)        ONE persistent jet, reads progress, never remounts
 ```
 
-Canvas stays mounted for entire journey. Jet travels, not recreated per section.
-
-> Implementation: `MainLayout.tsx` hosts `<JetCanvas fixed />` (`fixed inset-0 -z-10`), `Home` only provides scroll triggers. Current `MainLayout:8` + `JetCanvas:26 fixed` follows this.
+Data flows one way: scroll → tracker → indicator + sections + jet. Sections never talk to each other, and nothing but the jet layer touches the jet.
 
 ---
 
-## 2. Sections Don't Control Three.js Directly
+## 1. GSAP ownership (strict)
 
-Bad:
+- **Registration lives in exactly one place: `src/App.tsx`.**
+  `gsap.registerPlugin(ScrollTrigger)` at module scope. No component, hook, or util registers plugins — ever. If a new plugin is needed (e.g. ScrollSmoother), it goes in `App.tsx` next to the existing line.
+- **Lenis is already wired** (`src/lib/smoothScroll.ts`): `lenis.on('scroll', ScrollTrigger.update)` driven by `gsap.ticker`. Every ScrollTrigger in the app rides this — no per-component scroll listeners.
 
-```tsx
-<ExperienceSection> // manipulate jet/camera/clouds
-```
+## 2. Per-section animation rules
 
-Good:
+Each section gets wildly different motion, so each section owns a self-contained timeline:
 
-```
-Scroll → ScrollController → Normalized Portfolio Progress → SceneController → Jet/Camera/Clouds/Particles
-```
+1. **Scope everything with `gsap.context`.** All selectors and triggers for a section live inside one `gsap.context(() => {...}, rootRef)`, reverted in the effect cleanup. Use `useLayoutEffect` (or `useGSAP` from `@gsap/react`, which is StrictMode-safe by default).
+2. **One trigger per concern.** Entrance reveal, scrubbed parallax, and exit are separate `ScrollTrigger`s with explicit `start`/`end` — never one mega-trigger doing three jobs.
+3. **Scrub belongs to the jet; reveals belong to sections.** Continuous scroll-linked motion (`scrub: true`) is for the jet layer. Section content uses `toggleActions: 'play none none reverse'` so enter/leave animations reverse cleanly on scroll-up.
+4. **`invalidateOnRefresh: true`** on anything measuring layout (pins, xPercent moves) so resize/refresh recalculates instead of breaking.
+5. **Reduced motion first.** Guard timelines with `matchMedia('(prefers-reduced-motion: reduce)')` — jump to end states. The global CSS kill-switch in `index.css` is the backstop, not the plan.
+6. **Kill on unmount.** Every effect returns its context's `revert()`. No orphaned triggers — they leak scroll handlers and double-fire in StrictMode dev.
 
-Sections only emit: _"We're in Experience, 65% through it."_ Scene decides visuals. Decouples DOM from 3D.
+## 3. Section contract (`src/components/sections/`)
 
----
+- One component per section: `Hero`, `About`, `Experience`, `Projects`, `Tools`, `Contact`. (`Hobbies` is user-defined later — its placeholder lives inline in `Home.tsx` so tracking stays complete.)
+- Each renders `<section id="<id>" data-section="<id>">` — the `id` must match `src/config/sections.ts`, because the tracker finds sections by `document.getElementById`.
+- Sections own **only their own DOM**. They publish nothing; the tracker observes them.
+- Section titles are plain `h1`/`h2` (fonts come from CSS). Entrance motion is per-section GSAP, following the rules in §2.
+- Import sections through the barrel (`@/components/sections`), never by deep path.
 
-## 3. Normalized Journey Timeline — Config, Not Magic Numbers
+## 4. Shared state: the tracker
 
-Whole journey `0.00 → 1.00`:
+- `useSectionTracker()` is called **once**, in `Home.tsx`, with no arguments (defaults to all `SECTION_IDS`).
+- It returns `{ active, direction, progressRef }`:
+  - `active` + `direction` are React state → the `TopBar` indicator.
+  - `progressRef` is a mutation-only ref (`Record<SectionId, number>`, 0→1 per section) → the jet reads it in its render loop. Refs, not state, so 60fps updates never re-render React.
+- Never call the hook inside a section — that duplicates one ScrollTrigger per call site.
 
-```
-Hero 0.00→0.14 | About 0.14→0.28 | Experience 0.28→0.48 | Projects 0.48→0.67 | Tools 0.67→0.82 | Hobbies 0.82→0.92 | Contact 0.92→1.00
-```
+## 5. The one jet (target design)
 
-Stored in `config/sections.ts` / `config/journey.ts`, not scattered. Changing lengths = config edit.
+- Exactly **one** jet instance for the whole page, in a persistent fixed layer behind content. It never unmounts, never re-instantiates per section.
+- The jet layer subscribes to `progressRef` (and `active` for discrete pose changes) and maps journey progress → jet pose each frame. Sections drive it **indirectly** by being scrolled through — no section imports, controls, or animates the jet.
+- Jet styling (colors, scale) lives in config (`src/config/jet.ts` when it returns); pose logic lives in the jet layer, not in sections.
 
-> Current: `SECTIONS` ids exist, ranges TODO — add `JOURNEY_RANGES` next.
+## 6. UI building blocks (`src/components/ui/`)
 
-```ts
-// config/journey.ts
-export const JOURNEY_RANGES = {
-  hero: [0.0, 0.14],
-  about: [0.14, 0.28],
-  experience: [0.28, 0.48],
-  projects: [0.48, 0.67],
-  tools: [0.67, 0.82],
-  hobbies: [0.82, 0.92],
-  contact: [0.92, 1.0],
-} as const
-```
+- Chrome comes from `CyberFrame` (chamfered vector border, animatable paths via `data-slot` + refs). `Tag`, `Button`, and `CyberImage` are all frame-based — the frame is the border/background, so inner elements stay transparent (`border-0 bg-transparent`).
+- `stroke={false}` on `CyberFrame` renders fill-only. Frame color follows text via `stroke="currentColor"` where appropriate.
+- Japanese display text uses `JapaneseText` (Inter + filled/outlined layer pair). Headings default to fonts via CSS: `h1` Cyberform, `h2–h6` Ticking, body Universa — plus `font-cyberform` / `font-ticking` / `font-universa` utilities for free use.
 
----
-
-## 4. Scroll-Driven vs Triggered — Never Mix
-
-- **Scroll-driven (continuous):** jet/camera/clouds/wind/project slide/orbit expand/runway — responds to `journeyProgress`.
-- **Triggered (once):** title `scrambled → red blur → sharp` — fires on section activation.
+## 7. Current tree (post-cleanup)
 
 ```
-Scroll
- ├── continuous progress ──→ scene movement
- └── section activation ───→ title animation
+src/
+  App.tsx                  GSAP registration + routes
+  main.tsx                 providers, skeleton fadeout
+  MainLayout.tsx           skip-link + <Outlet>
+  pages/Home.tsx           tracker owner: TopBar + sections
+  components/
+    TopBar.tsx             section indicator (reads active/direction)
+    SeoUpdater.tsx         per-route title/meta
+    sections/              Hero About Experience Projects Tools Contact + barrel
+    ui/                    primitives (button, input, card, …) + cyber set
+  config/sections.ts       section ids/labels (tracker source of truth)
+  hooks/useSectionTracker.ts  scroll → { active, direction, progressRef }
+  lib/                     constants, seo, smoothScroll (Lenis), queryClient, utils
 ```
 
-`ScrambleTitle.tsx:33` uses `IntersectionObserver 0.55`, not scroll scrub — correct. Keep it.
-
----
-
-## 5. Proper Render Loop — No `addEventListener('scroll')`
-
-```
-Browser scroll → target progress → smooth lerp → useFrame() → update Three.js → render
-```
-
-Not `window.addEventListener("scroll", jet.position.x+=)`. Gives cinematic interpolation.
-
-> Current: `lib/smoothScroll.ts:8` Lenis `lerp:0.08` + `gsap.ticker + ScrollTrigger.update`, `hooks/useJetScroll.ts:18` `scrub:1.1` + `rAF float` inside `gsap.context` — follows this, but migrate to `useFrame` for per-frame Three.js updates (keep React out of hot path, §9).
-
----
-
-## 6. DOM vs Three.js Responsibilities
-
-- **Three.js:** jet, runway, clouds, particles, wind, orbits, lighting, camera, shadows
-- **HTML/CSS:** name, titles, paragraphs, experience/project data, tool labels, meter, buttons, contact
-
-Better typography/a11y, no text in Canvas.
-
----
-
-## 7. Jet Is Persistent Object
-
-```
-                    ┌──────────────┐
-                    │ Persistent JET│
-                    └──────┬───────┘
-        ┌──────────┬───────┼──────────┬───────────┐
-        ↓          ↓       ↓          ↓           ↓
-      Hero      About Experience Projects      Tools
-```
-
-One `THREE.Group` ref, transforms change with journey. Not `HeroJet`/`AboutJet` etc. `JetModel.tsx:16` `scene.clone(true)` + `jetRef` in `JetCanvas.tsx:26` follows this.
-
----
-
-## 8. Recycle Effects — Pool, Don't Create
-
-Bad: `scroll → create cloud → create cloud ...` (memory leak).
-
-Good:
-
-```
-Cloud pool [1][2][3][4][5][6] → move → when exits → reposition behind camera
-```
-
-Same for wind/particles. Infinite illusion, fixed memory. Implement in `scene/Clouds.tsx` / `WindLines.tsx` with instancing.
-
----
-
-## 9. Keep React Out of Hot Path
-
-Don't `setJetPosition` every frame (React re-renders). Use refs + `useFrame`:
-
-```tsx
-const jet = useRef<THREE.Group>(null);
-useFrame(() => { jet.current.position.x = ... });
-```
-
-React = structure/state, Three.js = per-frame motion.
-
-> Current `useJetScroll` mutates `jet.position` via GSAP (ok, not React state), but move final loop to `useFrame` for interpolation.
-
----
-
-## 10. Modular Scene — No 2000-Line File
-
-```
-scene/
-├── PortfolioScene.tsx
-├── Jet.tsx
-├── Runway.tsx
-├── Clouds.tsx
-├── WindLines.tsx
-├── Particles.tsx
-├── ToolOrbits.tsx
-└── lighting/
-
-sections/
-├── Hero.tsx
-├── About.tsx
-├── Experience.tsx
-├── Projects.tsx
-├── Tools.tsx
-├── Hobbies.tsx
-└── Contact.tsx
-
-systems/
-├── scroll/
-├── section-tracker/
-├── jet-controller/
-├── title-animation/
-└── performance/
-
-config/
-├── theme.ts
-├── sections.ts
-├── journey.ts
-├── experiences.ts
-├── projects.ts
-├── tools.ts
-└── timings.ts
-```
-
----
-
-## 11. One Scene Controller, Delegated
-
-```
-PortfolioSceneController
-  ├── JetController
-  ├── EnvironmentController
-  ├── ExperienceController
-  ├── ProjectController
-  └── OrbitController
-```
-
-Not 7 independent controllers, not one giant function.
-
----
-
-## 12. Optimize Early — Cheap Wins
-
-Do: one Canvas, one jet, reuse geometries/materials, recycle pools, reasonable poly count, compressed textures, don't render invisible, avoid React state per frame, instancing, subtle post-processing.
-
-Don't: 500 React particle components, `new Geometry()` per frame, `new Material()` per frame, mount/unmount Canvas, 4K textures for tiny objects, huge GLB, excessive bloom, 10 animation libs fighting.
-
----
-
-## 13. Don't Make Everything Scroll-Linked — Feel Travel, Not Drag
-
-Scroll → title activation → title plays → jet enters → covers title → flies to horizon → content approaches → dwell → next. User scrolls but feels _traveling_, not _dragging frames_. Dwell time matters.
-
----
-
-## Target Foundation — What We Build Before Hero
-
-```
-React
-├── UI Layer (sections)
-├── Shared UI (SectionTitle/CyberFrame/SectionMeter)
-├── Journey System (ScrollController/SectionTracker/JourneyProgress)
-├── Animation Systems (Title/Jet/Particle/Cloud/Wind)
-└── ONE R3F Canvas → PortfolioScene (Jet/Runway/Environment/Clouds/Wind/Particles/Orbits)
-```
-
-**Principle:** One canvas. One persistent world. One central journey state. Modular systems. React for UI. Three.js for motion.
-
-> Status: Phase 0 implements `ONE Canvas` (`MainLayout:JetCanvas fixed`), `ScrollController` (Lenis+ScrollTrigger), `SectionTracker` (`useSectionTracker`), `TitleAnimation` (`ScrambleTitle`), `Jet` (white body, `useJetScroll`). Next: `config/journey.ts` ranges + `systems/journeyProgress` normalized 0→1 + `useFrame` loop + modular `scene/*` split.
-
----
-
-_Keep this file as enforcement. Every new controller must state: What it is → Where it lives → What controls it → What data it receives → How to customize it._
+Removed as dead: `motion`-based ui files (broken imports, unused), `config/jet|journey` (scene deleted with them), auth `ROUTES`/`ROUTE_SEO` entries, `OAUTH_PROVIDERS`, broken barrel re-exports.

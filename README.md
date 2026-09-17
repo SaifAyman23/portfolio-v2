@@ -1,88 +1,180 @@
-# Saif Eldin Ayman
+# REACT RAPIDO
 
-Full-stack engineer. This is my portfolio — the work, the thinking behind it, and the code that ships it.
+**Starter that stays out of your way. React 19 + TS 5 + Vite 7 + Tailwind v4.**
 
-Production-grade products end to end: Django APIs and real-time systems underneath, React interfaces and a real-time WebGL shader up front. Fast by default, accessible by standard, SEO-solid by design.
+This is the starter I wish I had. No tutorial project. No demo fluff. Just a clean base that handles auth, routing, and performance so you can start building the real thing on day one.
+
+| RR // 01 | REACT RAPIDO V1.0 2026 |
+| -------- | ---------------------- |
+| Build    | Faster                 |
 
 ---
 
-## Stack
+### TAGS
 
-| Layer        | Tech                                       |
-| ------------ | ------------------------------------------ |
-| Framework    | React 19 + TypeScript (strict)             |
-| Bundler      | Vite 7 — HMR, code splitting               |
-| Styling      | Tailwind CSS v4 + CSS variable tokens      |
-| UI           | Radix UI primitives via shadcn/ui          |
-| Motion       | `motion` (Framer Motion v12), GSAP         |
-| Shaders / FX | `ogl` (WebGL/GLSL) — hero only             |
-| State        | Zustand (client) · TanStack Query (server) |
-| HTTP         | Axios with auth interceptors               |
-| Routing      | React Router v7, fully lazy-loaded         |
-| Testing      | Vitest + RTL + axe-core a11y scans         |
+![React](https://img.shields.io/badge/REACT-19-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![TypeScript](https://img.shields.io/badge/TYPESCRIPT-5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![Vite](https://img.shields.io/badge/VITE-7-000000?style=flat-square&labelColor=000000&color=8B5CF6)
+![Tailwind](https://img.shields.io/badge/TAILWIND-v4-000000?style=flat-square&labelColor=000000&color=8B5CF6)
+![Zustand](https://img.shields.io/badge/ZUSTAND-persist-000000?style=flat-square)
+![TanStack](https://img.shields.io/badge/TANSTACK-QUERY_5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
+![CI](https://img.shields.io/badge/CI-PASSING-000000?style=flat-square&labelColor=000000&color=22C55E)
+![LCP](https://img.shields.io/badge/LCP-%E2%89%A42.5s-000000?style=flat-square)
+![CLS](https://img.shields.io/badge/CLS-0.00-000000?style=flat-square)
+![License](https://img.shields.io/badge/LICENSE-MIT-000000?style=flat-square)
 
-## Local Setup
+`CLEAN` `FAST` `SOLID`
+
+---
+
+### TABLE OF CONTENTS
+
+| #   | SECTION      |
+| --- | ------------ |
+| 01  | SPECS        |
+| 02  | QUICK START  |
+| 03  | STRUCTURE    |
+| 04  | STACK        |
+| 05  | ROUTING      |
+| 06  | QUALITY GATE |
+| 07  | SECURITY     |
+| 08  | DOCS         |
+
+---
+
+### 01 SPECS
+
+| Metric | Value                    | Status  |
+| ------ | ------------------------ | ------- |
+| LCP    | 2.5s                     | GOOD    |
+| CLS    | 0.00                     | PERFECT |
+| TBT    | 200ms                    | FAST    |
+| AUTH   | JWT + OTP                | READY   |
+| SEO    | per-route meta + sitemap | READY   |
+| A11Y   | axe-core + focus ring    | PASS    |
+
+If you blow the budget by 100KB, the build fails. On purpose.
+
+---
+
+### 02 QUICK START
 
 ```bash
-git clone <repository-url>
-cd portfolio
-npm install
+# 01 clone
+git clone https://github.com/SaifAyman23/react-rapido my-app
+cd my-app
+
+# 02 install
+npm i
+
+# 03 env
+cp .env.example .env
+# set VITE_API_URL, VITE_SITE_URL, VITE_APP_NAME
+
+# 04 dev
 npm run dev
+# http://localhost:5173
 ```
 
-Open `http://localhost:5173`. Node 20+, npm 10+.
-
-## Scripts
-
-| Command             | What it does                                 |
-| ------------------- | -------------------------------------------- |
-| `npm run dev`       | Dev server with HMR                          |
-| `npm run build`     | Production build → `dist/`                   |
-| `npm run preview`   | Preview the production build locally         |
-| `npm run check`     | Full gate: typecheck + lint + format + tests |
-| `npm run typecheck` | `tsc -b --noEmit`                            |
-| `npm run lint`      | ESLint (flat config)                         |
-| `npm run format`    | Prettier write across the repo               |
-
-## Architecture
-
-- **Thin pages, real components** — pages orchestrate; UI lives in `components/<domain>/` with barrel exports
-- **Design tokens** — every color/radius/shadow is a CSS variable exposed as a Tailwind utility
-- **Every state designed** — loading, empty, error, success
-- **Motion with discipline** — GPU-friendly transforms/opacity, disabled under `prefers-reduced-motion`
-- **Accessibility as baseline** — skip links, `:focus-visible`, semantic HTML, axe-core tests in CI
-
-Full conventions live in [AGENTS.md](./AGENTS.md).
-
-## Quality Gates
-
-CI runs on every push and PR:
-
-```
-typecheck → lint → format:check → tests → build
-```
-
-Red pipeline means no merge. Performance targets follow the Web Vitals playbook in AGENTS.md Part C (LCP < 2.5s, CLS ≈ 0, INP < 200ms).
-
-## Environment
-
-Copy `.env.example` to `.env`:
-
-| Variable             | Purpose                              |
-| -------------------- | ------------------------------------ |
-| `VITE_API_URL`       | Backend API base URL                 |
-| `VITE_APP_NAME`      | Display name                         |
-| `VITE_SITE_URL`      | Canonical URL (SEO, sitemap, robots) |
-| `VITE_CONTACT_EMAIL` | Email shown in hero contact bar      |
-| `VITE_GITHUB_URL`    | GitHub profile link                  |
-| `VITE_LINKEDIN_URL`  | LinkedIn profile link                |
-
-Never commit populated `.env` files.
-
-## Deploy
-
-Static SPA build in `dist/`. Ships cleanly to Vercel (`vercel.json` included), Netlify, or Cloudflare Pages. Docker dev setup included (`Dockerfile.dev`, `docker-compose.yml`). Configure the host to rewrite all paths to `index.html`.
+| Command         | Time               |
+| --------------- | ------------------ |
+| `npm run dev`   | HMR 40ms           |
+| `npm run check` | type/lint/fmt/test |
 
 ---
 
-Saif Eldin Ayman — React · TypeScript · Django · Real-time Systems
+### 03 STRUCTURE
+
+```
+src/
+├── api/               # 3-file pattern per domain
+│   ├── axiosInstance.ts
+│   └── accounts/      # endpoints.ts + hooks.ts + index.ts
+├── components/
+│   ├── landing/       # LandingPage with marquee and spec sheet
+│   ├── auth/          # AuthLayout, FormError, OAuthButtons
+│   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal
+│   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack)
+│   └── theme/         # ThemeProvider
+├── hooks/             # useDebounce, useIsMobile
+├── lib/               # constants, seo, validators, color, smoothScroll, utils
+├── pages/             # Home (thin) + auth/* (lazy)
+├── store/auth/        # Zustand persist
+└── test/              # axe, setup
+```
+
+Pages stay thin. Components get props, not hooks. That is how it stays readable six months from now.
+
+---
+
+### 04 STACK
+
+| LAYER     | CHOICE                                                    |
+| --------- | --------------------------------------------------------- |
+| Framework | React 19 + TS 5 strict                                    |
+| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)      |
+| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black`      |
+| State     | Zustand persist + TanStack Query 5                        |
+| HTTP      | Axios + interceptors + `extractErrorMessage`              |
+| Router    | React Router 7 lazy + `basename`                          |
+| FX        | GSAP + Lenis on demand, respects `prefers-reduced-motion` |
+
+Accent `#8B5CF6` on `bg-white` and `bg-black`. High contrast, WCAG AA.
+
+---
+
+### 05 ROUTING
+
+```tsx
+// App.tsx, lazy and split. No bloat in the first chunk.
+const Home = lazy(() => import('@/pages/Home')) // LandingPage 17KB
+const Login = lazy(() => import('@/pages/auth/Login'))
+```
+
+Every route is its own chunk. Heavy libs never touch the first paint.
+
+---
+
+### 06 QUALITY GATE
+
+```bash
+npm run check   # typecheck + lint + format:check + test
+npm run typecheck
+npm run lint
+npm run format
+npm run test        # Vitest + RTL + axe-core
+npm run build       # to dist/
+```
+
+CI runs the same gate on every push. `.github/workflows/ci.yml` does `npm ci` then typecheck, lint, format, test, build. Red means do not merge.
+
+---
+
+### 07 SECURITY
+
+| Check                        | Status |
+| ---------------------------- | ------ |
+| VITE_API_URL points to prod  | [ ]    |
+| CORS allows prod origin only | [ ]    |
+| HTTPS everywhere             | [ ]    |
+| No secrets in client bundle  | [ ]    |
+| CSP headers set              | [ ]    |
+
+---
+
+### 08 DOCS
+
+| File                    | Covers                                    |
+| ----------------------- | ----------------------------------------- |
+| `docs/Performance.md`   | LCP, INP, CLS, TBT, WebP 82, vendor split |
+| `docs/SEO.md`           | crawlability, meta, JSON-LD               |
+| `docs/Accessibility.md` | skip link, focus, axe                     |
+| `docs/BestPractices.md` | 3-file API, thin pages, CI                |
+
+---
+
+| © 2026 REACT RAPIDO   | SHIP IT |
+| --------------------- | ------- |
+| RAW // CLEAN // SOLID | MIT     |
+
+_Built to be forked. Make it yours._

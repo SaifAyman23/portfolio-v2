@@ -6,27 +6,11 @@ import './index.css'
 import App from './App.tsx'
 
 import { queryClient } from '@/lib/queryClient'
-import { initSmoothScroll } from '@/lib/smoothScroll'
 
-if (typeof document !== 'undefined') {
-  document.documentElement.classList.remove('dark')
-  document.documentElement.style.colorScheme = 'light'
-}
-
-initSmoothScroll()
-
-function hideSkeleton() {
-  const skeleton = document.getElementById('loading-skeleton')
-  if (!skeleton) return
+const skeleton = document.getElementById('loading-skeleton')
+if (skeleton) {
   skeleton.style.opacity = '0'
   setTimeout(() => skeleton.remove(), 300)
-}
-
-if (document.readyState === 'complete') {
-  hideSkeleton()
-} else {
-  window.addEventListener('load', hideSkeleton, { once: true })
-  setTimeout(hideSkeleton, 20000)
 }
 
 const rootElement = document.getElementById('root')

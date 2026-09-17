@@ -1,2 +1,3 @@
 export { useDebounce } from './useDebounce'
-export { useSectionTracker } from './useSectionTracker'
+export { useIsMobile } from './useIsMobile'
+export { useSectionTracker, type SectionTracker } from './useSectionTracker'

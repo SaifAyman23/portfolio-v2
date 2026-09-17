@@ -1,4 +1,4 @@
-export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Saif Eldin Ayman'
+export const APP_NAME = import.meta.env.VITE_APP_NAME || '最強'
 export const API_BASE_URL = import.meta.env.VITE_API_URL || ''
 
 export const ROUTES = {

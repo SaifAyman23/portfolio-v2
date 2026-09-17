@@ -1,21 +1,26 @@
-import { Hero } from '@/components/home'
-import { About } from '@/sections/About'
-import { Contact } from '@/sections/Contact'
-import { Experience } from '@/sections/Experience'
-import { Hobbies } from '@/sections/Hobbies'
-import { Projects } from '@/sections/Projects'
-import { Tools } from '@/sections/Tools'
+import { About, Contact, Experience, Hero, Projects, Tools } from '@/components/sections'
+import { TopBar } from '@/components/TopBar'
+import { useSectionTracker } from '@/hooks/useSectionTracker'
 
 export default function Home() {
+  const { active, direction } = useSectionTracker()
+
   return (
-    <div className="bg-transparent text-foreground">
+    <div className="bg-background">
+      <TopBar active={active} direction={direction} />
       <Hero />
-      {/* <About />
+      <About />
       <Experience />
       <Projects />
       <Tools />
-      <Hobbies />
-      <Contact /> */}
+      <section
+        id="hobbies"
+        data-section="hobbies"
+        className="flex min-h-screen flex-col items-center justify-center gap-3 border-b border-border px-6"
+      >
+        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground">HOBBIES</p>
+      </section>
+      <Contact />
     </div>
   )
 }

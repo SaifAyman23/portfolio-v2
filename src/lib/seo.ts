@@ -19,26 +19,6 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
   },
-  '/login': {
-    title: `Sign in · ${SITE_NAME}`,
-    description: `Sign in to your ${SITE_NAME} account.`,
-  },
-  '/register': {
-    title: `Create an account · ${SITE_NAME}`,
-    description: `Create a new ${SITE_NAME} account in seconds.`,
-  },
-  '/forgot-password': {
-    title: `Reset password · ${SITE_NAME}`,
-    description: `Reset your ${SITE_NAME} password.`,
-  },
-  '/verify-otp': {
-    title: `Verify your identity · ${SITE_NAME}`,
-    description: `Enter the one-time code sent to your inbox.`,
-  },
-  '/reset-password': {
-    title: `Set a new password · ${SITE_NAME}`,
-    description: `Choose a new password for your ${SITE_NAME} account.`,
-  },
 }
 
 export function patternToRegex(pattern: string): RegExp {

@@ -6,9 +6,14 @@ import react from '@vitejs/plugin-react'
 import { loadEnv, type Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
 
-const DEFAULT_SITE_URL = 'https://saifayman23.github.io/portfolio/'
+const DEFAULT_SITE_URL = 'https://example.com'
 
-const SITEMAP_PATHS = [{ path: '/', priority: '1.0' }]
+const SITEMAP_PATHS = [
+  { path: '/', priority: '1.0' },
+  { path: '/login', priority: '0.5' },
+  { path: '/register', priority: '0.5' },
+  { path: '/forgot-password', priority: '0.3' },
+]
 
 function siteFiles(siteUrl: string): Plugin {
   const url = siteUrl.replace(/\/+$/, '')
@@ -49,7 +54,6 @@ export default defineConfig(({ mode }) => {
   const siteUrl = env.VITE_SITE_URL || DEFAULT_SITE_URL
 
   return {
-    base: mode === 'production' ? '/portfolio/' : '/',
     plugins: [
       react({
         babel: {
@@ -79,6 +83,7 @@ export default defineConfig(({ mode }) => {
               '@radix-ui/react-slot',
               '@radix-ui/react-label',
             ],
+            'vendor-motion': ['motion'],
             'vendor-gsap': ['gsap'],
             'vendor-three': ['three'],
           },
