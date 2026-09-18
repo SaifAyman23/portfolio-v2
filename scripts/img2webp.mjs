@@ -4,7 +4,7 @@ import { extname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import sharp from 'sharp'
 
-const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png'])
+const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.jfif', '.png'])
 
 function parseArgs(argv) {
   const args = { quality: 82, lossless: false, width: 0, height: 0, inputs: [] }

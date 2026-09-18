@@ -5,6 +5,7 @@ export const SECTIONS = [
   { id: 'projects', label: 'PROJECTS', title: 'PROJECTS' },
   { id: 'tools', label: 'TOOLS', title: 'TOOLS' },
   { id: 'contact', label: 'CONTACT', title: 'CONTACT' },
+  { id: 'footer', label: 'REACH OUT', title: 'REACH OUT' },
 ] as const
 
 export type SectionId = (typeof SECTIONS)[number]['id']

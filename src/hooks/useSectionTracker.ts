@@ -23,8 +23,8 @@ export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): Sect
 
       return ScrollTrigger.create({
         trigger: el,
-        start: 'top center',
-        end: 'bottom center',
+        start: 'top 10%',
+        end: 'bottom 10%',
         onToggle: (self) => {
           if (self.isActive) {
             setActive(id)

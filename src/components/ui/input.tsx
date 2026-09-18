@@ -9,10 +9,12 @@ import { cn } from '@/lib/utils'
 
 // ─── Input ────────────────────────────────────────────────────────────────────
 
-export interface InputProps extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariants {}
+export interface InputProps extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariants {
+  placeholderClassName?: string
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, type, ...props }, ref) => {
+  ({ className, placeholderClassName, variant, type, ...props }, ref) => {
     // Textarea variant – render <textarea> when variant="textarea"
     if (variant === 'textarea') {
       const { rows, maxLength, ...rest } = props as React.ComponentProps<'textarea'> & InputProps
@@ -21,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref as React.Ref<HTMLTextAreaElement>}
           rows={rows ?? 4}
           maxLength={maxLength}
-          className={cn(inputVariants({ variant }), className)}
+          className={cn(inputVariants({ variant }), placeholderClassName, className, 'border-b-3')}
           {...(rest as React.ComponentProps<'textarea'>)}
         />
       )
@@ -32,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         type={type ?? (variant === 'file' ? 'file' : 'text')}
         data-slot="input"
-        className={cn(inputVariants({ variant }), className)}
+        className={cn(inputVariants({ variant }), placeholderClassName, className)}
         {...props}
       />
     )
@@ -48,7 +50,7 @@ const Textarea = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <textarea
     ref={ref}
-    className={cn(inputVariants({ variant: 'textarea' }), className)}
+    className={cn(inputVariants({ variant: 'textarea' }), className, 'border-b-3')}
     {...props}
   />
 ))

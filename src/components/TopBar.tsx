@@ -32,6 +32,8 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
   )
 
   const label = SECTIONS.find((section) => section.id === active)?.label ?? active
+  const light = active === 'about' || active === 'experience' || active === 'footer'
+  const baseColor = light ? 'white' : 'var(--foreground)'
 
   return (
     <header
@@ -44,7 +46,7 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
       <div
         data-slot="top-bar-bars"
         aria-hidden="true"
-        className="flex w-full max-w-4xl items-start justify-center gap-[3px] px-6"
+        className="flex w-full max-w-4xl items-start transition-all justify-center gap-[3px] px-6"
       >
         {bars.map((bar, i) => {
           const redMix = Math.pow(bar.opacity, 8) * 100
@@ -52,12 +54,12 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
             <span
               key={i}
               data-slot={i === center ? 'top-bar-bar-active' : 'top-bar-bar'}
-              className="w-[2px] shrink-0 rounded-full"
+              className="w-[2px] shrink-0 rounded-full transition-[background-color] duration-500"
               style={{
                 height: bar.height,
                 filter: `blur(${bar.blur.toFixed(2)}px)`,
                 opacity: bar.opacity.toFixed(3),
-                backgroundColor: `color-mix(in srgb, var(--accent) ${redMix.toFixed(1)}%, var(--foreground) ${(100 - redMix).toFixed(1)}%)`,
+                backgroundColor: `color-mix(in srgb, var(--accent) ${redMix.toFixed(1)}%, ${baseColor} ${(100 - redMix).toFixed(1)}%)`,
               }}
             />
           )
@@ -69,7 +71,14 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
         className="topbar-name mt-1.5"
         style={{ '--enter-dir': direction } as CSSProperties}
       >
-        <span className="font-ticking text-xs tracking-[0.3em] text-foreground">{label}</span>
+        <span
+          className={cn(
+            'font-ticking text-xs tracking-[0.3em] transition-colors duration-500',
+            light ? 'text-white' : 'text-foreground'
+          )}
+        >
+          {label}
+        </span>
       </div>
     </header>
   )

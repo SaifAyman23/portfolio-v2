@@ -11,11 +11,17 @@ function Button({
   variant = 'default',
   size = 'default',
   asChild = false,
+  stroke,
+  strokeWidth,
+  fill, 
   children,
   ...props
 }: React.ComponentProps<'button'> &
   ButtonVariants & {
     asChild?: boolean
+    stroke?: string
+    strokeWidth?: number
+    fill?: string
   }) {
   if (asChild) {
     return (
@@ -40,9 +46,10 @@ function Button({
       <CyberFrame
         data-slot="button-frame"
         className="absolute inset-0"
-        contentClassName="flex h-full w-full items-center justify-center p-0"
-        stroke="currentColor"
-        strokeWidth={2}
+        contentClassName="flex h-full w-full items-center justify-center font-ticking parent"
+        stroke={stroke ?? '#FFFFFF'}
+        fill={fill ?? 'transparent'}
+        strokeWidth={strokeWidth ?? 1}
       >
         {children}
       </CyberFrame>

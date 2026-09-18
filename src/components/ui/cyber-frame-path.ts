@@ -23,3 +23,7 @@ export function buildCyberFramePath(
 }
 
 export const CYBER_FRAME_PATH = buildCyberFramePath()
+
+export function cyberFrameClip(chamferX = 18, chamferY = 18) {
+  return `polygon(${chamferX}px 0, 100% 0, 100% calc(100% - ${chamferY}px), calc(100% - ${chamferX}px) 100%, 0 100%, 0 ${chamferY}px)`
+}

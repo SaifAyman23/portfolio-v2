@@ -1,4 +1,5 @@
 import { CyberFrame } from './cyber-frame'
+import { cyberFrameClip } from './cyber-frame-path'
 
 import { cn } from '@/lib/utils'
 
@@ -18,6 +19,8 @@ export type CyberImageProps = {
   stroke?: string | false
   strokeWidth?: number
   fill?: string
+  chamferX?: number
+  chamferY?: number
   imgRef?: React.Ref<HTMLImageElement>
 }
 
@@ -37,31 +40,44 @@ export function CyberImage({
   stroke,
   strokeWidth,
   fill,
+  chamferX = 54,
+  chamferY = 54,
   imgRef,
 }: CyberImageProps) {
   return (
     <CyberFrame
       data-slot="cyber-image"
-      className={frameClassName}
-      contentClassName={cn('p-2', contentClassName)}
+      className={cn('w-full', frameClassName)}
+      contentClassName={cn('p-0', contentClassName)}
       stroke={stroke}
       strokeWidth={strokeWidth}
       fill={fill}
+      chamferX={chamferX}
+      chamferY={chamferY}
     >
-      <img
-        ref={imgRef}
-        data-slot="cyber-image-img"
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={loading}
-        decoding={decoding}
-        fetchPriority={fetchPriority}
-        srcSet={srcSet}
-        sizes={sizes}
-        className={cn('block h-auto w-full', imgClassName)}
-      />
+      <div
+        data-slot="cyber-image-viewport"
+        className="relative h-full w-full overflow-hidden"
+        style={{
+          clipPath: cyberFrameClip(chamferX, chamferY),
+        }}
+      >
+        <img
+          ref={imgRef}
+          data-slot="cyber-image-img"
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={loading}
+          decoding={decoding}
+          fetchPriority={fetchPriority}
+          srcSet={srcSet}
+          sizes={sizes}
+          draggable={false}
+          className={cn('absolute inset-0 h-full w-full object-cover', imgClassName)}
+        />
+      </div>
     </CyberFrame>
   )
 }

@@ -51,6 +51,9 @@
   --font-universa:
     'Universa', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
     sans-serif;
+  --font-inter:
+    'Inter', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
+    sans-serif;
 
   /* Accent */
   --color-accent-sky: #68bdf2;
@@ -267,6 +270,11 @@
     @apply text-accent-sky dark:text-accent-sky;
   }
 
+  input:active {
+    outline: none;
+    box-shadow: none;
+  }
+
   /* ── Small text ── */
   small,
   .text-small {
@@ -408,6 +416,9 @@
 .font-universa {
   font-family: var(--font-universa);
 }
+.font-inter {
+  font-family: var(--font-inter);
+}
 
 * {
   scrollbar-width: thin;
@@ -442,6 +453,17 @@
 :focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Text inputs never show focus/active chrome — only their bottom border. */
+input:focus,
+input:focus-visible,
+input:active,
+textarea:focus,
+textarea:focus-visible,
+textarea:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
