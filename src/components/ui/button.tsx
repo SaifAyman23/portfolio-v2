@@ -13,7 +13,7 @@ function Button({
   asChild = false,
   stroke,
   strokeWidth,
-  fill, 
+  fill,
   children,
   ...props
 }: React.ComponentProps<'button'> &

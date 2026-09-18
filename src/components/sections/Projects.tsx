@@ -54,8 +54,8 @@ export function Projects() {
           </p>
 
           <div className="flex max-w-xl flex-wrap justify-center gap-3">
-            {skills.go.map((skill) => (
-              <Tag text={skill} className="text-white"/>
+            {skills.go.map((skill, i) => (
+              <Tag key={i} text={skill} className="text-white"/>
             ))}
           </div>
 

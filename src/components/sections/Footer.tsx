@@ -1,6 +1,6 @@
-import { JapaneseText } from "../ui/japanese-text";
-import bg from "@/assets/img/download-1.webp"
-import { Info } from "./Hero";
+import { JapaneseText } from '../ui/japanese-text'
+import bg from '@/assets/img/download-1.webp'
+import { HeroInfo } from './HeroInfo'
 
 export function Footer() {
   return (
@@ -13,23 +13,22 @@ export function Footer() {
         <img src={bg} className="w-full object-cover" alt="background image" />
       </div>
       <div className="w-full z-20 h-full flex items-center justify-center bg-red-900 mix-blend-multiply">
-        <JapaneseText text={"サイフ"} className="text-blue-800 text-[590px] font-bold" />
+        <JapaneseText text={'サイフ'} className="text-blue-800 text-[590px] font-bold" />
       </div>
       <div
         className="absolute inset-0 z-20 backdrop-blur-xl"
         style={{
           maskImage:
-            "radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)",
+            'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',
           WebkitMaskImage:
-            "radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 80%, black 100%)",
+            'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 80%, black 100%)',
         }}
       />
       <div className="w-full z-20 h-full flex items-center justify-center absolute">
         <h1 className="text-[300px] font-ticking text-white">Saif Eldin</h1>
       </div>
 
-      <Info className={`flex xl:absolute *:text-white bottom-20 gap-2 z-30`} fill="black"/>
-
+      <HeroInfo className={`flex xl:absolute *:text-white bottom-20 gap-2 z-30`} fill='black' />
     </section>
   )
 }
