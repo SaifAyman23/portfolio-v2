@@ -1,11 +1,10 @@
 import { gsap } from 'gsap'
 import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { BiLogoPostgresql } from 'react-icons/bi'
+import { SiCelery, SiDjango, SiFirebase, SiPython, SiRedis } from 'react-icons/si'
 
+import { CyberFrame } from '@/components/ui/cyber-frame'
 import { cn } from '@/lib/utils'
-import { CyberFrame } from '../ui/cyber-frame'
-
-import { SiDjango, SiPython, SiRedis, SiCelery, SiFirebase } from 'react-icons/si'
-import { BiLogoPostgresql } from "react-icons/bi";
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
   const rad = ((deg - 90) * Math.PI) / 180
@@ -35,9 +34,9 @@ export function Radar({
   size = 320,
   rings = [
     { r: 144.5, color: 'black' },
-    { r: 103.5, color: '#B50000' },
+    { r: 103.5, color: 'var(--accent)' },
     { r: 59.5, color: 'black' },
-    { r: 19.5, color: '#B50000' },
+    { r: 19.5, color: 'var(--accent)' },
   ],
   sweepSpan = 55,
   sweepFrom = '#FF8484',
@@ -100,7 +99,7 @@ export function Radar({
           data-slot="radar-icon"
           className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
         >
-          {children ?? <span className="block h-3 w-3 rounded-full bg-[#B50000]" />}
+          {children ?? <span className="block h-3 w-3 rounded-full bg-accent" />}
         </div>
       )}
     </div>
@@ -171,7 +170,7 @@ export function RulerBar({
   minorStart = 57.5,
   baselineY = 29.5,
   majorColor = 'black',
-  minorColor = '#B50000',
+  minorColor = 'var(--accent)',
   strokeWidth = 3,
   label,
   labelClassName,
@@ -376,11 +375,12 @@ export function Tools() {
         <div className="col-span-3 flex flex-col items-center justify-between py-10">
           <CyberFrame className="w-3/6 relative" strokeWidth={3} stroke="black">
             <div className="flex flex-col items-center gap-2">
-              {activeSkillSet.skills.map((skill, index) => (
+              {activeSkillSet.skills.map((skill) => (
                 <button
-                  key={index}
-                  className="flex cursor-pointer font-universa items-center gap-3 text-lg"
-                  onClick={() => setActiveSkill(activeSkillSet.skills[index])}
+                  key={skill.title}
+                  type="button"
+                  className="flex cursor-pointer items-center gap-3 font-universa text-lg"
+                  onClick={() => setActiveSkill(skill)}
                 >
                   <span>{skill.title}</span>
                 </button>
@@ -390,13 +390,15 @@ export function Tools() {
               <p className="text-accent">{activeSkillSet.title}</p>
             </div>
           </CyberFrame>
-          <Radar showIcon={true} children={activeSkill.icon}  />
+          <Radar showIcon={true} children={activeSkill.icon} />
         </div>
         <div className="col-span-6 flex flex-col items-center justify-center">
           <div className="h-5/6 relative w-full flex justify-center items-end mb-10">
             <TickRing size={600} />
-            <div className='absolute end-20'>
-              <p className='text-accent text-xl'>1.2 km <br/> tot acq</p>
+            <div className="absolute end-20">
+              <p className="text-accent text-xl">
+                1.2 km <br /> tot acq
+              </p>
             </div>
           </div>
           <div className="mx-auto flex items-end h-1/6 w-2/3">
