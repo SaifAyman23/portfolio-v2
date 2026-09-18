@@ -19,7 +19,7 @@ export function Tag({
   textClassName,
   stroke,
   strokeWidth,
-  fill = "black",
+  fill = 'black',
 }: TagProps) {
   return (
     <CyberFrame
@@ -30,7 +30,10 @@ export function Tag({
       strokeWidth={strokeWidth}
       fill={fill}
     >
-      <span data-slot="tag-text" className={cn('font-ticking text-xl px-5 tracking-wide', textClassName)}>
+      <span
+        data-slot="tag-text"
+        className={cn('font-ticking text-xl px-5 tracking-wide', textClassName)}
+      >
         {text}
       </span>
     </CyberFrame>

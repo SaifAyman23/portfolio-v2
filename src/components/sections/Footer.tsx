@@ -1,6 +1,7 @@
-import { JapaneseText } from '../ui/japanese-text'
-import bg from '@/assets/img/download-1.webp'
 import { HeroInfo } from './HeroInfo'
+
+import bg from '@/assets/img/download-1.webp'
+import { JapaneseText } from '@/components/ui/japanese-text'
 
 export function Footer() {
   return (
@@ -28,7 +29,7 @@ export function Footer() {
         <h1 className="text-[300px] font-ticking text-white">Saif Eldin</h1>
       </div>
 
-      <HeroInfo className={`flex xl:absolute *:text-white bottom-20 gap-2 z-30`} fill='black' />
+      <HeroInfo className="flex gap-2 *:text-white bottom-20 z-30 xl:absolute" fill="black" />
     </section>
   )
 }

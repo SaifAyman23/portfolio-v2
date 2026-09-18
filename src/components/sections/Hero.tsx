@@ -1,8 +1,8 @@
-import PixelBlast from '@/components/PixelBlast'
-import { JapaneseText } from '@/components/ui/japanese-text'
-
 import { HeroBlurb } from './HeroBlurb'
 import { HeroInfo } from './HeroInfo'
+
+import PixelBlast from '@/components/PixelBlast'
+import { JapaneseText } from '@/components/ui/japanese-text'
 
 const reduceMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches

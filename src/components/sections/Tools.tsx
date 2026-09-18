@@ -329,7 +329,7 @@ export function Tools() {
     },
   }
 
-  const [activeSkillSet, setActiveSkillSet] = useState(skills.backend)
+  const [activeSkillSet] = useState(skills.backend)
   const [activeSkill, setActiveSkill] = useState(skills.backend.skills[0])
 
   useLayoutEffect(() => {
