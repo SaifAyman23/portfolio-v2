@@ -2,7 +2,26 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { useId, useRef, useState } from 'react'
 import { BiLogoPostgresql } from 'react-icons/bi'
-import { SiCelery, SiDjango, SiFirebase, SiPython, SiRedis } from 'react-icons/si'
+import {
+  SiCelery,
+  SiDjango,
+  SiDocker,
+  SiFigma,
+  SiFirebase,
+  SiFramer,
+  SiGit,
+  SiGithub,
+  SiJavascript,
+  SiMysql,
+  SiPostman,
+  SiPython,
+  SiReact,
+  SiReactquery,
+  SiRedis,
+  SiTailwindcss,
+  SiTypescript,
+  SiVercel,
+} from 'react-icons/si'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { cn } from '@/lib/utils'
@@ -322,10 +341,33 @@ export function Tools() {
       skills: [
         { title: 'Python', icon: <SiPython className="size-35 text-blue-600 drop-shadow-2xl" /> },
         { title: 'Django', icon: <SiDjango className="size-35 text-green-800" /> },
-        { title: 'PostgresQL', icon: <BiLogoPostgresql className="size-35 text-sky-700" /> },
+        { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35 text-sky-700" /> },
+        { title: 'MySQL', icon: <SiMysql className="size-35 text-blue-700" /> },
         { title: 'Redis', icon: <SiRedis className="size-35 text-red-700" /> },
         { title: 'Celery', icon: <SiCelery className="size-35 text-lime-600" /> },
         { title: 'Firebase', icon: <SiFirebase className="size-35 text-amber-600" /> },
+      ],
+    },
+    frontend: {
+      title: 'Frontend',
+      skills: [
+        { title: 'React', icon: <SiReact className="size-35 text-sky-400" /> },
+        { title: 'TypeScript', icon: <SiTypescript className="size-35 text-blue-600" /> },
+        { title: 'JavaScript', icon: <SiJavascript className="size-35 text-yellow-500" /> },
+        { title: 'Tailwind', icon: <SiTailwindcss className="size-35 text-cyan-500" /> },
+        { title: 'TanStack Query', icon: <SiReactquery className="size-35 text-pink-600" /> },
+        { title: 'Framer Motion', icon: <SiFramer className="size-35 text-fuchsia-500" /> },
+      ],
+    },
+    tools: {
+      title: 'Tools',
+      skills: [
+        { title: 'Git', icon: <SiGit className="size-35 text-orange-600" /> },
+        { title: 'GitHub', icon: <SiGithub className="size-35 text-black" /> },
+        { title: 'Docker', icon: <SiDocker className="size-35 text-sky-600" /> },
+        { title: 'Vercel', icon: <SiVercel className="size-35 text-black" /> },
+        { title: 'Figma', icon: <SiFigma className="size-35 text-violet-500" /> },
+        { title: 'Postman', icon: <SiPostman className="size-35 text-orange-500" /> },
       ],
     },
   }
@@ -373,7 +415,7 @@ export function Tools() {
       className="flex h-screen flex-col items-center justify-center gap-8 px-6 py-10"
     >
       <div className="grid h-full w-full gap-10 md:grid-cols-12">
-        <div className="col-span-3 flex flex-col items-center justify-between py-10">
+        <div className="relative z-[60] col-span-3 flex flex-col items-center justify-between py-10">
           <CyberFrame className="w-3/6 relative" strokeWidth={3} stroke="black">
             <div className="flex flex-col items-center gap-2">
               {activeSkillSet.skills.map((skill) => (

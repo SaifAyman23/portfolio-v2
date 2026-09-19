@@ -6,6 +6,9 @@ import './index.css'
 import App from './App.tsx'
 
 import { queryClient } from '@/lib/queryClient'
+import { initSmoothScroll } from '@/lib/smoothScroll'
+
+initSmoothScroll()
 
 const skeleton = document.getElementById('loading-skeleton')
 if (skeleton) {

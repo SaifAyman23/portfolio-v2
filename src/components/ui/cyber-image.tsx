@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { CyberFrame } from './cyber-frame'
 import { cyberFrameClip } from './cyber-frame-path'
 
@@ -44,6 +46,27 @@ export function CyberImage({
   chamferY = 54,
   imgRef,
 }: CyberImageProps) {
+  const [top, setTop] = useState(src)
+  const [bottom, setBottom] = useState<string | null>(null)
+  const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    if (src === top) return
+    const frame = requestAnimationFrame(() => {
+      setBottom(src)
+      setFading(true)
+    })
+    const timer = window.setTimeout(() => {
+      setTop(src)
+      setFading(false)
+      setBottom(null)
+    }, 700)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.clearTimeout(timer)
+    }
+  }, [src, top])
+
   return (
     <CyberFrame
       data-slot="cyber-image"
@@ -62,10 +85,28 @@ export function CyberImage({
           clipPath: cyberFrameClip(chamferX, chamferY),
         }}
       >
+        {bottom && (
+          <img
+            key={bottom}
+            aria-hidden="true"
+            data-slot="cyber-image-img-next"
+            src={bottom}
+            alt=""
+            width={width}
+            height={height}
+            loading={loading}
+            decoding={decoding}
+            draggable={false}
+            className={cn(
+              'animate-blur-in absolute inset-0 z-0 h-full w-full object-cover',
+              imgClassName
+            )}
+          />
+        )}
         <img
           ref={imgRef}
           data-slot="cyber-image-img"
-          src={src}
+          src={top}
           alt={alt}
           width={width}
           height={height}
@@ -75,7 +116,11 @@ export function CyberImage({
           srcSet={srcSet}
           sizes={sizes}
           draggable={false}
-          className={cn('absolute inset-0 h-full w-full object-cover', imgClassName)}
+          className={cn(
+            'absolute inset-0 z-10 h-full w-full object-cover',
+            fading && 'animate-fade-blur-out',
+            imgClassName
+          )}
         />
       </div>
     </CyberFrame>

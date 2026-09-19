@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SplitText } from 'gsap/SplitText'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -10,7 +11,7 @@ import MainLayout from './MainLayout'
 import { SeoUpdater } from '@/components/SeoUpdater'
 import { ROUTES } from '@/lib/constants'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const Home = lazy(() => import('@/pages/Home'))
 
@@ -21,7 +22,7 @@ function App() {
     <Router>
       <SeoUpdater />
       <Suspense fallback={null}>
-        <JetScene progressRef={progressRef} />
+        <JetScene active={active} progressRef={progressRef} />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Home active={active} direction={direction} />} />

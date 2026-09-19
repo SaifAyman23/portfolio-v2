@@ -9,40 +9,73 @@ export type SectionTracker = {
   progressRef: React.RefObject<Record<SectionId, number>>
 }
 
-// Viewport line sections are judged against (10% from the top).
-// Kept as the single handoff rule so every consumer agrees.
 const ACTIVATION_LINE = 0.1
 
-export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): SectionTracker {
+/*
+ * A pinned section stops moving while it's pinned — GSAP instead
+ * moves its `.pin-spacer` wrapper through the full scroll distance
+ * (natural height + whatever extra the pin consumes). Measuring the
+ * spacer when it exists keeps progress correct through a pin without
+ * this hook needing to know that pin exists at all.
+ */
+function measureSection(element: HTMLElement): DOMRect {
+  const parent = element.parentElement
+  return parent?.classList.contains('pin-spacer')
+    ? parent.getBoundingClientRect()
+    : element.getBoundingClientRect()
+}
+
+export function useSectionTracker(
+  ids: readonly SectionId[] = SECTION_IDS
+): SectionTracker {
   const [active, setActive] = useState<SectionId>(ids[0])
   const [direction, setDirection] = useState<1 | -1>(1)
+
   const progressRef = useRef(
     Object.fromEntries(ids.map((id) => [id, 0])) as Record<SectionId, number>
   )
+
   const lastY = useRef(typeof window === 'undefined' ? 0 : window.scrollY)
 
   useEffect(() => {
-    // Single trigger for the whole page. Active section is derived from
-    // measured section rectangles — never from per-section trigger
-    // positions — so trigger count stays at one no matter how many
-    // section timelines exist, and none can starve or reorder it.
+    let observer: MutationObserver | null = null
+
     const update = () => {
       const elements = ids.map((id) => document.getElementById(id))
-      if (elements.some((el) => !el)) return
+      if (elements.some((element) => !element)) return
 
       const line = window.innerHeight * ACTIVATION_LINE
       const y = window.scrollY
-      const nextDirection = y >= lastY.current ? 1 : -1
+      const nextDirection: 1 | -1 = y >= lastY.current ? 1 : -1
       lastY.current = y
-      setDirection((prev) => (prev === nextDirection ? prev : nextDirection))
+
+      setDirection((previous) =>
+        previous === nextDirection ? previous : nextDirection
+      )
 
       let current = ids[0]
-      elements.forEach((el, i) => {
-        const rect = el!.getBoundingClientRect()
-        progressRef.current[ids[i]] = Math.min(Math.max((line - rect.top) / rect.height, 0), 1)
-        if (rect.top <= line && rect.bottom >= line) current = ids[i]
+
+      elements.forEach((element, index) => {
+        if (!element) return
+
+        const rect = measureSection(element)
+
+        progressRef.current[ids[index]] = Math.min(
+          Math.max((line - rect.top) / rect.height, 0),
+          1
+        )
+
+        if (rect.top <= line && rect.bottom > line) {
+          current = ids[index]
+        }
       })
-      setActive((prev) => (prev === current ? prev : current))
+
+      setActive((previous) => (previous === current ? previous : current))
+    }
+
+    const refresh = () => {
+      ScrollTrigger.refresh()
+      update()
     }
 
     const tracker = ScrollTrigger.create({
@@ -51,12 +84,27 @@ export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): Sect
       end: 'bottom bottom',
       onUpdate: update,
     })
+
     update()
-    window.addEventListener('load', update)
+
+    window.addEventListener('resize', refresh)
+    window.addEventListener('load', refresh)
+
+    observer = new MutationObserver(() => {
+      if (!ids.every((id) => document.getElementById(id))) return
+      refresh()
+      observer?.disconnect()
+      observer = null
+    })
+
+    observer.observe(document.body, { childList: true, subtree: true })
 
     return () => {
-      window.removeEventListener('load', update)
       tracker.kill()
+      observer?.disconnect()
+      observer = null
+      window.removeEventListener('resize', refresh)
+      window.removeEventListener('load', refresh)
     }
   }, [ids])
 

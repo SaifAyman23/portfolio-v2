@@ -1,3 +1,4 @@
+import { ScrollBar } from '@/components/ScrollBar'
 import { About, Contact, Experience, Footer, Hero, Projects, Tools } from '@/components/sections'
 import { TopBar } from '@/components/TopBar'
 
@@ -10,6 +11,7 @@ export default function Home(props: HomeProps) {
   return (
     <div className="bg-background">
       <TopBar active={props.active} direction={props.direction} />
+      <ScrollBar appearDelayMs={5000} />
       <Hero />
       <About />
       <Experience />

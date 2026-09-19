@@ -193,6 +193,7 @@
     font-size: 1rem;
     line-height: 1.6;
     font-weight: 400;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -385,6 +386,40 @@
 }
 .animate-fade-in-scale {
   animation: fade-in-scale 0.4s ease forwards;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 0.65s ease forwards;
+}
+
+@keyframes fade-blur-out {
+  to {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+
+.animate-fade-blur-out {
+  animation: fade-blur-out 0.65s ease forwards;
+}
+
+@keyframes blur-in {
+  from {
+    filter: blur(8px);
+  }
+  to {
+    filter: blur(0);
+  }
+}
+
+.animate-blur-in {
+  animation: blur-in 0.65s ease forwards;
 }
 
 @keyframes topbar-name-in {
