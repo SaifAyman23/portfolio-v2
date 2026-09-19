@@ -421,30 +421,12 @@
 }
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #3b3d42 transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #3b3d42;
-  border-radius: 999px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: #5a5c63;
-}
-
-*::-webkit-scrollbar-corner {
-  background: transparent;
+  display: none;
 }
 
 /* ============================================================

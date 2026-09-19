@@ -304,7 +304,7 @@ export function Hero() {
       </div>
 
       <HeroInfo
-        className="z-30 flex gap-2 text-foreground xl:absolute -start-50 xl:rotate-90"
+        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`}
       />
 
       {!reduceMotion && (
@@ -379,6 +379,7 @@ export function Hero() {
           </p>
         </div>
       </div>
+
     </section>
   )
 }

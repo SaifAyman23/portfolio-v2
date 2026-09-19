@@ -96,68 +96,93 @@ function JetController({
      * While that section is between 10% from the top
      * and 10% from the bottom, GSAP scrubs the jet
      * from the previous pose to the current pose.
+     *
+     * Sections render inside lazy-loaded Home, which can resolve
+     * AFTER this effect runs — so legs are built the moment each
+     * section element appears instead of being skipped when missing.
      */
-    ids.forEach((id, index) => {
-      if (index === 0) return
+    const pending = new Set(ids.slice(1))
+    const legTimelines: gsap.core.Timeline[] = []
+    let observer: MutationObserver | null = null
 
+    const buildLeg = (id: SectionId, index: number) => {
       const section = document.getElementById(id)
-
-      if (!section) return
+      if (!section || !pending.has(id)) return
+      pending.delete(id)
 
       const previousId = ids[index - 1]
-
       const from = POSES[previousId]
       const to = POSES[id]
 
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 10%',
-          end: 'bottom 10%',
-          scrub: true,
+      legTimelines.push(
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 10%',
+              end: 'bottom 10%',
+              scrub: true,
 
-          onUpdate: (self) => {
-            progressRef.current[id] = self.progress
-          },
-        },
-      })
+              onUpdate: (self) => {
+                progressRef.current[id] = self.progress
+              },
+            },
+          })
+          .fromTo(
+            jet.position,
+            {
+              x: from.position[0],
+              y: from.position[1],
+              z: from.position[2],
+            },
+            {
+              x: to.position[0],
+              y: to.position[1],
+              z: to.position[2],
+              ease: 'none',
+              immediateRender: false,
+            },
+            0
+          )
+          .fromTo(
+            jet.rotation,
+            {
+              x: from.rotation[0],
+              y: from.rotation[1],
+              z: from.rotation[2],
+            },
+            {
+              x: to.rotation[0],
+              y: to.rotation[1],
+              z: to.rotation[2],
+              ease: 'none',
+              immediateRender: false,
+            },
+            0
+          )
+      )
+      if (pending.size === 0) observer?.disconnect()
+    }
 
-      timeline
-        .fromTo(
-          jet.position,
-          {
-            x: from.position[0],
-            y: from.position[1],
-            z: from.position[2],
-          },
-          {
-            x: to.position[0],
-            y: to.position[1],
-            z: to.position[2],
-            ease: 'none',
-            immediateRender: false,
-          },
-          0
-        )
-        .fromTo(
-          jet.rotation,
-          {
-            x: from.rotation[0],
-            y: from.rotation[1],
-            z: from.rotation[2],
-          },
-          {
-            x: to.rotation[0],
-            y: to.rotation[1],
-            z: to.rotation[2],
-            ease: 'none',
-            immediateRender: false,
-          },
-          0
-        )
+    ids.forEach((id, index) => {
+      if (index === 0) return
+      buildLeg(id, index)
     })
+    observer = new MutationObserver(() => {
+      ids.forEach((id, index) => {
+        if (index === 0) return
+        buildLeg(id, index)
+      })
+    })
+    if (pending.size > 0) observer.observe(document.body, { childList: true, subtree: true })
 
     ScrollTrigger.refresh()
+
+    return () => {
+      observer?.disconnect()
+      observer = null
+      legTimelines.forEach((timeline) => timeline.kill())
+    }
   })
 
   return (
