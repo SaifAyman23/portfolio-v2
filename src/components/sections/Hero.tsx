@@ -11,8 +11,7 @@ import { CyberFrame } from '../ui/cyber-frame'
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const reduceMotion =
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function Hero() {
   useGSAP(() => {
@@ -25,9 +24,7 @@ export function Hero() {
     const japanese = document.querySelector('#hero-japanese')
     const info = document.querySelector('[data-slot="hero-info"]')
     const loaderItems = document.querySelectorAll('#hero-loader > *')
-    const paragraphs = document.querySelectorAll(
-      '[data-slot="hero-blurb"]'
-    )
+    const paragraphs = document.querySelectorAll('[data-slot="hero-blurb"]')
     const overlay = document.querySelector('#hero-overlay')
 
     if (
@@ -103,11 +100,19 @@ export function Hero() {
       // filter: 'blur(20px)',
     })
 
-    document.body.style.overflow = 'hidden'
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } })
+      .__lenis
+
+    document.documentElement.style.overflow = 'hidden'
+    lenis?.stop()
+    ScrollTrigger.getAll().forEach((trigger) => trigger.disable(false))
 
     const tl = gsap.timeline({
       onComplete: () => {
-        document.body.style.overflow = ''
+        document.documentElement.style.overflow = ''
+        lenis?.start()
+        ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
+        ScrollTrigger.refresh()
       },
     })
 
@@ -121,9 +126,9 @@ export function Hero() {
       duration: 0.5,
       ease: 'steps(1)',
     })
-    
+
     // 1.5. CYBER LOADER
-    
+
     tl.from(
       loaderItems,
       {
@@ -134,9 +139,9 @@ export function Hero() {
       },
       '<0.1'
     )
-    
+
     // 2. LARGE TITLE BECOMES SHARP
-    
+
     tl.to(
       introSplit.chars,
       {
@@ -147,9 +152,9 @@ export function Hero() {
       },
       '<0.1'
     )
-    
+
     // 3. LARGE TITLE LEAVES
-    
+
     tl.to(
       intro,
       {
@@ -161,9 +166,9 @@ export function Hero() {
       },
       '+=0.15'
     )
-    
+
     // 4. WHITE SCREEN DISAPPEARS
-    
+
     tl.to(
       overlay,
       {
@@ -173,9 +178,9 @@ export function Hero() {
       },
       '<0.1'
     )
-    
+
     // 5. REAL HERO TITLE
-    
+
     tl.to(
       titleSplit.chars,
       {
@@ -188,9 +193,9 @@ export function Hero() {
       },
       '>-0.05'
     )
-    
+
     // 6. SUBTITLE
-    
+
     tl.to(subtitleSplit.chars, {
       opacity: 1,
       filter: 'blur(0px)',
@@ -198,9 +203,9 @@ export function Hero() {
       duration: 0.4,
       ease: 'none',
     })
-    
+
     // 7. HERO INFO BUTTONS
-    
+
     tl.to(
       infoItems,
       {
@@ -213,9 +218,9 @@ export function Hero() {
       },
       '<0.15'
     )
-    
+
     // 8. FIRST PARAGRAPH
-    
+
     tl.to(
       paragraphSplits[0].chars,
       {
@@ -227,9 +232,9 @@ export function Hero() {
       },
       '<0.1'
     )
-    
+
     // 9. SECOND PARAGRAPH
-    
+
     tl.to(
       paragraphSplits[1].chars,
       {
@@ -241,9 +246,9 @@ export function Hero() {
       },
       '<0.2'
     )
-    
+
     // 10. JAPANESE CENTER TEXT
-    
+
     tl.to(
       japaneseSplit.chars,
       {
@@ -257,6 +262,10 @@ export function Hero() {
     )
 
     return () => {
+      document.documentElement.style.overflow = ''
+      lenis?.start()
+      ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
+      ScrollTrigger.refresh()
       introSplit.revert()
       titleSplit.revert()
       subtitleSplit.revert()
@@ -275,10 +284,7 @@ export function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center gap-3 overflow-hidden px-6"
     >
       {/* White screen */}
-      <div
-        id="hero-overlay"
-        className="pointer-events-none absolute inset-0 z-50 bg-white"
-      />
+      <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-50 bg-white" />
 
       {/* Large intro title ABOVE the white screen */}
       <div
@@ -288,24 +294,14 @@ export function Hero() {
         <span className="text-[5vw] font-cyberform font-bold leading-none text-black">
           Brace Yourself
         </span>
-        <div
-          id="hero-loader"
-          className="mx-auto flex gap-2"
-        >
+        <div id="hero-loader" className="mx-auto flex gap-2">
           {Array.from({ length: 10 }).map((_, i) => (
-            <CyberFrame
-              key={i}
-              className="h-10 w-20"
-              fill="var(--accent)"
-              strokeWidth={0}
-            />
+            <CyberFrame key={i} className="h-10 w-20" fill="var(--accent)" strokeWidth={0} />
           ))}
         </div>
       </div>
 
-      <HeroInfo
-        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`}
-      />
+      <HeroInfo className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`} />
 
       {!reduceMotion && (
         <div className="absolute z-0 h-full w-full opacity-30">
@@ -333,15 +329,12 @@ export function Hero() {
 
       <div className="z-10 mb-20 flex flex-col">
         <JapaneseText
-          id={""}
+          id={''}
           text="サイフ"
           className="ms-15 hero-subtitle -mb-5 text-5xl font-bold text-accent"
         />
 
-        <h1
-          id="hero-title"
-          className="text-center xl:text-9xl"
-        >
+        <h1 id="hero-title" className="text-center xl:text-9xl">
           Saif Eldin
         </h1>
 
@@ -357,9 +350,7 @@ export function Hero() {
 
       <div className="grid h-[50vh] grid-cols-8 gap-3 xl:px-60">
         <div className="col-span-2 text-start">
-          <p data-slot="hero-blurb">
-            Building scalable web applications with modern technologies.
-          </p>
+          <p data-slot="hero-blurb">Building scalable web applications with modern technologies.</p>
         </div>
 
         <div className="col-span-4 text-center">
@@ -374,12 +365,9 @@ export function Hero() {
         </div>
 
         <div className="col-span-2 flex h-full flex-col justify-end text-start">
-          <p data-slot="hero-blurb">
-            Focused on clean architecture and smooth user experiences.
-          </p>
+          <p data-slot="hero-blurb">Focused on clean architecture and smooth user experiences.</p>
         </div>
       </div>
-
     </section>
   )
 }

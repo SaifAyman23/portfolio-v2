@@ -13,6 +13,7 @@ export function initSmoothScroll() {
     gestureOrientation: 'vertical',
   })
 
+  ;(window as unknown as { __lenis?: typeof lenis }).__lenis = lenis
   lenis.on('scroll', ScrollTrigger.update)
 
   const raf = (time: number) => lenis.raf(time * 1000)
@@ -22,5 +23,6 @@ export function initSmoothScroll() {
   return () => {
     gsap.ticker.remove(raf)
     lenis.destroy()
+    delete (window as unknown as { __lenis?: unknown }).__lenis
   }
 }

@@ -372,8 +372,9 @@ export function Tools() {
     },
   }
 
-  const [activeSkillSet] = useState(skills.backend)
-  const [activeSkill, setActiveSkill] = useState(skills.backend.skills[0])
+  const skillSets = [skills.backend, skills.frontend, skills.tools] as const
+  const [activeSkillSet, setActiveSkillSet] = useState(skillSets[0])
+  const [activeSkill, setActiveSkill] = useState(skillSets[0].skills[0])
 
   useGSAP(
     () => {
@@ -403,8 +404,56 @@ export function Tools() {
         ease: 'none',
         repeat: -1,
       })
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: rootRef.current,
+          start: 'top top',
+          end: '+=250%',
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const progress = self.progress
+            const nextIndex = Math.min(
+              Math.floor(progress * skillSets.length),
+              skillSets.length - 1
+            )
+            const nextSet = skillSets[nextIndex]
+            setActiveSkillSet((prev) => (prev === nextSet ? prev : nextSet))
+          },
+        },
+      })
     },
     { scope: rootRef }
+  )
+
+  useGSAP(
+    () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      gsap.from('[data-slot="skills-panel"]', {
+        autoAlpha: 0,
+        y: 18,
+        filter: 'blur(6px)',
+        duration: 0.45,
+        ease: 'power3.out',
+        stagger: 0.1,
+      })
+      gsap.from('[data-slot="skills-panel"] [data-slot="skill-btn"]', {
+        autoAlpha: 0,
+        y: 14,
+        filter: 'blur(6px)',
+        duration: 0.4,
+        ease: 'power3.out',
+        stagger: 0.05,
+      })
+      gsap.fromTo(
+        '[data-slot="radar-icon"]',
+        { autoAlpha: 0, scale: 0.75, filter: 'blur(6px)' },
+        { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.32, ease: 'power3.out' }
+      )
+    },
+    { dependencies: [activeSkillSet], scope: rootRef }
   )
 
   return (
@@ -415,12 +464,18 @@ export function Tools() {
       className="flex h-screen flex-col items-center justify-center gap-8 px-6 py-10"
     >
       <div className="grid h-full w-full gap-10 md:grid-cols-12">
-        <div className="relative z-[60] col-span-3 flex flex-col items-center justify-between py-10">
-          <CyberFrame className="w-3/6 relative" strokeWidth={3} stroke="black">
+        <div className="relative z-[9999] col-span-3 flex flex-col items-center justify-between py-10 [isolation:isolate]">
+          <CyberFrame
+            data-slot="skills-panel"
+            className="w-3/6 relative"
+            strokeWidth={3}
+            stroke="black"
+          >
             <div className="flex flex-col items-center gap-2">
               {activeSkillSet.skills.map((skill) => (
                 <button
                   key={skill.title}
+                  data-slot="skill-btn"
                   type="button"
                   className="flex cursor-pointer items-center gap-3 font-universa text-lg"
                   onClick={() => setActiveSkill(skill)}
