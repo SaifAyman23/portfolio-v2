@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 
 export type JapaneseTextProps = {
   text: string
+  id?: string
   color?: string
   border?: boolean
   className?: string
@@ -11,12 +12,13 @@ const JAPANESE_FONT = "'Inter','Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Go
 
 export function JapaneseText({
   text,
+  id,
   color = 'currentColor',
   border = false,
   className,
 }: JapaneseTextProps) {
   return (
-    <span className={cn('relative inline-block', className)} style={{ fontFamily: JAPANESE_FONT }}>
+    <span id={id} className={cn('relative inline-block', className)} style={{ fontFamily: JAPANESE_FONT }}>
       <span className="relative z-0" style={{ color }}>
         {text}
       </span>
@@ -24,7 +26,7 @@ export function JapaneseText({
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-[9999]"
-          style={{ color: 'transparent', WebkitTextStroke: `1px ${color}` }}
+          style={{ color: 'transparent', WebkitTextStroke: `3px ${color}` }}
         >
           {text}
         </span>

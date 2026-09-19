@@ -20,7 +20,7 @@ export function HeroInfo({
   fill?: string
 }) {
   return (
-    <div className={className}>
+    <div className={className} data-slot="hero-info">
       {links.map((link) => {
         const external = !link.href.startsWith('mailto:')
         return (

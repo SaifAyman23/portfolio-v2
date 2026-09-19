@@ -2,12 +2,44 @@ import bg from '@/assets/img/shinjuku-train.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 const skills = {
   go: ['Django', 'PostgresQL', 'Redis', 'Celery', 'React'],
 }
 
 export function Projects() {
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#projects',
+        start: 'top center',
+        end: 'bottom center',
+        scrub: true,
+      },
+    })
+
+    tl.fromTo(
+      '#projects h1',
+      { y: 100, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out' }
+    )
+    tl.fromTo(
+      '#projects p',
+      { y: 100, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out' },
+      '-=0.5'
+    )
+    tl.fromTo(
+      '#projects .tag',
+      { y: 100, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out', stagger: 0.1 },
+      '-=0.5'
+    )
+  }, [])
+
   return (
     <section
       id="projects"
@@ -37,7 +69,7 @@ export function Projects() {
         </div>
 
         <div className="relative col-span-3 text-center">
-          <JapaneseText text="最強" border className="font-bold text-accent text-[250px]" />
+          <JapaneseText text="最強" border className="font-bold text-[250px]" color='var(--accent)' />
         </div>
       </div>
 

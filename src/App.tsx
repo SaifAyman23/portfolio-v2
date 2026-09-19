@@ -3,6 +3,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+import { JetScene } from './components/jet/JetScene'
+import { useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
 import { SeoUpdater } from '@/components/SeoUpdater'
@@ -13,13 +15,16 @@ gsap.registerPlugin(ScrollTrigger)
 const Home = lazy(() => import('@/pages/Home'))
 
 function App() {
+  const { active, direction, progressRef } = useSectionTracker()
+
   return (
     <Router>
       <SeoUpdater />
       <Suspense fallback={null}>
+        <JetScene progressRef={progressRef} />
         <Routes>
           <Route element={<MainLayout />}>
-            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.HOME} element={<Home active={active} direction={direction} />} />
             {/* Future authenticated routes go here */}
           </Route>
         </Routes>

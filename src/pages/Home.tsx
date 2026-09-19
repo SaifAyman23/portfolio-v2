@@ -1,13 +1,15 @@
 import { About, Contact, Experience, Footer, Hero, Projects, Tools } from '@/components/sections'
 import { TopBar } from '@/components/TopBar'
-import { useSectionTracker } from '@/hooks/useSectionTracker'
 
-export default function Home() {
-  const { active, direction } = useSectionTracker()
+interface HomeProps {
+  active: 'hero' | 'about' | 'experience' | 'projects' | 'tools' | 'contact' | 'footer'
+  direction: 1 | -1
+}
 
+export default function Home(props: HomeProps) {
   return (
     <div className="bg-background">
-      <TopBar active={active} direction={direction} />
+      <TopBar active={props.active} direction={props.direction} />
       <Hero />
       <About />
       <Experience />

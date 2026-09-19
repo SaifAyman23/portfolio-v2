@@ -17,27 +17,41 @@ export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): Sect
   )
 
   useEffect(() => {
-    const triggers = ids.map((id) => {
-      const el = document.getElementById(id)
-      if (!el) return null
+    const triggers: Array<ScrollTrigger | null> = []
+    const pending = new Set(ids)
 
-      return ScrollTrigger.create({
-        trigger: el,
-        start: 'top 10%',
-        end: 'bottom 10%',
-        onToggle: (self) => {
-          if (self.isActive) {
-            setActive(id)
-            setDirection(self.direction === -1 ? -1 : 1)
-          }
-        },
-        onUpdate: (self) => {
-          progressRef.current[id] = self.progress
-        },
-      })
-    })
+    // Sections render inside lazy-loaded Home, which may resolve AFTER
+    // this effect runs. Create each trigger the moment its element
+    // appears instead of giving up on missing ones.
+    const createFor = (id: SectionId) => {
+      const el = document.getElementById(id)
+      if (!el || !pending.has(id)) return
+      pending.delete(id)
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 10%',
+          end: 'bottom 10%',
+          onToggle: (self) => {
+            if (self.isActive) {
+              setActive(id)
+              setDirection(self.direction === -1 ? -1 : 1)
+            }
+          },
+          onUpdate: (self) => {
+            progressRef.current[id] = self.progress
+          },
+        })
+      )
+      if (pending.size === 0) observer.disconnect()
+    }
+
+    ids.forEach(createFor)
+    const observer = new MutationObserver(() => ids.forEach(createFor))
+    if (pending.size > 0) observer.observe(document.body, { childList: true, subtree: true })
 
     return () => {
+      observer.disconnect()
       triggers.forEach((trigger) => trigger?.kill())
     }
   }, [ids])

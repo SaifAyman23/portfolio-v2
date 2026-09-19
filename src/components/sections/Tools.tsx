@@ -1,5 +1,6 @@
+import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { BiLogoPostgresql } from 'react-icons/bi'
 import { SiCelery, SiDjango, SiFirebase, SiPython, SiRedis } from 'react-icons/si'
 
@@ -332,9 +333,9 @@ export function Tools() {
   const [activeSkillSet] = useState(skills.backend)
   const [activeSkill, setActiveSkill] = useState(skills.backend.skills[0])
 
-  useLayoutEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => {
+  useGSAP(
+    () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
       gsap.from(
         '[data-slot="radar"], [data-slot="tick-ring"], [data-slot="ruler-bar"], [data-slot="cool-meter"]',
         {
@@ -360,9 +361,9 @@ export function Tools() {
         ease: 'none',
         repeat: -1,
       })
-    }, rootRef)
-    return () => ctx.revert()
-  }, [])
+    },
+    { scope: rootRef }
+  )
 
   return (
     <section
