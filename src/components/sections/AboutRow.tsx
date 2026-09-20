@@ -6,7 +6,7 @@ const blurb =
   'Two years of building the whole stack. ERPs, delivery platforms, AI tools, live-streaming infra. Django under the hood, React where it counts, real-time by default.'
 
 export function AboutRow({ flip = false }: { flip?: boolean }) {
-  const text = <p className="max-w-2xl text-white xl:text-2xl">{blurb}</p>
+  const text = <p className="max-w-2xl row-text text-white xl:text-2xl">{blurb}</p>
   const image = (
     <div className="w-50">
       <CyberImage src={portrait.src} alt={portrait.alt} width={200} height={200} />

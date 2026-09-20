@@ -421,12 +421,12 @@ export function Projects() {
     >
       <h2
         data-slot="projects-intro"
-        className="absolute inset-0 z-20 flex items-center justify-center text-[180px] font-bold"
+        className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center text-[180px] font-bold"
       >
         Projects
       </h2>
 
-      <div className="grid grid-cols-9 gap-5 w-full">
+      <div className="grid grid-cols-9 gap-5 w-full items-center">
         <div className="relative col-span-6">
           <h1
             className="absolute start-20 top-20 -rotate-30 text-transparent xl:text-[150px]"

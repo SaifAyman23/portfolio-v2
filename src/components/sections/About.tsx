@@ -1,29 +1,47 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { AboutRow } from './AboutRow'
+import { SplitText } from 'gsap/SplitText'
+import { CyberImage } from '@/components/ui/cyber-image'
+import bg1 from '@/assets/img/city.webp'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, SplitText)
+
+const reduceMotion =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function About() {
   useGSAP(() => {
+    if (reduceMotion) return
+
     const section = document.querySelector('#about')
 
     if (!section) return
 
-    const title = section.querySelector('.about-title')
-    const rows = section.querySelectorAll('.about-rows > *')
-
-    if (!title || rows.length < 2) return
-
-    gsap.set(title, {
-      opacity: 0,
-      x: 100,
+    const splitTitle = SplitText.create('.about-title', {
+      type: 'lines, words, chars',
+      linesClass: 'split-line',
+      wordsClass: 'split-word',
+      charsClass: 'split-char',
     })
 
-    gsap.set(rows, {
+    const splitRows1 = SplitText.create('.row-text-1', {
+      type: 'lines, words, chars',
+      linesClass: 'split-line',
+      wordsClass: 'split-word',
+      charsClass: 'split-char',
+    })
+
+    const splitRows2 = SplitText.create('.row-text-2', {
+      type: 'lines, words, chars',
+      linesClass: 'split-line',
+      wordsClass: 'split-word',
+      charsClass: 'split-char',
+    })
+
+    gsap.set('.row-img-1', {
       opacity: 0,
-      y: 60,
+      filter: 'blur(10px)',
     })
 
     const tl = gsap.timeline({
@@ -40,38 +58,57 @@ export function About() {
 
     // 1. ABOUT TITLE
 
-    tl.to(title, {
-      opacity: 1,
-      x: 0,
-      duration: 1,
+    tl.from(splitTitle.chars, {
+      opacity: 0,
+      filter: 'blur(10px)',
+      duration: 2,
+      stagger: 2,
       ease: 'none',
+    })
+
+    // 1.5. JAPANESE TEXT
+
+    tl.from('#about-japanese-text', {
+      opacity: 0,
+      filter: 'blur(10px)',
+      y: 100,
+      duration: 2,
     })
 
     // 2. FIRST ROW
 
-    tl.to(
-      rows[0],
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: 'none',
-      },
-      '<0.3'
-    )
+    tl.from(splitRows1.chars, {
+      opacity: 0,
+      filter: 'blur(10px)',
+      duration: 2,
+      stagger: 0.02,
+      ease: 'none',
+    }, '<0.3')
+
+    tl.to('.row-img-1', {
+      opacity: 1,
+      filter: 'blur(0px)',
+      duration: 1,
+      ease: 'none',
+    }, '<0.3')
 
     // 3. SECOND ROW
 
-    tl.to(
-      rows[1],
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: 'none',
-      },
-      '<0.3'
-    )
+    tl.from(splitRows2.chars, {
+      opacity: 0,
+      filter: 'blur(10px)',
+      duration: 2,
+      stagger: 0.02,
+      ease: 'none',
+    }, '<0.3')
+
+    tl.to('.row-img-1', {
+      opacity: 1,
+      filter: 'blur(0px)',
+      duration: 1,
+      ease: 'none',
+    }, '<0.3')
+
   }, [])
 
   return (
@@ -82,6 +119,7 @@ export function About() {
     >
       <div className="col-span-2 flex">
         <h1
+          id="about-japanese-text"
           className="rotate-90 break-keep text-[330px] font-bold text-transparent font-inter"
           style={{ WebkitTextStroke: `3px var(--accent)` }}
         >
@@ -93,8 +131,26 @@ export function About() {
         <h1 className="about-title text-start text-white xl:text-9xl">About</h1>
 
         <div className="about-rows flex flex-col gap-10">
-          <AboutRow />
-          <AboutRow flip />
+          <div className="flex w-full items-center gap-20">
+            <p className="max-w-2xl row-text-1 text-white xl:text-2xl">
+              Two years of building the whole stack. ERPs, delivery platforms, AI tools, live-streaming infra. Django under the hood, React where it counts, real-time by default.
+            </p>
+            <div className="w-50 row-img-1">
+              <CyberImage src={bg1} alt={"Background First"} strokeWidth={0}
+                stroke="transparent"
+                frameClassName="w-50 h-40" />
+            </div>
+          </div>
+          <div className="flex w-full items-center gap-20">
+            <div className="w-50 row-img-1">
+              <CyberImage src={bg1} alt={"Background First"} strokeWidth={0}
+                stroke="transparent"
+                frameClassName="w-50 h-40" />
+            </div>
+            <p className="max-w-2xl row-text-2 text-white xl:text-2xl">
+              Two years of building the whole stack. ERPs, delivery platforms, AI tools, live-streaming infra. Django under the hood, React where it counts, real-time by default.
+            </p>
+          </div>
         </div>
       </div>
     </section>
