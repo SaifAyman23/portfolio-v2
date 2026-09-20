@@ -301,7 +301,7 @@ export function Hero() {
         </div>
       </div>
 
-      <HeroInfo className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`} />
+      <HeroInfo dataSlot={"hero-info"} className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`} />
 
       {!reduceMotion && (
         <div className="absolute z-0 h-full w-full opacity-30">

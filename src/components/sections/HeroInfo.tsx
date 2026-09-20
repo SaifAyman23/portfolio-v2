@@ -13,14 +13,16 @@ export function HeroInfo({
   stroke = 'black',
   strokeWidth = 3,
   fill = 'white',
+  dataSlot,
 }: {
   className?: string
   stroke?: string
   strokeWidth?: number
   fill?: string
+  dataSlot?: string
 }) {
   return (
-    <div className={className} data-slot="hero-info">
+    <div className={className} data-slot={dataSlot}>
       {links.map((link) => {
         const external = !link.href.startsWith('mailto:')
         return (
