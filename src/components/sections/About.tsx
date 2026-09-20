@@ -33,6 +33,7 @@ export function About() {
         end: '+=2000',
         scrub: true,
         pin: true,
+        pinReparent: true,
         anticipatePin: 1,
       },
     })
@@ -89,9 +90,7 @@ export function About() {
       </div>
 
       <div className="z-10 col-span-4 mb-20 flex flex-col gap-10">
-        <h1 className="about-title text-start text-white xl:text-9xl">
-          About
-        </h1>
+        <h1 className="about-title text-start text-white xl:text-9xl">About</h1>
 
         <div className="about-rows flex flex-col gap-10">
           <AboutRow />

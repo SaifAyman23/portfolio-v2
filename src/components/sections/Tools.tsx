@@ -447,13 +447,20 @@ export function Tools() {
         ease: 'power3.out',
         stagger: 0.05,
       })
+    },
+    { dependencies: [activeSkillSet], scope: rootRef }
+  )
+
+  useGSAP(
+    () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
       gsap.fromTo(
         '[data-slot="radar-icon"]',
         { autoAlpha: 0, scale: 0.75, filter: 'blur(6px)' },
         { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.32, ease: 'power3.out' }
       )
     },
-    { dependencies: [activeSkillSet], scope: rootRef }
+    { dependencies: [activeSkill], scope: rootRef }
   )
 
   return (
@@ -461,7 +468,7 @@ export function Tools() {
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="flex h-screen flex-col items-center justify-center gap-8 px-6 py-10"
+      className="relative z-[60] flex h-screen flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
     >
       <div className="grid h-full w-full gap-10 md:grid-cols-12">
         <div className="relative z-[9999] col-span-3 flex flex-col items-center justify-between py-10 [isolation:isolate]">

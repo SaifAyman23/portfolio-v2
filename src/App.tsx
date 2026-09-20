@@ -22,7 +22,7 @@ function App() {
     <Router>
       <SeoUpdater />
       <Suspense fallback={null}>
-        <JetScene active={active} progressRef={progressRef} />
+        {/* <JetScene active={active} progressRef={progressRef} /> */}
         <Routes>
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<Home active={active} direction={direction} />} />

@@ -60,15 +60,11 @@ export function Projects() {
   useGSAP(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    const panels = gsap.utils.toArray<HTMLElement>(
-      '[data-slot="project-panel"]',
-    )
+    const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
     if (panels.length === 0) return
 
-    const intro = document.querySelector<HTMLElement>(
-      '[data-slot="projects-intro"]',
-    )
+    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
 
     if (!intro) return
 
@@ -80,16 +76,12 @@ export function Projects() {
       (panel) =>
         new SplitText(panel.querySelector('p'), {
           type: 'chars',
-        }),
+        })
     )
 
-    const image = document.querySelector<HTMLElement>(
-      '[data-slot="project-image"]',
-    )
+    const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
 
-    const japanese = document.querySelector<HTMLElement>(
-      '[data-slot="projects-japanese"]',
-    )
+    const japanese = document.querySelector<HTMLElement>('[data-slot="projects-japanese"]')
 
     /*
      * ─────────────────────────────
@@ -155,6 +147,7 @@ export function Projects() {
         end: '+=400%',
         scrub: true,
         pin: true,
+        pinReparent: true,
         anticipatePin: 1,
       },
     })
@@ -223,7 +216,7 @@ export function Projects() {
           duration: 2,
           ease: 'power2.out',
         },
-        '<1',
+        '<1'
       )
     }
 
@@ -240,7 +233,7 @@ export function Projects() {
           duration: 2,
           ease: 'power2.out',
         },
-        '<1',
+        '<1'
       )
     }
 
@@ -255,7 +248,7 @@ export function Projects() {
         duration: 0.9,
         ease: 'power2.out',
       },
-      '<0.25',
+      '<0.25'
     )
 
     /*
@@ -270,7 +263,7 @@ export function Projects() {
         stagger: 0.018,
         ease: 'none',
       },
-      '<0.15',
+      '<0.15'
     )
 
     /*
@@ -286,7 +279,7 @@ export function Projects() {
         stagger: 1,
         ease: 'power2.out',
       },
-      '<0.2',
+      '<0.2'
     )
 
     /*
@@ -340,7 +333,7 @@ export function Projects() {
           stagger: 0.07,
           ease: 'power2.in',
         },
-        '<0.05',
+        '<0.05'
       )
 
       /*
@@ -354,7 +347,7 @@ export function Projects() {
           duration: 0.7,
           ease: 'power2.in',
         },
-        '<',
+        '<'
       )
 
       /*
@@ -379,7 +372,7 @@ export function Projects() {
           stagger: 0.025,
           ease: 'none',
         },
-        '<0.12',
+        '<0.12'
       )
 
       /*
@@ -391,12 +384,10 @@ export function Projects() {
        */
       tl.call(
         () => {
-          setActiveIndex(
-            tl.scrollTrigger?.direction === -1 ? i : i + 1,
-          )
+          setActiveIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
         },
         [],
-        '<0.25',
+        '<0.25'
       )
 
       /*
@@ -412,7 +403,7 @@ export function Projects() {
           stagger: 0.1,
           ease: 'power2.out',
         },
-        '<0.15',
+        '<0.15'
       )
     })
 
@@ -459,10 +450,7 @@ export function Projects() {
           </div>
         </div>
 
-        <div
-          data-slot="projects-japanese"
-          className="relative col-span-3 text-center"
-        >
+        <div data-slot="projects-japanese" className="relative col-span-3 text-center">
           <JapaneseText
             text="最強"
             border
@@ -481,19 +469,13 @@ export function Projects() {
           >
             <div className="relative text-center flex flex-col justify-center items-center col-span-6 gap-10">
               <p className="text-3xl max-w-3xl">
-                <span className="font-bold">
-                  {project.title} —{' '}
-                </span>
+                <span className="font-bold">{project.title} — </span>
                 {project.description}
               </p>
 
               <div className="flex max-w-xl flex-wrap justify-center gap-3">
                 {project.stack.map((skill) => (
-                  <Tag
-                    key={skill}
-                    text={skill}
-                    className="text-white"
-                  />
+                  <Tag key={skill} text={skill} className="text-white" />
                 ))}
               </div>
             </div>
