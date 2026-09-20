@@ -6,6 +6,7 @@ import cityImg from '@/assets/img/city.webp'
 import download1Img from '@/assets/img/download-1.webp'
 import shinjukuImg from '@/assets/img/shinjuku-train.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
+import { prefersReducedMotion } from '@/lib/motion'
 
 const experiences = [
   {
@@ -30,35 +31,23 @@ const experiences = [
 
 export function Experience() {
   useGSAP(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReducedMotion()) return
 
-    const solidTitle = document.querySelector<HTMLElement>(
-      '[data-slot="experience-solid-title"]',
-    )
+    const solidTitle = document.querySelector<HTMLElement>('[data-slot="experience-solid-title"]')
 
     const outlineTitle = document.querySelector<HTMLElement>(
-      '[data-slot="experience-outline-title"]',
+      '[data-slot="experience-outline-title"]'
     )
 
-    const covers = gsap.utils.toArray<HTMLElement>(
-      '[data-slot="experience-cover"]',
-    )
+    const covers = gsap.utils.toArray<HTMLElement>('[data-slot="experience-cover"]')
 
-    const contents = gsap.utils.toArray<HTMLElement>(
-      '[data-slot="experience-content"]',
-    )
+    const descriptions = gsap.utils.toArray<HTMLElement>('[data-slot="experience-description"]')
 
-    const descriptions = gsap.utils.toArray<HTMLElement>(
-      '[data-slot="experience-description"]',
-    )
-    
-    const images = gsap.utils.toArray<HTMLElement>(
-      '[data-slot="experience-image"]',
-    )
+    const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
 
     if (!solidTitle || !outlineTitle) return
 
-    const split = new SplitText(solidTitle, {
+    const split = SplitText.create(solidTitle, {
       type: 'chars',
     })
 
@@ -84,11 +73,11 @@ export function Experience() {
     // gsap.set(contents, {
     //   xPercent: 100,
     // })
-    
+
     gsap.set(descriptions, {
       xPercent: 150,
     })
-    
+
     gsap.set(images, {
       xPercent: -150,
     })
@@ -130,9 +119,12 @@ export function Experience() {
      * Small pause.
      */
 
-    tl.to({}, {
-      duration: 0.3,
-    })
+    tl.to(
+      {},
+      {
+        duration: 0.3,
+      }
+    )
 
     /*
      * ─────────────────────────────
@@ -166,9 +158,12 @@ export function Experience() {
      * Let the cover settle.
      */
 
-    tl.to({}, {
-      duration: 0.35,
-    })
+    tl.to(
+      {},
+      {
+        duration: 0.35,
+      }
+    )
 
     /*
      * ─────────────────────────────
@@ -187,20 +182,27 @@ export function Experience() {
       duration: 1.5,
       ease: 'power2.out',
     })
-    
-    tl.to(images[0], {
-      xPercent: 0,
-      duration: 1.8,
-      ease: 'power2.out',
-    }, '<0.2')
+
+    tl.to(
+      images[0],
+      {
+        xPercent: 0,
+        duration: 1.8,
+        ease: 'power2.out',
+      },
+      '<0.2'
+    )
 
     /*
      * Reading time.
      */
 
-    tl.to({}, {
-      duration: 0.9,
-    })
+    tl.to(
+      {},
+      {
+        duration: 0.9,
+      }
+    )
 
     /*
      * ─────────────────────────────
@@ -211,8 +213,6 @@ export function Experience() {
     experiences.forEach((_, i) => {
       if (i >= experiences.length - 1) return
 
-      const currentContent = contents[i]
-      const nextContent = contents[i + 1]
       const nextCover = covers[i + 1]
 
       /*
@@ -226,21 +226,28 @@ export function Experience() {
         duration: 1.6,
         ease: 'power2.inOut',
       })
-      
-      tl.to(images[i], {
-        xPercent: 150,
-        duration: 1.8,
-        ease: 'power2.inOut',
-      }, '<0.15')
+
+      tl.to(
+        images[i],
+        {
+          xPercent: 150,
+          duration: 1.8,
+          ease: 'power2.inOut',
+        },
+        '<0.15'
+      )
 
       /*
        * Small separation between the
        * content swipe and the cover.
        */
 
-      tl.to({}, {
-        duration: 0.3,
-      })
+      tl.to(
+        {},
+        {
+          duration: 0.3,
+        }
+      )
 
       /*
        * NOW the next cover enters.
@@ -259,9 +266,12 @@ export function Experience() {
        * Let the cover establish itself.
        */
 
-      tl.to({}, {
-        duration: 0.25,
-      })
+      tl.to(
+        {},
+        {
+          duration: 0.25,
+        }
+      )
 
       /*
        * Next content enters smoothly.
@@ -272,20 +282,27 @@ export function Experience() {
         duration: 1.6,
         ease: 'power2.out',
       })
-      
-      tl.to(images[i + 1], {
-        xPercent: 0,
-        duration: 1.8,
-        ease: 'power2.out',
-      }, '<0.2')
+
+      tl.to(
+        images[i + 1],
+        {
+          xPercent: 0,
+          duration: 1.8,
+          ease: 'power2.out',
+        },
+        '<0.2'
+      )
 
       /*
        * Reading time.
        */
 
-      tl.to({}, {
-        duration: 0.9,
-      })
+      tl.to(
+        {},
+        {
+          duration: 0.9,
+        }
+      )
     })
 
     return () => {
@@ -294,15 +311,10 @@ export function Experience() {
   }, [])
 
   return (
-    <section
-      id="experience"
-      data-section="experience"
-      className="relative min-h-screen bg-black"
-    >
+    <section id="experience" data-section="experience" className="relative min-h-screen bg-black">
       {/* Background / cover */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
         <div className="relative w-full h-100 overflow-hidden">
-
           {/* Solid title */}
           <h1
             data-slot="experience-solid-title"
@@ -313,11 +325,7 @@ export function Experience() {
 
           {/* Cover images */}
           {experiences.map((experience) => (
-            <div
-              key={experience.title}
-              data-slot="experience-cover"
-              className="absolute inset-0"
-            >
+            <div key={experience.title} data-slot="experience-cover" className="absolute inset-0">
               <img
                 src={experience.image}
                 alt=""
@@ -350,19 +358,11 @@ export function Experience() {
             data-slot="experience-content"
             className="absolute inset-0 flex min-h-screen flex-col items-center justify-center gap-70 px-4"
           >
-            <div
-              data-slot="experience-description"
-              className="text-start max-w-300"
-            >
-              <p className="text-4xl text-white">
-                {experience.description}
-              </p>
+            <div data-slot="experience-description" className="text-start max-w-300">
+              <p className="text-4xl text-white">{experience.description}</p>
             </div>
 
-            <div
-              data-slot="experience-image"
-              className="w-2/3 flex justify-end"
-            >
+            <div data-slot="experience-image" className="w-2/3 flex justify-end">
               <CyberImage
                 src={experience.image}
                 alt={experience.title}

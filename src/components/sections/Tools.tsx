@@ -24,6 +24,7 @@ import {
 } from 'react-icons/si'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
+import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
@@ -378,7 +379,7 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      if (prefersReducedMotion()) return
       gsap.from(
         '[data-slot="radar"], [data-slot="tick-ring"], [data-slot="ruler-bar"], [data-slot="cool-meter"]',
         {
@@ -430,7 +431,7 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      if (prefersReducedMotion()) return
       gsap.from('[data-slot="skills-panel"]', {
         autoAlpha: 0,
         y: 18,
@@ -453,7 +454,7 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      if (prefersReducedMotion()) return
       gsap.fromTo(
         '[data-slot="radar-icon"]',
         { autoAlpha: 0, scale: 0.75, filter: 'blur(6px)' },

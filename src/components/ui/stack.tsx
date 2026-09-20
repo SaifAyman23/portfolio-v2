@@ -1,6 +1,7 @@
 import { gsap } from 'gsap'
 import { useLayoutEffect, useRef } from 'react'
 
+import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 interface StackProps {
@@ -17,7 +18,7 @@ export function Stack({ children, className }: StackProps) {
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const reduceMotion = prefersReducedMotion()
 
     const items = gsap.utils.toArray<HTMLElement>('.stack-item', rootRef.current)
     if (items.length === 0) return

@@ -1,21 +1,20 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { HeroInfo } from './HeroInfo'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 
+import { HeroInfo } from './HeroInfo'
+import { CyberFrame } from '../ui/cyber-frame'
+
 import PixelBlast from '@/components/PixelBlast'
 import { JapaneseText } from '@/components/ui/japanese-text'
-import { CyberFrame } from '../ui/cyber-frame'
+import { prefersReducedMotion } from '@/lib/motion'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
-const reduceMotion =
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
 export function Hero() {
   useGSAP(() => {
-    if (reduceMotion) return
+    if (prefersReducedMotion()) return
 
     const hero = document.querySelector('#hero')
     const intro = document.querySelector('#hero-intro')
@@ -40,27 +39,26 @@ export function Hero() {
       return
     }
 
-    const introSplit = new SplitText(intro, {
+    const introSplit = SplitText.create(intro, {
       type: 'chars',
     })
 
-    const titleSplit = new SplitText(title, {
+    const titleSplit = SplitText.create(title, {
       type: 'chars',
     })
 
-    const subtitleSplit = new SplitText(subtitle, {
+    const subtitleSplit = SplitText.create(subtitle, {
       type: 'chars',
     })
 
-    const japaneseSplit = new SplitText(japanese, {
+    const japaneseSplit = SplitText.create(japanese, {
       type: 'chars',
     })
 
-    const paragraphSplits = Array.from(paragraphs).map(
-      (paragraph) =>
-        new SplitText(paragraph, {
-          type: 'chars',
-        })
+    const paragraphSplits = Array.from(paragraphs).map((paragraph) =>
+      SplitText.create(paragraph, {
+        type: 'chars',
+      })
     )
 
     const infoItems = Array.from(info.children)
@@ -301,9 +299,12 @@ export function Hero() {
         </div>
       </div>
 
-      <HeroInfo dataSlot={"hero-info"} className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`} />
+      <HeroInfo
+        dataSlot={'hero-info'}
+        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`}
+      />
 
-      {!reduceMotion && (
+      {!prefersReducedMotion && (
         <div className="absolute z-0 h-full w-full opacity-30">
           <PixelBlast
             variant="circle"

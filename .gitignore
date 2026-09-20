@@ -24,3 +24,13 @@ dist-ssr
 *.sw?
 
 OPEN SESAME.exe
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Models / large binaries
+public/models/*.zip
+public/models/post-soviet-retro-dining-asset-pack.zip
+public/models/post-soviet-retro-dining-asset-pack/

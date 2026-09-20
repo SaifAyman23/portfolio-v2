@@ -25,9 +25,7 @@ function measureSection(element: HTMLElement): DOMRect {
     : element.getBoundingClientRect()
 }
 
-export function useSectionTracker(
-  ids: readonly SectionId[] = SECTION_IDS
-): SectionTracker {
+export function useSectionTracker(ids: readonly SectionId[] = SECTION_IDS): SectionTracker {
   const [active, setActive] = useState<SectionId>(ids[0])
   const [direction, setDirection] = useState<1 | -1>(1)
 
@@ -49,9 +47,7 @@ export function useSectionTracker(
       const nextDirection: 1 | -1 = y >= lastY.current ? 1 : -1
       lastY.current = y
 
-      setDirection((previous) =>
-        previous === nextDirection ? previous : nextDirection
-      )
+      setDirection((previous) => (previous === nextDirection ? previous : nextDirection))
 
       let current = ids[0]
 
@@ -60,10 +56,7 @@ export function useSectionTracker(
 
         const rect = measureSection(element)
 
-        progressRef.current[ids[index]] = Math.min(
-          Math.max((line - rect.top) / rect.height, 0),
-          1
-        )
+        progressRef.current[ids[index]] = Math.min(Math.max((line - rect.top) / rect.height, 0), 1)
 
         if (rect.top <= line && rect.bottom > line) {
           current = ids[index]

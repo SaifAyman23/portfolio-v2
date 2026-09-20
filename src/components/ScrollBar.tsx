@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { useEffect, useRef, useState } from 'react'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
+import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 export type ScrollBarProps = {
@@ -20,7 +21,7 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
 
   useGSAP(
     () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+      if (prefersReducedMotion()) return
       gsap.from(trackRef.current, {
         xPercent: 200,
         opacity: 0,

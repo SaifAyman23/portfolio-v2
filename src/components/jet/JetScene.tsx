@@ -124,12 +124,13 @@ function JetController({
 
     const heroStay = SECTION_POSES.hero.stay
 
-    introRef.current = gsap.timeline({
-      delay: 4,
-      onComplete: () => {
-        introDone.current = true
-      },
-    })
+    introRef.current = gsap
+      .timeline({
+        delay: 4,
+        onComplete: () => {
+          introDone.current = true
+        },
+      })
       .to(jet.position, {
         x: heroStay.position[0],
         y: heroStay.position[1],

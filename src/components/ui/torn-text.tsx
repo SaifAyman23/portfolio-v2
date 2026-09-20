@@ -1,6 +1,8 @@
 import { gsap } from 'gsap'
 import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
+import { prefersReducedMotion } from '@/lib/motion'
+
 type TornImage = string | { src: string; scale?: number; className?: string }
 
 interface TornTextProps {
@@ -52,7 +54,7 @@ export const TornText = forwardRef<HTMLElement, TornTextProps>(function TornText
   useLayoutEffect(() => {
     const el = localRef.current
     if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReducedMotion()) return
 
     const charTexts = el.querySelectorAll<HTMLElement>('.char-text')
     const charImgs = el.querySelectorAll<HTMLElement>('.char-img')

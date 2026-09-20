@@ -4,7 +4,6 @@ import { SplitText } from 'gsap/SplitText'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import { JetScene } from './components/jet/JetScene'
 import { useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
@@ -16,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText)
 const Home = lazy(() => import('@/pages/Home'))
 
 function App() {
-  const { active, direction, progressRef } = useSectionTracker()
+  const { active, direction } = useSectionTracker()
 
   return (
     <Router>

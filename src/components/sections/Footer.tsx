@@ -1,18 +1,16 @@
-import { HeroInfo } from './HeroInfo'
-
-import bg from '@/assets/img/download-1.webp'
-import { JapaneseText } from '@/components/ui/japanese-text'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
-const reduceMotion =
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+import { HeroInfo } from './HeroInfo'
+
+import bg from '@/assets/img/download-1.webp'
+import { JapaneseText } from '@/components/ui/japanese-text'
+import { prefersReducedMotion } from '@/lib/motion'
 
 export function Footer() {
-
   useGSAP(() => {
-    if (reduceMotion) return
+    if (prefersReducedMotion()) return
 
     const japanese = document.querySelector('#footer-japanese')
     const name = document.querySelector('.name')
@@ -25,11 +23,11 @@ export function Footer() {
 
     const infoItems = Array.from(info.children)
 
-    const splitJap = new SplitText(japanese, {
+    const splitJap = SplitText.create(japanese, {
       type: 'chars',
     })
 
-    const splitName = new SplitText(name, {
+    const splitName = SplitText.create(name, {
       type: 'chars',
     })
 
@@ -41,19 +39,19 @@ export function Footer() {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-          toggleActions: 'play none none reverse',
-          trigger: '#footer',
-          start: 'top top',
-          end: 'bottom bottom',
-          // scrub: true,
-        },
+        toggleActions: 'play none none reverse',
+        trigger: '#footer',
+        start: 'top top',
+        end: 'bottom bottom',
+        // scrub: true,
+      },
     })
 
     tl.from(overlay, {
       opacity: 0,
       stagger: {
         amount: 1,
-        from: "center",
+        from: 'center',
       },
     })
 
@@ -62,7 +60,7 @@ export function Footer() {
       filter: 'blur(10px)',
       stagger: {
         amount: 0.2,
-        from: "center",
+        from: 'center',
       },
       duration: 0.2,
     })
@@ -71,11 +69,11 @@ export function Footer() {
       opacity: 0,
       stagger: {
         amount: 0.4,
-        from: "start",
+        from: 'start',
       },
       duration: 0.5,
       delay: 0.5,
-      ease: "steps(1)",
+      ease: 'steps(1)',
     })
 
     tl.to(infoItems, {
@@ -85,7 +83,11 @@ export function Footer() {
       filter: 'blur(0px)',
       duration: 0.2,
     })
-    
+
+    return () => {
+      splitJap.revert()
+      splitName.revert()
+    }
   }, [])
 
   return (
@@ -98,7 +100,11 @@ export function Footer() {
         <img src={bg} className="w-full object-cover" alt="background image" />
       </div>
       <div className="w-full z-20 h-full flex items-center justify-center bg-red-900 mix-blend-multiply">
-        <JapaneseText id='footer-japanese' text={'サイフ'} className="text-blue-800 text-[590px] font-bold" />
+        <JapaneseText
+          id="footer-japanese"
+          text={'サイフ'}
+          className="text-blue-800 text-[590px] font-bold"
+        />
       </div>
       <div
         className="absolute blurred-overlay inset-0 z-20 backdrop-blur-xl"
@@ -113,7 +119,11 @@ export function Footer() {
         <h1 className="text-[300px] name font-ticking text-white">Saif Eldin</h1>
       </div>
 
-      <HeroInfo dataSlot={"footer-info"} className="flex gap-2 info *:text-white bottom-20 z-30 xl:absolute" fill="black" />
+      <HeroInfo
+        dataSlot={'footer-info'}
+        className="flex gap-2 info *:text-white bottom-20 z-30 xl:absolute"
+        fill="black"
+      />
     </section>
   )
 }

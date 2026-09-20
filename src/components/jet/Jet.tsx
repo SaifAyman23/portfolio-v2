@@ -2,10 +2,7 @@ import { useGLTF } from '@react-three/drei'
 import { forwardRef, useEffect } from 'react'
 import * as THREE from 'three'
 
-export const Jet = forwardRef<
-  THREE.Group,
-  React.ComponentProps<'group'>
->(function Jet(props, ref) {
+export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'>>(function Jet(props, ref) {
   const { scene } = useGLTF('/models/jet.glb')
 
   useEffect(() => {

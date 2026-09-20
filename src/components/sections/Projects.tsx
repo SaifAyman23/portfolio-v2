@@ -10,6 +10,7 @@ import shinjukuImg from '@/assets/img/shinjuku-train.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
+import { prefersReducedMotion } from '@/lib/motion'
 
 const projects = [
   {
@@ -58,7 +59,7 @@ export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
 
   useGSAP(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReducedMotion()) return
 
     const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
@@ -68,15 +69,14 @@ export function Projects() {
 
     if (!intro) return
 
-    const introSplit = new SplitText(intro, {
+    const introSplit = SplitText.create(intro, {
       type: 'chars',
     })
 
-    const splits = panels.map(
-      (panel) =>
-        new SplitText(panel.querySelector('p'), {
-          type: 'chars',
-        })
+    const splits = panels.map((panel) =>
+      SplitText.create(panel.querySelector('p'), {
+        type: 'chars',
+      })
     )
 
     const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')

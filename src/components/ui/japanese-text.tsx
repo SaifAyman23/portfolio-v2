@@ -18,7 +18,11 @@ export function JapaneseText({
   className,
 }: JapaneseTextProps) {
   return (
-    <span id={id} className={cn('relative inline-block', className)} style={{ fontFamily: JAPANESE_FONT }}>
+    <span
+      id={id}
+      className={cn('relative inline-block', className)}
+      style={{ fontFamily: JAPANESE_FONT }}
+    >
       <span className="relative z-0" style={{ color }}>
         {text}
       </span>
