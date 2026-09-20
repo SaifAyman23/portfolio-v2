@@ -1,26 +1,15 @@
-import { gsap } from 'gsap'
+export let reduceMotion: boolean | null = null
 
 export function prefersReducedMotion(): boolean {
-  return (
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  if (reduceMotion !== null) return reduceMotion
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-export function withReducedMotion<T extends unknown[]>(
-  fn: (...args: T) => void | (() => void)
-): (...args: T) => void | (() => void) {
-  return (...args: T) => {
-    const mm = gsap.matchMedia()
-    let cleanup: void | (() => void)
-    mm.add('(prefers-reduced-motion: reduce)', () => {
-      return () => {}
-    })
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      cleanup = fn(...args) as void | (() => void)
-      return () => {
-        if (typeof cleanup === 'function') cleanup()
-      }
-    })
-    return () => mm.revert()
-  }
+export function setReducedMotion(value: boolean | null): void {
+  reduceMotion = value
+}
+
+export function toggleReducedMotion(): boolean {
+  reduceMotion = !prefersReducedMotion()
+  return reduceMotion as boolean
 }

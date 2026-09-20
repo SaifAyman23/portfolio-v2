@@ -304,7 +304,7 @@ export function Hero() {
         className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`}
       />
 
-      {!prefersReducedMotion && (
+      {!prefersReducedMotion() && (
         <div className="absolute z-0 h-full w-full opacity-30">
           <PixelBlast
             variant="circle"
