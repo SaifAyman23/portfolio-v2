@@ -153,14 +153,13 @@ export function About() {
         <div className="about-rows flex flex-col gap-10">
           <div className="flex w-full items-center gap-20">
             <p className="max-w-2xl row-text-1 text-white xl:text-2xl">
-              Two years of building the whole stack. ERPs, delivery platforms, AI tools,
-              live-streaming infra. Django under the hood, React where it counts, real-time by
-              default.
+              I’m Saif, based in Alexandria. I build end to end, from idea to live product. Keeping
+              my work organized, clean, and focused.
             </p>
             <div className="w-50 row-img-1">
               <CyberImage
                 src={bg1}
-                alt={'Background First'}
+                alt={'Saif Eldin'}
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-50 h-40"
@@ -171,16 +170,15 @@ export function About() {
             <div className="w-50 row-img-1">
               <CyberImage
                 src={bg1}
-                alt={'Background First'}
+                alt={'Saif Eldin'}
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-50 h-40"
               />
             </div>
             <p className="max-w-2xl row-text-2 text-white xl:text-2xl">
-              Two years of building the whole stack. ERPs, delivery platforms, AI tools,
-              live-streaming infra. Django under the hood, React where it counts, real-time by
-              default.
+              I approach my projects with steady planning. design and architecture first, code after. When
+              the structure is right, development stays calm and the product holds.
             </p>
           </div>
         </div>

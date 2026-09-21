@@ -1,14 +1,64 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
+import { X } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { GiCyberEye } from "react-icons/gi";
 
 import { HeroInfo } from './HeroInfo'
 
 import bg from '@/assets/img/download-1.webp'
+import { CyberFrame } from '@/components/ui/cyber-frame'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { prefersReducedMotion } from '@/lib/motion'
 
 export function Footer() {
+  const [expanded, setExpanded] = useState(false)
+  const btnRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const iconRef = useRef<HTMLButtonElement>(null)
+
+  useGSAP(
+    () => {
+      if (!btnRef.current) return
+      if (prefersReducedMotion()) {
+        gsap.set(btnRef.current, {
+          width: expanded ? 360 : 56,
+
+        })
+        if (iconRef.current) gsap.set(iconRef.current, { scale: expanded ? 0 : 1, autoAlpha: expanded ? 0 : 1 })
+        if (contentRef.current) gsap.set(contentRef.current, { autoAlpha: expanded ? 1 : 0, x: expanded ? 0 : -8 })
+        return
+      }
+      gsap.to(btnRef.current, {
+        width: expanded ? 360 : 56,
+        duration: 0.6,
+        ease: 'expo.inOut',
+        overwrite: 'auto',
+      })
+      if (iconRef.current) {
+        gsap.to(iconRef.current, {
+          scale: expanded ? 0 : 1,
+          autoAlpha: expanded ? 0 : 1,
+          duration: 0.25,
+          ease: 'power2.inOut',
+          overwrite: 'auto',
+        })
+      }
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          autoAlpha: expanded ? 1 : 0,
+          x: expanded ? 0 : -8,
+          duration: 0.35,
+          delay: expanded ? 0.15 : 0,
+          ease: 'power3.out',
+          overwrite: 'auto',
+        })
+      }
+    },
+    { dependencies: [expanded] }
+  )
+
   useGSAP(() => {
     if (prefersReducedMotion()) return
 
@@ -124,6 +174,48 @@ export function Footer() {
         className="flex gap-2 info *:text-white bottom-20 z-60 xl:absolute"
         fill="black"
       />
+
+      <CyberFrame
+        ref={btnRef}
+        className="absolute bottom-6 right-10 z-50 overflow-hidden"
+        style={{ width: 56, height: 56 }}
+        fill="black"
+        stroke="transparent"
+        strokeWidth={0}
+        chamferX={12}
+        chamferY={12}
+        contentClassName="flex h-full w-full items-center justify-center p-0"
+      >
+        <button
+          ref={iconRef}
+          type="button"
+          aria-label="Open alternative aesthetic"
+          onClick={() => setExpanded(true)}
+          className="absolute inset-0 flex cursor-pointer items-center justify-center text-white"
+        >
+          <GiCyberEye className="size-5" />
+        </button>
+        <div
+          ref={contentRef}
+          className="absolute inset-0 flex items-center justify-between gap-3 px-4"
+        >
+          <p className="whitespace-nowrap text-sm text-white">
+            Not your aesthetic? What about{' '}
+            <a href="https://saifayman23.github.io/portfolio/" target='_blank' className="underline decoration-white underline-offset-4">
+              this
+            </a>
+            .
+          </p>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setExpanded(false)}
+            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white text-black"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+      </CyberFrame>
     </section>
   )
 }

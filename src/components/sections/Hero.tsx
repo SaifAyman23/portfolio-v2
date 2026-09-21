@@ -55,11 +55,7 @@ export function Hero() {
       type: 'chars',
     })
 
-    const paragraphSplits = Array.from(paragraphs).map((paragraph) =>
-      SplitText.create(paragraph, {
-        type: 'chars',
-      })
-    )
+    const paragraphSplits = Array.from(paragraphs)
 
     const infoItems = Array.from(info.children)
 
@@ -79,11 +75,10 @@ export function Hero() {
       filter: 'blur(10px)',
     })
 
-    paragraphSplits.forEach((split) => {
-      gsap.set(split.chars, {
-        opacity: 0,
-        filter: 'blur(8px)',
-      })
+    gsap.set(paragraphSplits, {
+      opacity: 0,
+      y: 16,
+      filter: 'blur(8px)',
     })
 
     gsap.set(infoItems, {
@@ -217,30 +212,30 @@ export function Hero() {
       '<0.15'
     )
 
-    // 8. FIRST PARAGRAPH
+    // 8. FIRST PARAGRAPH — flows as a whole
 
     tl.to(
-      paragraphSplits[0].chars,
+      paragraphSplits[0],
       {
         opacity: 1,
+        y: 0,
         filter: 'blur(0px)',
-        stagger: 0.012,
-        duration: 0.4,
-        ease: 'none',
+        duration: 0.5,
+        ease: 'power2.out',
       },
       '<0.1'
     )
 
-    // 9. SECOND PARAGRAPH
+    // 9. SECOND PARAGRAPH — flows as a whole
 
     tl.to(
-      paragraphSplits[1].chars,
+      paragraphSplits[1],
       {
         opacity: 1,
+        y: 0,
         filter: 'blur(0px)',
-        stagger: 0.012,
-        duration: 0.4,
-        ease: 'none',
+        duration: 0.5,
+        ease: 'power2.out',
       },
       '<0.2'
     )
@@ -269,9 +264,7 @@ export function Hero() {
       subtitleSplit.revert()
       japaneseSplit.revert()
 
-      paragraphSplits.forEach((split) => {
-        split.revert()
-      })
+
     }
   }, [])
 
@@ -351,7 +344,11 @@ export function Hero() {
 
       <div className="grid h-[50vh] grid-cols-8 gap-3 xl:px-60">
         <div className="col-span-2 text-start">
-          <p data-slot="hero-blurb">Building scalable web applications with modern technologies.</p>
+          <p data-slot="hero-blurb" className="text-pretty text-2xl leading-relaxed">
+            TOKYO // 2087 <br />
+            NETWORK ONLINE <br />
+            SIGNAL STABLE
+          </p>
         </div>
 
         <div className="col-span-4 text-center">
@@ -366,7 +363,11 @@ export function Hero() {
         </div>
 
         <div className="col-span-2 flex h-full flex-col justify-end text-start">
-          <p data-slot="hero-blurb">Focused on clean architecture and smooth user experiences.</p>
+          <p data-slot="hero-blurb" className="text-pretty text-2xl leading-relaxed">
+            SYSTEMS IN MOTION <br/>
+            CODE / DATA / INTERFACE <br/>
+            ROUTE: ACTIVE
+          </p>
         </div>
       </div>
     </section>

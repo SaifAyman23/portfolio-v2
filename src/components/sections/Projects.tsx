@@ -3,10 +3,11 @@ import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 import { useState } from 'react'
 
-import cityImg from '@/assets/img/city.webp'
-import download1Img from '@/assets/img/download-1.webp'
-import downloadImg from '@/assets/img/download.webp'
-import shinjukuImg from '@/assets/img/shinjuku-train.webp'
+import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
+import careerlyImg from '@/assets/img/projects/Careerly.webp'
+import goImg from '@/assets/img/projects/Go.webp'
+import powerZoneImg from '@/assets/img/projects/Power Zone.webp'
+import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
@@ -16,7 +17,7 @@ const projects = [
   {
     title: 'GO Delivery Platform',
     period: 'July 2025 – Present',
-    image: cityImg,
+    image: goImg,
     description:
       'Multi-store delivery platform with customer workflows, order management, authentication with role-based access, and real-time notifications — architected for future merchant integration.',
     stack: ['Django', 'Django REST Framework', 'React', 'Redis', 'RBAC'],
@@ -24,7 +25,7 @@ const projects = [
   {
     title: 'Careerly',
     period: 'December 2025 – June 2026',
-    image: downloadImg,
+    image: careerlyImg,
     description:
       'AI-powered career platform aggregating jobs from 4 sources, with CV analysis, AI-assisted resume tailoring, application tracking, and personalized recommendations.',
     stack: ['Django', 'React', 'TypeScript', 'TanStack Query', 'AI'],
@@ -32,7 +33,7 @@ const projects = [
   {
     title: 'Bin Saedan Smart ERP',
     period: 'December 2025 – April 2026',
-    image: download1Img,
+    image: binSadanImg,
     description:
       'Smart ERP for enterprise workflows — REST APIs, database architecture, role-based access, and workflow automation, mapped closely with client operations.',
     stack: ['Django', 'React', 'PostgreSQL', 'RBAC'],
@@ -40,7 +41,7 @@ const projects = [
   {
     title: 'Streamore',
     period: 'April 2025 – July 2026',
-    image: shinjukuImg,
+    image: streamoreImg,
     description:
       'Live streaming platform on LiveKit and RTMP, broadcasting to 5 platforms at once with layouts, overlays, and WebSocket private chat.',
     stack: ['LiveKit', 'RTMP', 'React', 'WebSockets'],
@@ -48,7 +49,7 @@ const projects = [
   {
     title: 'Power Zone Dashboard',
     period: 'September 2024',
-    image: cityImg,
+    image: powerZoneImg,
     description:
       'Fitness dashboard for workouts, nutrition, and progress tracking — coach views, role-based access, optimized APIs, and WebSocket realtime.',
     stack: ['React', 'Django', 'WebSockets'],

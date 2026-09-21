@@ -151,7 +151,10 @@ export function Contact() {
     >
       <div className='h-full bottom-0 start-0 flex flex-col justify-between z-20'>
         <div className='w-4/6 bg-white h-2/3 p-10'>
-          <p className="text-start max-w-4xl xl:text-4xl">Reach out and tell me more about your project!</p>
+          <p className="text-start max-w-4xl xl:text-5xl">
+            You bring the vision, I’ll own the build. From architecture to launch, turning your
+            project into a live service that holds, scales, and ships.
+          </p>
         </div>
         <h1 className="text-start m-10 max-w-7xl xl:text-9xl" style={{ WebkitTextStroke: '2px white' }}>Let’s Work Together</h1>
       </div>

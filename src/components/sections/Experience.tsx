@@ -10,21 +10,21 @@ import { prefersReducedMotion } from '@/lib/motion'
 
 const experiences = [
   {
-    title: 'Experience 1',
+    title: 'Genius AI',
     description:
-      'I have experience in web development, software engineering, and data analysis. I have experience in web development, software engineering, and data analysis.',
+      'I got my start in frontend at Genius AI. React and TypeScript, shipping production builds alongside the team. Over time I took on code reviews and helped new interns find their footing.',
     image: shinjukuImg,
   },
   {
-    title: 'Experience 2',
+    title: 'Digiations',
     description:
-      'Full-stack development with Django and React, building scalable APIs and interactive user interfaces for modern web applications.',
+      'At Digiations I developed modern dashboards and a Smart ERP. Analyzed project documents and requirements to map how the business flows.',
     image: cityImg,
   },
   {
-    title: 'Experience 3',
+    title: 'Beyond',
     description:
-      'Data analysis and visualization, building dashboards and automated reporting pipelines to extract insights from complex datasets.',
+      'Beyond titles, I work on many projects on my own. The approach stays the same: understand the system end to end, design it clean, then make it work.',
     image: download1Img,
   },
 ]

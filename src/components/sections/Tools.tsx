@@ -523,7 +523,10 @@ export function Tools() {
                   key={skill.title}
                   data-slot="skill-btn"
                   type="button"
-                  className="flex cursor-pointer items-center gap-3 font-universa text-lg"
+                  className={cn(
+                    'flex cursor-pointer items-center gap-3 font-universa text-lg',
+                    activeSkill.title === skill.title && 'text-accent'
+                  )}
                   onClick={() => setActiveSkill(skill)}
                 >
                   <span>{skill.title}</span>
