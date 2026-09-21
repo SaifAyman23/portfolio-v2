@@ -6,12 +6,29 @@ import { CyberFrame } from '@/components/ui/cyber-frame'
 import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
+import type Lenis from 'lenis'
+
 export type ScrollBarProps = {
   appearDelayMs?: number
   className?: string
 }
 
 const MIN_THUMB = 28
+
+/**
+ * Routes a scroll request through Lenis when it's mounted (window.__lenis,
+ * set by initSmoothScroll) so we don't fight its own per-frame position
+ * updates. Falls back to native scrollTo when Lenis isn't running — e.g.
+ * prefers-reduced-motion, or this component used without smooth scroll.
+ */
+function scrollTo(top: number, options?: { immediate?: boolean }) {
+  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis
+  if (lenis) {
+    lenis.scrollTo(top, { immediate: options?.immediate ?? false })
+    return
+  }
+  window.scrollTo({ top, behavior: options?.immediate ? 'auto' : 'smooth' })
+}
 
 export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -74,9 +91,7 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
       Math.max((clientY - rect.top - thumbHeight / 2) / (rect.height - thumbHeight), 0),
       1
     )
-    window.scrollTo({
-      top: ratio * (document.documentElement.scrollHeight - window.innerHeight),
-    })
+    scrollTo(ratio * (document.documentElement.scrollHeight - window.innerHeight))
   }
 
   return (
@@ -112,7 +127,9 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
           const thumbHeight = thumbRef.current?.clientHeight ?? MIN_THUMB
           const maxTop = document.documentElement.scrollHeight - window.innerHeight
           const deltaRatio = (e.clientY - drag.current.startY) / (trackHeight - thumbHeight)
-          window.scrollTo({ top: drag.current.startTop + deltaRatio * maxTop })
+          // immediate: true — a scrollbar drag needs to track the pointer 1:1;
+          // Lenis's default eased scrollTo would lag noticeably behind the cursor.
+          scrollTo(drag.current.startTop + deltaRatio * maxTop, { immediate: true })
         }}
         onPointerUp={() => {
           drag.current = null

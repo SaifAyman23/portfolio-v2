@@ -174,20 +174,22 @@ function JetController({
   useFrame((_, delta) => {
     const jet = jetRef.current
     if (!jet || !introDone.current) return
-
-    const progress = progressRef.current?.[active] ?? 0
+  
+    // progressRef now stores 0–100 per the tracker's contract; targetPose's
+    // ENTER_END/LEAVE_START math is written for a 0–1 fraction, so normalize here.
+    const progress = (progressRef.current?.[active] ?? 0) / 100
     const target = targetPose(active, progress)
-
+  
     if (SMOOTHING <= 0) {
       jet.position.set(...target.position)
       jet.rotation.set(...target.rotation)
       return
     }
-
+  
     jet.position.x = THREE.MathUtils.damp(jet.position.x, target.position[0], SMOOTHING, delta)
     jet.position.y = THREE.MathUtils.damp(jet.position.y, target.position[1], SMOOTHING, delta)
     jet.position.z = THREE.MathUtils.damp(jet.position.z, target.position[2], SMOOTHING, delta)
-
+  
     jet.rotation.x = THREE.MathUtils.damp(jet.rotation.x, target.rotation[0], SMOOTHING, delta)
     jet.rotation.y = THREE.MathUtils.damp(jet.rotation.y, target.rotation[1], SMOOTHING, delta)
     jet.rotation.z = THREE.MathUtils.damp(jet.rotation.z, target.rotation[2], SMOOTHING, delta)

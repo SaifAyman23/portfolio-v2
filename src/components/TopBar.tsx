@@ -35,6 +35,9 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
   const light = active === 'about' || active === 'experience' || active === 'footer'
   const baseColor = light ? 'white' : 'var(--foreground)'
 
+  console.log(
+    `useSectionTracker: active=${active}, direction=${direction}`
+  );
   return (
     <header
       data-slot="top-bar"
