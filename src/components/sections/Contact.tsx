@@ -78,7 +78,7 @@ export function Contact() {
     <section
       id="contact"
       data-section="contact"
-      className="flex min-h-screen flex-col items-center justify-center gap-3 px-6"
+      className="flex min-h-screen z-70 flex-col items-center justify-center gap-3 px-6"
     >
       <div className="grid grid-cols-9 gap-5">
         <div className="col-span-5 flex justify-center flex-col gap-5 px-10">
@@ -104,14 +104,19 @@ export function Contact() {
             Take Off
           </Button>
         </div>
-        <div className="col-span-4 my-auto text-center">
-          <JapaneseText
+        <div className="col-span-4 mx-auto my-auto text-center">
+          {/* <JapaneseText
             id="contact-japanese-text"
             text="未来"
             className="text-[350px] font-inter font-bold [writing-mode:vertical-rl]"
-            color="var(--accent)"
-            border
-          />
+          /> */}
+          <h1
+            id="contact-japanese-text"
+            className="[writing-mode:vertical-rl] break-keep text-[350px] font-bold text-transparent font-inter"
+            style={{ WebkitTextStroke: `3px var(--accent)` }}
+          >
+            未来
+          </h1>
         </div>
       </div>
     </section>

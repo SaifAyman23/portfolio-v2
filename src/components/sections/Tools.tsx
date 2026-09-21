@@ -340,35 +340,35 @@ export function Tools() {
     backend: {
       title: 'Backend',
       skills: [
-        { title: 'Python', icon: <SiPython className="size-35 text-blue-600 drop-shadow-2xl" /> },
-        { title: 'Django', icon: <SiDjango className="size-35 text-green-800" /> },
-        { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35 text-sky-700" /> },
-        { title: 'MySQL', icon: <SiMysql className="size-35 text-blue-700" /> },
-        { title: 'Redis', icon: <SiRedis className="size-35 text-red-700" /> },
-        { title: 'Celery', icon: <SiCelery className="size-35 text-lime-600" /> },
-        { title: 'Firebase', icon: <SiFirebase className="size-35 text-amber-600" /> },
+        { title: 'Python', icon: <SiPython className="size-35 drop-shadow-2xl" /> },
+        { title: 'Django', icon: <SiDjango className="size-35" /> },
+        { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35" /> },
+        { title: 'MySQL', icon: <SiMysql className="size-35" /> },
+        { title: 'Redis', icon: <SiRedis className="size-35" /> },
+        { title: 'Celery', icon: <SiCelery className="size-35" /> },
+        { title: 'Firebase', icon: <SiFirebase className="size-35" /> },
       ],
     },
     frontend: {
       title: 'Frontend',
       skills: [
-        { title: 'React', icon: <SiReact className="size-35 text-sky-400" /> },
-        { title: 'TypeScript', icon: <SiTypescript className="size-35 text-blue-600" /> },
-        { title: 'JavaScript', icon: <SiJavascript className="size-35 text-yellow-500" /> },
-        { title: 'Tailwind', icon: <SiTailwindcss className="size-35 text-cyan-500" /> },
-        { title: 'TanStack Query', icon: <SiReactquery className="size-35 text-pink-600" /> },
-        { title: 'Framer Motion', icon: <SiFramer className="size-35 text-fuchsia-500" /> },
+        { title: 'React', icon: <SiReact className="size-35" /> },
+        { title: 'TypeScript', icon: <SiTypescript className="size-35" /> },
+        { title: 'JavaScript', icon: <SiJavascript className="size-35" /> },
+        { title: 'Tailwind', icon: <SiTailwindcss className="size-35" /> },
+        { title: 'TanStack Query', icon: <SiReactquery className="size-35" /> },
+        { title: 'Framer Motion', icon: <SiFramer className="size-35" /> },
       ],
     },
     tools: {
       title: 'Tools',
       skills: [
-        { title: 'Git', icon: <SiGit className="size-35 text-orange-600" /> },
-        { title: 'GitHub', icon: <SiGithub className="size-35 text-black" /> },
-        { title: 'Docker', icon: <SiDocker className="size-35 text-sky-600" /> },
-        { title: 'Vercel', icon: <SiVercel className="size-35 text-black" /> },
-        { title: 'Figma', icon: <SiFigma className="size-35 text-violet-500" /> },
-        { title: 'Postman', icon: <SiPostman className="size-35 text-orange-500" /> },
+        { title: 'Git', icon: <SiGit className="size-35" /> },
+        { title: 'GitHub', icon: <SiGithub className="size-35" /> },
+        { title: 'Docker', icon: <SiDocker className="size-35" /> },
+        { title: 'Vercel', icon: <SiVercel className="size-35" /> },
+        { title: 'Figma', icon: <SiFigma className="size-35" /> },
+        { title: 'Postman', icon: <SiPostman className="size-35" /> },
       ],
     },
   }
@@ -530,7 +530,7 @@ export function Tools() {
                 </button>
               ))}
             </div>
-            <div className="absolute top-10 -end-12 rotate-90">
+            <div className="absolute top-10 -end-12 w-18 rotate-90">
               <p className="text-accent">{activeSkillSet.title}</p>
             </div>
           </CyberFrame>
