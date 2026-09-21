@@ -454,7 +454,7 @@ export function Projects() {
           <JapaneseText
             text="最強"
             border
-            className="font-bold text-[250px]"
+            className="font-bold text-[250px] [writ"
             color="var(--accent)"
           />
         </div>

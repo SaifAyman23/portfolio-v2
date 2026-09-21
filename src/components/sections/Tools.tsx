@@ -507,7 +507,7 @@ export function Tools() {
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="relative flex h-screen flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
+      className="relative flex h-screen z-900 flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
     >
       <div className="grid h-full w-full gap-10 md:grid-cols-12">
         <div className="relative col-span-3 flex flex-col items-center justify-between py-10">
@@ -537,8 +537,8 @@ export function Tools() {
           <Radar showIcon={true} children={activeSkill.icon} />
         </div>
         <div className="col-span-6 flex flex-col items-center justify-center">
-          <div className="h-5/6 relative w-full flex justify-center items-end mb-10">
-            <TickRing size={600} />
+          <div className="h-5/6 relative w-full flex justify-center items-end mb-5">
+            <TickRing size={670} />
             <div className="absolute end-20">
               <p className="text-accent text-xl">
                 1.2 km <br /> tot acq
