@@ -1,12 +1,12 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import type Lenis from 'lenis'
 import { useEffect, useRef, useState } from 'react'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
-import type Lenis from 'lenis'
 
 export type ScrollBarProps = {
   appearDelayMs?: number

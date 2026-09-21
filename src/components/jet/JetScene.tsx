@@ -34,37 +34,37 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   hero: {
     enter: { position: [0.5, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
     stay: { position: [0.5, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
-    leave: { position: [60, 60, -10.5], rotation: [0.8, 0.8, 0] },
+    leave: { position: [50, 60, -10.5], rotation: [0, 0.8, 4] },
   },
   about: {
-    enter: { position: [-7.5, 8, -5], rotation: [0, -1, 5] },
+    enter: { position: [-10.5, 40, -5], rotation: [0, -1, 5] },
     stay: { position: [-7.5, 1.3, -5], rotation: [0, -1, 5] },
-    leave: { position: [-7.5, -20, -5], rotation: [0, -1, 5] },
+    leave: { position: [-7.5, -10, -5], rotation: [0, -1, 5] },
   },
   experience: {
     enter: { position: [-5, -8, -10.5], rotation: [0.8, 0.8, 0] },
     stay: { position: [0.5, 0.6, -10.5], rotation: [0.5, 0, 0.1] },
-    leave: { position: [6, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
+    leave: { position: [30, 6, -25.5], rotation: [0.3, 0.4, 0] },
   },
   projects: {
-    enter: { position: [0, 8, -3.2], rotation: [0, 0, 0] },
-    stay: { position: [0, 1.3, -3.2], rotation: [0, 0, 0] },
-    leave: { position: [4, 1.3, -3.2], rotation: [0, 0, 0] },
+    enter: { position: [20, 4, -16], rotation: [0.7, 3.8, 0] },
+    stay:  { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
+    leave: { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
   },
   tools: {
-    enter: { position: [-1.6, -8, -1], rotation: [0, 0.25, -0.2] },
-    stay: { position: [-1.6, 0.2, -1], rotation: [0, 0.25, -0.2] },
-    leave: { position: [1.5, 0.2, -1], rotation: [0, 0.25, -0.2] },
+    enter: { position: [0, 1.7, -10], rotation: [1.2, 4.724, 0] },
+    stay: { position: [0, 1.7, -10], rotation: [1.2, 4.724, 0] },
+    leave: { position: [0, 1.7, -10], rotation: [1.2, 4.724, 0] },
   },
   contact: {
-    enter: { position: [0, 8, 0.5], rotation: [0, 0, 0] },
-    stay: { position: [0, -0.4, 0.5], rotation: [0, 0, 0] },
-    leave: { position: [2.5, -0.4, 0.5], rotation: [0, 0, 0] },
+    enter: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
+    stay: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
+    leave: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
   },
   footer: {
-    enter: { position: [0.5, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
-    stay: { position: [0.5, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
-    leave: { position: [6, 0.6, -10.5], rotation: [0.8, 0.8, 0] },
+    enter: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
+    stay: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
+    leave: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
   },
 }
 

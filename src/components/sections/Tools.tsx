@@ -376,6 +376,8 @@ export function Tools() {
   const skillSets = [skills.backend, skills.frontend, skills.tools] as const
   const [activeSkillSet, setActiveSkillSet] = useState(skillSets[0])
   const [activeSkill, setActiveSkill] = useState(skillSets[0].skills[0])
+  const [coolActive, setCoolActive] = useState(5)
+  const [ktsValue, setKtsValue] = useState(320)
 
   useGSAP(
     () => {
@@ -464,22 +466,58 @@ export function Tools() {
     { dependencies: [activeSkill], scope: rootRef }
   )
 
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+      const obj = { v: coolActive }
+      const tween = gsap.to(obj, {
+        v: () => gsap.utils.random(9, 14, 1),
+        duration: 1.1,
+        ease: 'power1.inOut',
+        repeat: -1,
+        repeatDelay: 0.7,
+        repeatRefresh: true,
+        onUpdate: () => setCoolActive(Math.round(obj.v)),
+      })
+      return () => tween.kill()
+    },
+    { scope: rootRef }
+  )
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+      const numObj = { val: ktsValue }
+      const tween = gsap.to(numObj, {
+        val: () => gsap.utils.random(285, 345, 1),
+        duration: 1.2,
+        ease: 'power1.inOut',
+        repeat: -1,
+        repeatDelay: 7,
+        repeatRefresh: true,
+        onUpdate: () => setKtsValue(Math.round(numObj.val)),
+      })
+      return () => tween.kill()
+    },
+    { scope: rootRef }
+  )
+
   return (
     <section
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="relative z-[60] flex h-screen flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
+      className="relative flex h-screen flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
     >
       <div className="grid h-full w-full gap-10 md:grid-cols-12">
-        <div className="relative z-[9999] col-span-3 flex flex-col items-center justify-between py-10 [isolation:isolate]">
+        <div className="relative col-span-3 flex flex-col items-center justify-between py-10">
           <CyberFrame
             data-slot="skills-panel"
             className="w-3/6 relative"
             strokeWidth={3}
             stroke="black"
           >
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 z-60">
               {activeSkillSet.skills.map((skill) => (
                 <button
                   key={skill.title}
@@ -508,11 +546,11 @@ export function Tools() {
             </div>
           </div>
           <div className="mx-auto flex items-end h-1/6 w-2/3">
-            <RulerBar label="320 kts" />
+            <RulerBar label={`${ktsValue} kts`} />
           </div>
         </div>
         <div className="col-span-3 flex justify-center items-center">
-          <CoolMeter active={5} bottomLabel="Cool-Ometer" topLabel="Too Cool" />
+          <CoolMeter active={coolActive} bottomLabel="Cool-Ometer" topLabel="Too Cool" />
         </div>
       </div>
     </section>

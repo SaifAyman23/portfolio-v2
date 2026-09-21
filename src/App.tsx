@@ -4,12 +4,12 @@ import { SplitText } from 'gsap/SplitText'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+import { JetScene } from './components/jet/JetScene'
 import { useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
 import { SeoUpdater } from '@/components/SeoUpdater'
 import { ROUTES } from '@/lib/constants'
-import { JetScene } from './components/jet/JetScene'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 

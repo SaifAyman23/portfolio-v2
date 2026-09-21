@@ -47,7 +47,7 @@ export function Contact() {
       tl.from(splitText.chars, {
         opacity: 0,
         filter: 'blur(10px)',
-        duration: 0.6,
+        duration: 0.2,
         stagger: 1,
       })
         .from(['#contact input, #contact textarea'], {

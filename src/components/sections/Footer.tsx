@@ -121,7 +121,7 @@ export function Footer() {
 
       <HeroInfo
         dataSlot={'footer-info'}
-        className="flex gap-2 info *:text-white bottom-20 z-30 xl:absolute"
+        className="flex gap-2 info *:text-white bottom-20 z-60 xl:absolute"
         fill="black"
       />
     </section>

@@ -16,6 +16,20 @@ export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'>>(functi
     if (maxDim > 0) {
       scene.scale.setScalar(4.5 / maxDim)
     }
+
+    scene.traverse((child) => {
+      const mesh = child as THREE.Mesh
+      if (!mesh.isMesh) return
+      const mat = mesh.material as THREE.MeshStandardMaterial | THREE.MeshStandardMaterial[]
+      const mats = Array.isArray(mat) ? mat : [mat]
+      for (const m of mats) {
+        if (!m) continue
+        m.roughness = 1
+        m.metalness = 0
+        m.envMapIntensity = 0
+        m.needsUpdate = true
+      }
+    })
   }, [scene])
 
   return (

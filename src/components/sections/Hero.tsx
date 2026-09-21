@@ -282,12 +282,12 @@ export function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center gap-3 overflow-hidden px-6"
     >
       {/* White screen */}
-      <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-50 bg-white" />
+      <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-70 bg-white" />
 
       {/* Large intro title ABOVE the white screen */}
       <div
         id="hero-intro"
-        className="pointer-events-none absolute inset-0 z-[60] gap-10 flex flex-col items-center justify-center"
+        className="pointer-events-none absolute inset-0 z-80 gap-10 flex flex-col items-center justify-center"
       >
         <span className="text-[5vw] font-cyberform font-bold leading-none text-black">
           Brace Yourself
@@ -301,7 +301,7 @@ export function Hero() {
 
       <HeroInfo
         dataSlot={'hero-info'}
-        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-10`}
+        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-60`}
       />
 
       {!prefersReducedMotion() && (
