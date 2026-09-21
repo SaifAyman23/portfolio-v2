@@ -1,75 +1,144 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import { Observer } from 'gsap/Observer'
 import { SplitText } from 'gsap/SplitText'
+import { useMemo } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { JapaneseText } from '@/components/ui/japanese-text'
+import { CyberFrame } from '../ui/cyber-frame'
+
 import { prefersReducedMotion } from '@/lib/motion'
 
-const inputClasses = 'placeholder:text-2xl xl:text-2xl font-universa py-10'
+gsap.registerPlugin(Observer)
 
 export function Contact() {
+   
+   
+  const fills = useMemo(() => {
+    const total = 100
+    const whiteCount = Math.floor((total * 4) / 7)
+    const blackCount = Math.floor((total * 2) / 7)
+    const accentCount = total - whiteCount - blackCount
+    const arr: string[] = [
+      ...Array(whiteCount).fill('white'),
+      ...Array(blackCount).fill('black'),
+      ...Array(accentCount).fill('var(--accent)'),
+    ]
+    let seed = 12345
+    const rand = (): number => {
+      seed = (seed * 9301 + 29297) % 233280
+      return seed / 233280
+    }
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1))
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    for (let row = 6; row < 8; row++) {
+      for (let col = 0; col < 4; col++) {
+        const idx = row * 12 + col
+        if (idx < arr.length) arr[idx] = 'white'
+      }
+    }
+    return arr
+  }, [])
+
   useGSAP(
     () => {
       if (prefersReducedMotion()) return
-      const splitText = SplitText.create('#contact h1', {
+
+      const p = document.querySelector<HTMLElement>('#contact p')
+      const frames = gsap.utils.toArray<HTMLElement>('#contact .size-1\\/12')
+      const h1 = document.querySelector<HTMLElement>('#contact h1')
+      if (!p || !h1 || frames.length === 0) return
+
+      const splitP = SplitText.create(p, {
         type: 'lines, words, chars',
         linesClass: 'split-line',
         wordsClass: 'split-word',
         charsClass: 'split-char',
       })
 
-      const splitJapText = SplitText.create('#contact-japanese-text', {
+      const splitH1 = SplitText.create(h1, {
         type: 'lines, words, chars',
         linesClass: 'split-line',
         wordsClass: 'split-word',
         charsClass: 'split-char',
       })
+
+      gsap.set(splitP.chars, { opacity: 0, filter: 'blur(10px)', y: 20 })
+      gsap.set(frames, { opacity: 0, filter: 'blur(10px)', scale: 0.96 })
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: '#contact',
-          start: 'top top',
-          end: '+=2500',
+          start: 'top 90%',
+          end: 'bottom 120%',
           scrub: true,
-          pin: true,
-          anticipatePin: 1,
+          toggleActions: 'play none none reverse',
         },
       })
 
-      gsap.set('#button', {
-        opacity: 0,
-        filter: 'blur(10px)',
-        x: 100,
+      tl.to(splitP.chars, {
+        opacity: 1,
+        filter: 'blur(0px)',
+        y: 0,
+        stagger: 0.02,
+        duration: 0.6,
+        ease: 'none',
+      }).to(
+        frames,
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          scale: 1,
+          duration: 0.8,
+          stagger: { amount: 0.9, from: 'random' },
+          ease: 'none',
+        },
+        '<0.15'
+      )
+
+      gsap.set(splitH1.chars, { opacity: 0, filter: 'blur(10px)', y: 20 })
+
+      gsap.to(splitH1.chars, {
+        opacity: 1,
+        filter: 'blur(0px)',
+        y: 0,
+        stagger: 0.02,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: h1,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
       })
 
-      tl.from(splitText.chars, {
-        opacity: 0,
-        filter: 'blur(10px)',
-        duration: 0.2,
-        stagger: 1,
-      })
-        .from(['#contact input, #contact textarea'], {
-          opacity: 0,
-          filter: 'blur(10px)',
-          x: 100,
-          duration: 1,
-          stagger: 0.2,
+      const observers = frames.map((frame) =>
+        Observer.create({
+          target: frame,
+          type: 'pointer',
+          onHover: () =>
+            gsap.to(frame, {
+              scale: 0.75,
+              duration: 0.01,
+              ease: 'steps(1)',
+              overwrite: 'auto',
+            }),
+          onHoverEnd: () =>
+            gsap.to(frame, {
+              scale: 1,
+              duration: 0.01,
+              ease: 'steps(1)',
+              overwrite: 'auto',
+            }),
         })
-        .to('#button', {
-          opacity: 1,
-          x: 0,
-          filter: 'blur(0px)',
-          duration: 1,
-          ease: 'none',
-        })
-        .from(splitJapText.chars, {
-          opacity: 0,
-          filter: 'blur(10px)',
-          stagger: 1,
-          duration: 2,
-        })
+      )
+
+      return () => {
+        splitP.revert()
+        splitH1.revert()
+        observers.forEach((o) => o.kill())
+      }
     },
     { dependencies: [] }
   )
@@ -78,46 +147,26 @@ export function Contact() {
     <section
       id="contact"
       data-section="contact"
-      className="flex min-h-screen z-70 flex-col items-center justify-center gap-3 px-6"
+      className="grid grid-cols-2 min-h-screen flex items-center relative z-70 justify-center gap-3 px-6"
     >
-      <div className="grid grid-cols-9 gap-5">
-        <div className="col-span-5 flex justify-center flex-col gap-5 px-10">
-          <h1 className="text-start xl:text-8xl">Let’s Work Together</h1>
-
-          <div>
-            <Input type="text" placeholder="Full Name" className={inputClasses} />
-            <Input type="email" placeholder="Email" className={inputClasses} />
-            <Input
-              type="text"
-              variant="textarea"
-              placeholder="Tell me about your project"
-              className={inputClasses}
-            />
-          </div>
-
-          <Button
-            className="text-3xl px-10 py-7 mt-5 w-fit text-white"
+      <div className='h-full bottom-0 start-0 flex flex-col justify-between z-20'>
+        <div className='w-4/6 bg-white h-2/3 p-10'>
+          <p className="text-start max-w-4xl xl:text-4xl">Reach out and tell me more about your project!</p>
+        </div>
+        <h1 className="text-start m-10 max-w-7xl xl:text-9xl" style={{ WebkitTextStroke: '2px white' }}>Let’s Work Together</h1>
+      </div>
+      <div className="flex flex-wrap h-full p-10 content-start gap-3">
+        {fills.map((fill, i) => (
+          <CyberFrame
+            key={i}
+            className="size-1/12 hover:scale-75"
+            chamferX={40}
+            chamferY={30}
             strokeWidth={0}
-            id="button"
-            fill="var(--accent)"
-          >
-            Take Off
-          </Button>
-        </div>
-        <div className="col-span-4 mx-auto my-auto text-center">
-          {/* <JapaneseText
-            id="contact-japanese-text"
-            text="未来"
-            className="text-[350px] font-inter font-bold [writing-mode:vertical-rl]"
-          /> */}
-          <h1
-            id="contact-japanese-text"
-            className="[writing-mode:vertical-rl] break-keep text-[350px] font-bold text-transparent font-inter"
-            style={{ WebkitTextStroke: `3px var(--accent)` }}
-          >
-            未来
-          </h1>
-        </div>
+            stroke="transparent"
+            fill={fill}
+          />
+        ))}
       </div>
     </section>
   )

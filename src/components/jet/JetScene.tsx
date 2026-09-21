@@ -57,10 +57,15 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
     leave: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
   },
   contact: {
-    enter: { position: [100, 20, -6], rotation: [0.3, 3.7, 0] },
-    stay: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
-    leave: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
+    enter: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
+    stay: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
+    leave: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
   },
+  // contact: {
+  //   enter: { position: [100, 20, -6], rotation: [0.3, 3.7, 0] },
+  //   stay: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
+  //   leave: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
+  // },
   footer: {
     enter: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
     stay: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
