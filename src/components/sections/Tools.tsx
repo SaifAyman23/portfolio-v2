@@ -434,22 +434,32 @@ export function Tools() {
   useGSAP(
     () => {
       if (prefersReducedMotion()) return
-      gsap.from('[data-slot="skills-panel"]', {
-        autoAlpha: 0,
-        y: 18,
-        filter: 'blur(6px)',
-        duration: 0.45,
-        ease: 'power3.out',
-        stagger: 0.1,
-      })
-      gsap.from('[data-slot="skills-panel"] [data-slot="skill-btn"]', {
-        autoAlpha: 0,
-        y: 14,
-        filter: 'blur(6px)',
-        duration: 0.4,
-        ease: 'power3.out',
-        stagger: 0.05,
-      })
+      gsap.fromTo(
+        '[data-slot="skills-panel"]',
+        { autoAlpha: 0, y: 18, filter: 'blur(6px)' },
+        {
+          autoAlpha: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.45,
+          ease: 'power3.out',
+          stagger: 0.1,
+          overwrite: 'auto',
+        }
+      )
+      gsap.fromTo(
+        '[data-slot="skills-panel"] [data-slot="skill-btn"]',
+        { autoAlpha: 0, y: 14, filter: 'blur(6px)' },
+        {
+          autoAlpha: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.4,
+          ease: 'power3.out',
+          stagger: 0.05,
+          overwrite: 'auto',
+        }
+      )
     },
     { dependencies: [activeSkillSet], scope: rootRef }
   )
