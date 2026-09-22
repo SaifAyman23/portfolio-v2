@@ -1,6 +1,6 @@
 import { CyberImage } from '@/components/ui/cyber-image'
 
-const portrait = { src: '/images/saifeldin.jpg', alt: 'Saif Eldin' }
+const portrait = { src: `${import.meta.env.BASE_URL}images/saifeldin.jpg`, alt: 'Saif Eldin' }
 
 const blurb =
   'Two years of building the whole stack. ERPs, delivery platforms, AI tools, live-streaming infra. Django under the hood, React where it counts, real-time by default.'

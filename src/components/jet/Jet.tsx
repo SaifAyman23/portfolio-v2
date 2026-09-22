@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from 'react'
 import * as THREE from 'three'
 
 export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'>>(function Jet(props, ref) {
-  const { scene } = useGLTF('/models/jet.glb')
+  const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/jet.glb`)
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene)

@@ -26,15 +26,13 @@ export function About() {
     })
 
     const splitRows1 = SplitText.create('.row-text-1', {
-      type: 'lines, words, chars',
-      linesClass: 'split-line',
+      type: 'words, chars',
       wordsClass: 'split-word',
       charsClass: 'split-char',
     })
 
     const splitRows2 = SplitText.create('.row-text-2', {
-      type: 'lines, words, chars',
-      linesClass: 'split-line',
+      type: 'words, chars',
       wordsClass: 'split-word',
       charsClass: 'split-char',
     })

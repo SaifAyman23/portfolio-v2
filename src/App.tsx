@@ -19,7 +19,7 @@ function App() {
   const { active, direction, progressRef } = useSectionTracker()
 
   return (
-    <Router>
+    <Router basename="/portfolio/v2">
       <SeoUpdater />
       <Suspense fallback={null}>
         <JetScene active={active} progressRef={progressRef} />

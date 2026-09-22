@@ -8,12 +8,7 @@ import { defineConfig } from 'vitest/config'
 
 const DEFAULT_SITE_URL = 'https://example.com'
 
-const SITEMAP_PATHS = [
-  { path: '/', priority: '1.0' },
-  { path: '/login', priority: '0.5' },
-  { path: '/register', priority: '0.5' },
-  { path: '/forgot-password', priority: '0.3' },
-]
+const SITEMAP_PATHS = [{ path: '/', priority: '1.0' }]
 
 function siteFiles(siteUrl: string): Plugin {
   const url = siteUrl.replace(/\/+$/, '')
@@ -54,6 +49,7 @@ export default defineConfig(({ mode }) => {
   const siteUrl = env.VITE_SITE_URL || DEFAULT_SITE_URL
 
   return {
+    base: '/portfolio/v2/',
     plugins: [
       react({
         babel: {

@@ -76,7 +76,7 @@ export function Projects() {
 
     const splits = panels.map((panel) =>
       SplitText.create(panel.querySelector('p'), {
-        type: 'chars',
+        type: 'words, chars',
       })
     )
 

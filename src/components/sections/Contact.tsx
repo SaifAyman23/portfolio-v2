@@ -51,8 +51,7 @@ export function Contact() {
       if (!p || !h1 || frames.length === 0) return
 
       const splitP = SplitText.create(p, {
-        type: 'lines, words, chars',
-        linesClass: 'split-line',
+        type: 'words, chars',
         wordsClass: 'split-word',
         charsClass: 'split-char',
       })
