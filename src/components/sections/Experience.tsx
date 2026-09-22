@@ -2,9 +2,9 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
-import cityImg from '@/assets/img/city.webp'
-import download1Img from '@/assets/img/download-1.webp'
-import shinjukuImg from '@/assets/img/shinjuku-train.webp'
+import exp1Img from '@/assets/img/experience/1.webp'
+import exp2Img from '@/assets/img/experience/2.webp'
+import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { prefersReducedMotion } from '@/lib/motion'
 
@@ -13,19 +13,19 @@ const experiences = [
     title: 'Genius AI',
     description:
       'I got my start in frontend at Genius AI. React and TypeScript, shipping production builds alongside the team. Over time I took on code reviews and helped new interns find their footing.',
-    image: shinjukuImg,
+    image: exp1Img,
   },
   {
     title: 'Digiations',
     description:
       'At Digiations I developed modern dashboards and a Smart ERP. Analyzed project documents and requirements to map how the business flows.',
-    image: cityImg,
+    image: exp2Img,
   },
   {
     title: 'Beyond',
     description:
       'Beyond titles, I work on many projects on my own. The approach stays the same: understand the system end to end, design it clean, then make it work.',
-    image: download1Img,
+    image: exp3Img,
   },
 ]
 
@@ -331,7 +331,7 @@ export function Experience() {
                 alt=""
                 className="w-full h-full object-cover"
                 style={{
-                  filter: 'brightness(0.40) blur(5px)',
+                  filter: 'brightness(0.30) blur(10px)',
                 }}
               />
             </div>
@@ -367,7 +367,7 @@ export function Experience() {
                 src={experience.image}
                 alt={experience.title}
                 strokeWidth={0}
-                stroke="transparent"
+                fill='transparent'
                 frameClassName="w-80 h-50"
               />
             </div>

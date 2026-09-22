@@ -64,7 +64,7 @@ export function Contact() {
         charsClass: 'split-char',
       })
 
-      gsap.set(splitP.chars, { opacity: 0, filter: 'blur(10px)', y: 20 })
+      gsap.set(splitP.chars, { opacity: 0, y: 20 })
       gsap.set(frames, { opacity: 0, filter: 'blur(10px)', scale: 0.96 })
 
       const tl = gsap.timeline({
@@ -79,11 +79,10 @@ export function Contact() {
 
       tl.to(splitP.chars, {
         opacity: 1,
-        filter: 'blur(0px)',
         y: 0,
         stagger: 0.02,
         duration: 0.6,
-        ease: 'none',
+        ease: 'steps(1)',
       }).to(
         frames,
         {
@@ -97,18 +96,17 @@ export function Contact() {
         '<0.15'
       )
 
-      gsap.set(splitH1.chars, { opacity: 0, filter: 'blur(10px)', y: 20 })
+      gsap.set(splitH1.chars, { opacity: 0, y: 20 })
 
       gsap.to(splitH1.chars, {
         opacity: 1,
-        filter: 'blur(0px)',
         y: 0,
         stagger: 0.02,
         duration: 0.8,
-        ease: 'power2.out',
+        ease: 'steps(1)',
         scrollTrigger: {
           trigger: h1,
-          start: 'top 85%',
+          start: 'top 90%',
           toggleActions: 'play none none reverse',
         },
       })

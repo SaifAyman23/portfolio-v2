@@ -55,14 +55,19 @@ export function Hero() {
       type: 'chars',
     })
 
-    const paragraphSplits = Array.from(paragraphs)
+    const paragraphSplits = Array.from(paragraphs).map((p) =>
+      SplitText.create(p, {
+        type: 'lines',
+        mask: 'lines',
+        linesClass: 'hero-line',
+      })
+    )
 
     const infoItems = Array.from(info.children)
 
     gsap.set(titleSplit.chars, {
       opacity: 0,
       // y: 20,
-      filter: 'blur(12px)',
     })
 
     gsap.set(subtitleSplit.chars, {
@@ -75,10 +80,11 @@ export function Hero() {
       filter: 'blur(10px)',
     })
 
-    gsap.set(paragraphSplits, {
-      opacity: 0,
-      y: 16,
-      filter: 'blur(8px)',
+    paragraphSplits.forEach((split) => {
+      gsap.set(split.lines, {
+        yPercent: 100,
+        opacity: 0,
+      })
     })
 
     gsap.set(infoItems, {
@@ -179,10 +185,9 @@ export function Hero() {
       {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         stagger: 0.04,
         duration: 0.5,
-        ease: 'none',
+        ease: 'steps(1)',
       },
       '>-0.05'
     )
@@ -194,7 +199,6 @@ export function Hero() {
       filter: 'blur(0px)',
       stagger: 0.03,
       duration: 0.4,
-      ease: 'none',
     })
 
     // 7. HERO INFO BUTTONS
@@ -212,30 +216,30 @@ export function Hero() {
       '<0.15'
     )
 
-    // 8. FIRST PARAGRAPH — flows as a whole
+    // 8. FIRST PARAGRAPH — lines masked, from below
 
     tl.to(
-      paragraphSplits[0],
+      paragraphSplits[0].lines,
       {
+        yPercent: 0,
         opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        duration: 0.5,
-        ease: 'power2.out',
+        stagger: 0.12,
+        duration: 0.6,
+        ease: 'power3.out',
       },
       '<0.1'
     )
 
-    // 9. SECOND PARAGRAPH — flows as a whole
+    // 9. SECOND PARAGRAPH — lines masked, from below
 
     tl.to(
-      paragraphSplits[1],
+      paragraphSplits[1].lines,
       {
+        yPercent: 0,
         opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        duration: 0.5,
-        ease: 'power2.out',
+        stagger: 0.12,
+        duration: 0.6,
+        ease: 'power3.out',
       },
       '<0.2'
     )
@@ -263,8 +267,7 @@ export function Hero() {
       titleSplit.revert()
       subtitleSplit.revert()
       japaneseSplit.revert()
-
-
+      paragraphSplits.forEach((s) => s.revert())
     }
   }, [])
 
@@ -343,10 +346,14 @@ export function Hero() {
       </div>
 
       <div className="grid h-[50vh] grid-cols-8 gap-3 xl:px-60">
-        <div className="col-span-2 text-start">
-          <p data-slot="hero-blurb" className="text-pretty text-2xl leading-relaxed">
-            TOKYO // 2087 <br />
-            NETWORK ONLINE <br />
+        <div className="col-span-2 text-start" data-slot="hero-blurb">
+          <p className="text-pretty text-2xl leading-relaxed">
+            ASAKURA // 2087
+          </p>
+          <p className="text-pretty text-2xl leading-relaxed">
+            NETWORK ONLINE
+          </p>
+          <p className="text-pretty text-2xl leading-relaxed">
             SIGNAL STABLE
           </p>
         </div>
@@ -362,10 +369,14 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="col-span-2 flex h-full flex-col justify-end text-start">
-          <p data-slot="hero-blurb" className="text-pretty text-2xl leading-relaxed">
-            SYSTEMS IN MOTION <br/>
-            CODE / DATA / INTERFACE <br/>
+        <div  data-slot="hero-blurb" className="col-span-2 flex h-full flex-col justify-end text-start">
+          <p className="text-pretty text-2xl leading-relaxed">
+            SYSTEMS IN MOTION
+          </p>
+          <p className="text-pretty text-2xl leading-relaxed">
+            CODE / DATA / INTERFACE
+          </p>
+          <p className="text-pretty text-2xl leading-relaxed">
             ROUTE: ACTIVE
           </p>
         </div>

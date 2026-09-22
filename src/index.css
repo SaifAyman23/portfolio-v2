@@ -27,8 +27,8 @@
 }
 
 @font-face {
-  font-family: 'Universa';
-  src: url('./assets/fonts/Universa.woff2') format('woff2');
+  font-family: 'Motivate';
+  src: url('./assets/fonts/Motivate.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -43,7 +43,7 @@
      faces are Latin-only. */
   --font-heading: 'Ticking', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   --font-body:
-    'Universa', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
+    'Motivate', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
     sans-serif;
   --font-display: 'Cyberform', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   --font-cyberform: 'Cyberform', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
@@ -51,6 +51,8 @@
   --font-universa:
     'Universa', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
     sans-serif;
+  --font-throwz: 'Throwz', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-motivate: 'Motivate', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   --font-inter:
     'Inter', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', ui-sans-serif, system-ui,
     sans-serif;
@@ -450,6 +452,12 @@
 }
 .font-universa {
   font-family: var(--font-universa);
+}
+.font-throwz {
+  font-family: var(--font-throwz);
+}
+.font-motivate {
+  font-family: var(--font-motivate);
 }
 .font-inter {
   font-family: var(--font-inter);

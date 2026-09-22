@@ -3,7 +3,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 
-import bg1 from '@/assets/img/city.webp'
+import about1Img from '@/assets/img/about/1.webp'
+import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { prefersReducedMotion } from '@/lib/motion'
 
@@ -47,7 +48,7 @@ export function About() {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=2000',
+        end: '+=1700',
         scrub: true,
         pin: true,
         pinReparent: true,
@@ -59,14 +60,14 @@ export function About() {
 
     tl.from(splitTitle.chars, {
       opacity: 0,
-      filter: 'blur(10px)',
+      // filter: 'blur(10px)',
       duration: 2,
       stagger: 2,
-      ease: 'none',
+      ease: 'steps(1)',
     })
-
+    
     // 1.5. JAPANESE TEXT
-
+    
     tl.from('#about-japanese-text', {
       opacity: 0,
       filter: 'blur(10px)',
@@ -83,7 +84,7 @@ export function About() {
         filter: 'blur(10px)',
         duration: 2,
         stagger: 0.02,
-        ease: 'none',
+        ease: 'steps(1)',
       },
       '<0.3'
     )
@@ -108,7 +109,7 @@ export function About() {
         filter: 'blur(10px)',
         duration: 2,
         stagger: 0.02,
-        ease: 'none',
+        ease: 'steps(1)',
       },
       '<0.3'
     )
@@ -158,9 +159,10 @@ export function About() {
             </p>
             <div className="w-50 row-img-1">
               <CyberImage
-                src={bg1}
+                src={about1Img}
                 alt={'Saif Eldin'}
                 strokeWidth={0}
+                fill='transparent'
                 stroke="transparent"
                 frameClassName="w-50 h-40"
               />
@@ -169,8 +171,9 @@ export function About() {
           <div className="flex w-full items-center gap-20">
             <div className="w-50 row-img-1">
               <CyberImage
-                src={bg1}
+                src={about2Img}
                 alt={'Saif Eldin'}
+                fill='transparent'
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-50 h-40"

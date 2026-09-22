@@ -8,7 +8,7 @@ import {
   SiDocker,
   SiFigma,
   SiFirebase,
-  SiFramer,
+  SiGsap,
   SiGit,
   SiGithub,
   SiJavascript,
@@ -357,7 +357,7 @@ export function Tools() {
         { title: 'JavaScript', icon: <SiJavascript className="size-35" /> },
         { title: 'Tailwind', icon: <SiTailwindcss className="size-35" /> },
         { title: 'TanStack Query', icon: <SiReactquery className="size-35" /> },
-        { title: 'Framer Motion', icon: <SiFramer className="size-35" /> },
+        { title: 'GSAP', icon: <SiGsap className="size-35" /> },
       ],
     },
     tools: {
@@ -524,7 +524,7 @@ export function Tools() {
                   data-slot="skill-btn"
                   type="button"
                   className={cn(
-                    'flex cursor-pointer items-center gap-3 font-universa text-lg',
+                    'flex cursor-pointer items-center gap-3 font-motivate text-lg',
                     activeSkill.title === skill.title && 'text-accent'
                   )}
                   onClick={() => setActiveSkill(skill)}
@@ -534,7 +534,7 @@ export function Tools() {
               ))}
             </div>
             <div className="absolute top-10 -end-12 w-18 rotate-90">
-              <p className="text-accent">{activeSkillSet.title}</p>
+              <p className="text-accent tracking-wider">{activeSkillSet.title}</p>
             </div>
           </CyberFrame>
           <Radar showIcon={true} children={activeSkill.icon} />
@@ -544,12 +544,12 @@ export function Tools() {
             <TickRing size={670} />
             <div className="absolute end-20">
               <p className="text-accent text-xl">
-                1.2 km <br /> tot acq
+                1.2 km <br /> TOT ACQ
               </p>
             </div>
           </div>
           <div className="mx-auto flex items-end h-1/6 w-2/3">
-            <RulerBar label={`${ktsValue} kts`} />
+            <RulerBar label={`${ktsValue} KTS`} />
           </div>
         </div>
         <div className="col-span-3 flex justify-center items-center">

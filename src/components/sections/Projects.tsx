@@ -125,7 +125,6 @@ export function Projects() {
 
       gsap.set(splits[i].chars, {
         opacity: 0,
-        filter: 'blur(6px)',
       })
 
       gsap.set(panel.querySelectorAll('.tag'), {
@@ -149,7 +148,7 @@ export function Projects() {
         scrub: true,
         pin: true,
         pinReparent: true,
-        anticipatePin: 1,
+        anticipatePin: 2,
       },
     })
 
@@ -178,10 +177,12 @@ export function Projects() {
     tl.to(introSplit.chars, {
       opacity: 0,
       y: -30,
-      filter: 'blur(10px)',
-      stagger: 1,
+      stagger: {
+        amount: 0.5,
+        from: 'start',
+      },
       duration: 2,
-      ease: 'power2.in',
+      ease: 'steps(1)',
     })
 
     /*
@@ -259,10 +260,9 @@ export function Projects() {
       splits[0].chars,
       {
         opacity: 1,
-        filter: 'blur(0px)',
         duration: 0.8,
         stagger: 0.018,
-        ease: 'none',
+        ease: 'steps(1)',
       },
       '<0.15'
     )
@@ -315,10 +315,9 @@ export function Projects() {
        */
       tl.to(currentChars, {
         opacity: 0,
-        filter: 'blur(7px)',
         duration: 0.65,
         stagger: 0.012,
-        ease: 'none',
+        ease: 'steps(1)',
       })
 
       /*
@@ -331,7 +330,7 @@ export function Projects() {
           y: -8,
           filter: 'blur(7px)',
           duration: 0.5,
-          stagger: 0.07,
+          stagger: 0.2,
           ease: 'power2.in',
         },
         '<0.05'
@@ -368,10 +367,9 @@ export function Projects() {
         nextChars,
         {
           opacity: 1,
-          filter: 'blur(0px)',
           duration: 0.75,
           stagger: 0.025,
-          ease: 'none',
+          ease: 'steps(1)',
         },
         '<0.12'
       )
