@@ -14,7 +14,7 @@ export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'>>(functi
     const maxDim = Math.max(size.x, size.y, size.z)
 
     if (maxDim > 0) {
-      scene.scale.setScalar(6.5 / maxDim)
+      scene.scale.setScalar(8.5 / maxDim)
     }
 
     scene.traverse((child) => {
