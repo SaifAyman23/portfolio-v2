@@ -347,15 +347,9 @@ export function Hero() {
 
       <div className="grid h-[50vh] grid-cols-8 gap-3 xl:px-60">
         <div className="col-span-2 text-start" data-slot="hero-blurb">
-          <p className="text-pretty text-2xl leading-relaxed">
-            ASAKURA // 2087
-          </p>
-          <p className="text-pretty text-2xl leading-relaxed">
-            NETWORK ONLINE
-          </p>
-          <p className="text-pretty text-2xl leading-relaxed">
-            SIGNAL STABLE
-          </p>
+          <p className="text-pretty text-2xl leading-relaxed">ASAKURA // 2087</p>
+          <p className="text-pretty text-2xl leading-relaxed">NETWORK ONLINE</p>
+          <p className="text-pretty text-2xl leading-relaxed">SIGNAL STABLE</p>
         </div>
 
         <div className="col-span-4 text-center">
@@ -369,16 +363,13 @@ export function Hero() {
           </div>
         </div>
 
-        <div  data-slot="hero-blurb" className="col-span-2 flex h-full flex-col justify-end text-start">
-          <p className="text-pretty text-2xl leading-relaxed">
-            SYSTEMS IN MOTION
-          </p>
-          <p className="text-pretty text-2xl leading-relaxed">
-            CODE / DATA / INTERFACE
-          </p>
-          <p className="text-pretty text-2xl leading-relaxed">
-            ROUTE: ACTIVE
-          </p>
+        <div
+          data-slot="hero-blurb"
+          className="col-span-2 flex h-full flex-col justify-end text-start"
+        >
+          <p className="text-pretty text-2xl leading-relaxed">SYSTEMS IN MOTION</p>
+          <p className="text-pretty text-2xl leading-relaxed">CODE / DATA / INTERFACE</p>
+          <p className="text-pretty text-2xl leading-relaxed">ROUTE: ACTIVE</p>
         </div>
       </div>
     </section>

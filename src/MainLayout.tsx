@@ -1,6 +1,4 @@
-import { Outlet } from 'react-router-dom'
-
-const MainLayout = () => {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-dvh flex-col">
       {/* <a
@@ -11,7 +9,7 @@ const MainLayout = () => {
       </a> */}
       {/* <Navbar /> */}
       <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
-        <Outlet />
+        {children}
       </main>
     </div>
   )

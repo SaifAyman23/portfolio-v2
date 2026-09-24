@@ -63,9 +63,9 @@ export function About() {
       stagger: 2,
       ease: 'steps(1)',
     })
-    
+
     // 1.5. JAPANESE TEXT
-    
+
     tl.from('#about-japanese-text', {
       opacity: 0,
       filter: 'blur(10px)',
@@ -160,7 +160,7 @@ export function About() {
                 src={about1Img}
                 alt={'Saif Eldin'}
                 strokeWidth={0}
-                fill='transparent'
+                fill="transparent"
                 stroke="transparent"
                 frameClassName="w-50 h-40"
               />
@@ -171,15 +171,15 @@ export function About() {
               <CyberImage
                 src={about2Img}
                 alt={'Saif Eldin'}
-                fill='transparent'
+                fill="transparent"
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-50 h-40"
               />
             </div>
             <p className="max-w-2xl row-text-2 text-white xl:text-2xl">
-              I approach my projects with steady planning. design and architecture first, code after. When
-              the structure is right, development stays calm and the product holds.
+              I approach my projects with steady planning. design and architecture first, code
+              after. When the structure is right, development stays calm and the product holds.
             </p>
           </div>
         </div>

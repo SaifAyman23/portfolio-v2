@@ -72,13 +72,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            'vendor-query': ['@tanstack/react-query'],
-            'vendor-radix': [
-              '@radix-ui/react-tabs',
-              '@radix-ui/react-slot',
-              '@radix-ui/react-label',
-            ],
+            'vendor-react': ['react', 'react-dom'],
             'vendor-gsap': ['gsap'],
             'vendor-three': ['three'],
           },

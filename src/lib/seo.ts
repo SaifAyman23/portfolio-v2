@@ -9,36 +9,6 @@ export const DEFAULT_TITLE = `${SITE_NAME} · Full-Stack Engineer`
 export const DEFAULT_DESCRIPTION =
   'Full-stack engineer building production-grade products end to end. Django APIs, real-time systems, and React interfaces.'
 
-interface RouteSeo {
-  title: string
-  description: string
-}
-
-export const ROUTE_SEO: Record<string, RouteSeo> = {
-  '/': {
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESCRIPTION,
-  },
-}
-
-export function patternToRegex(pattern: string): RegExp {
-  const escaped = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  return new RegExp(`^${escaped.replace(/\\:(\w+)/g, '[^/]+')}/?$`)
-}
-
-export function matchRouteSeo(pathname: string): RouteSeo {
-  const exact = ROUTE_SEO[pathname]
-  if (exact) return exact
-
-  for (const [pattern, seo] of Object.entries(ROUTE_SEO)) {
-    if (pattern.includes(':') && patternToRegex(pattern).test(pathname)) {
-      return seo
-    }
-  }
-
-  return { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION }
-}
-
 export function getOgImage(): string {
-  return `${SITE_URL}/og.webp`
+  return `${SITE_URL}/logo.ico`
 }

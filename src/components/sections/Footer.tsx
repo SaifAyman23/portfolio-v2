@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 import { X } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { GiCyberEye } from "react-icons/gi";
+import { GiCyberEye } from 'react-icons/gi'
 
 import { HeroInfo } from './HeroInfo'
 
@@ -24,10 +24,11 @@ export function Footer() {
       if (prefersReducedMotion()) {
         gsap.set(btnRef.current, {
           width: expanded ? 360 : 56,
-
         })
-        if (iconRef.current) gsap.set(iconRef.current, { scale: expanded ? 0 : 1, autoAlpha: expanded ? 0 : 1 })
-        if (contentRef.current) gsap.set(contentRef.current, { autoAlpha: expanded ? 1 : 0, x: expanded ? 0 : -8 })
+        if (iconRef.current)
+          gsap.set(iconRef.current, { scale: expanded ? 0 : 1, autoAlpha: expanded ? 0 : 1 })
+        if (contentRef.current)
+          gsap.set(contentRef.current, { autoAlpha: expanded ? 1 : 0, x: expanded ? 0 : -8 })
         return
       }
       gsap.to(btnRef.current, {
@@ -201,7 +202,11 @@ export function Footer() {
         >
           <p className="whitespace-nowrap text-sm text-white">
             Not your aesthetic? What about{' '}
-            <a href="https://saifayman23.github.io/portfolio/" target='_blank' className="underline decoration-white underline-offset-4">
+            <a
+              href="https://saifayman23.github.io/portfolio/"
+              target="_blank"
+              className="underline decoration-white underline-offset-4"
+            >
               this
             </a>
             .

@@ -1,9 +1,5 @@
-export const APP_NAME = import.meta.env.VITE_APP_NAME || '最強'
+export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Saif Eldin Ayman'
 export const API_BASE_URL = import.meta.env.VITE_API_URL || ''
-
-export const ROUTES = {
-  HOME: '/',
-} as const
 
 export const CONTACT = {
   email: import.meta.env.VITE_CONTACT_EMAIL || '',

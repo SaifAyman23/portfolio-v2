@@ -367,7 +367,7 @@ export function Experience() {
                 src={experience.image}
                 alt={experience.title}
                 strokeWidth={0}
-                fill='transparent'
+                fill="transparent"
                 frameClassName="w-80 h-50"
               />
             </div>

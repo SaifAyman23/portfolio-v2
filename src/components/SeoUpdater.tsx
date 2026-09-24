@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 
-import { SITE_NAME, SITE_URL, matchRouteSeo } from '@/lib/seo'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL } from '@/lib/seo'
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   const selector = `meta[${attr}="${key}"]`
@@ -25,23 +24,16 @@ function upsertCanonical(href: string) {
 }
 
 export function SeoUpdater() {
-  const { pathname } = useLocation()
-
   useEffect(() => {
-    const seo = matchRouteSeo(pathname)
-    const title =
-      seo.title === SITE_NAME || seo.title.startsWith(SITE_NAME)
-        ? seo.title
-        : `${seo.title} | ${SITE_NAME}`
-    const url = SITE_URL + (pathname === '/' ? '/' : pathname)
+    const url = `${SITE_URL}/`
 
-    document.title = title
-    upsertMeta('name', 'description', seo.description)
-    upsertMeta('property', 'og:title', title)
-    upsertMeta('property', 'og:description', seo.description)
+    document.title = DEFAULT_TITLE
+    upsertMeta('name', 'description', DEFAULT_DESCRIPTION)
+    upsertMeta('property', 'og:title', DEFAULT_TITLE)
+    upsertMeta('property', 'og:description', DEFAULT_DESCRIPTION)
     upsertMeta('property', 'og:url', url)
     upsertCanonical(url)
-  }, [pathname])
+  }, [])
 
   return null
 }
