@@ -58,8 +58,7 @@ const defaultGetLenis = (): LenisLike | undefined =>
 function findPinTrigger(ST: ScrollTriggerCtor, el: Element): ScrollTriggerInstance | undefined {
   const pins = ST.getAll().filter(
     (st) =>
-      !!st.pin &&
-      (st.trigger === el || (st.trigger instanceof Element && el.contains(st.trigger))),
+      !!st.pin && (st.trigger === el || (st.trigger instanceof Element && el.contains(st.trigger)))
   )
   if (pins.length === 0) return undefined
   return pins.reduce((a, b) => (b.end - b.start > a.end - a.start ? b : a))
@@ -67,7 +66,7 @@ function findPinTrigger(ST: ScrollTriggerCtor, el: Element): ScrollTriggerInstan
 
 export function useSectionTracker(
   ids: readonly SectionId[] = SECTION_IDS,
-  options: SectionTrackerOptions = {},
+  options: SectionTrackerOptions = {}
 ): SectionTracker {
   const { getLenis = defaultGetLenis, persistentObserver = false } = options
 
@@ -83,7 +82,7 @@ export function useSectionTracker(
   const [direction, setDirection] = useState<1 | -1>(1)
 
   const progressRef = useRef(
-    Object.fromEntries(ids.map((id) => [id, 0])) as Record<SectionId, number>,
+    Object.fromEntries(ids.map((id) => [id, 0])) as Record<SectionId, number>
   )
 
   const activeRef = useRef<SectionId>(ids[0])

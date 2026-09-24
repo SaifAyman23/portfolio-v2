@@ -2,12 +2,13 @@ import { useGSAP } from '@gsap/react'
 import { PerspectiveCamera } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { gsap } from 'gsap'
-import { Suspense, useEffect, useRef, type RefObject } from 'react'
+import { Suspense, useEffect, useRef, useState, type RefObject } from 'react'
 import * as THREE from 'three'
 
 import { Jet } from './Jet'
 
 import type { SectionId } from '@/config/sections'
+import { isWebGLAvailable } from '@/lib/webgl'
 
 type Pose = {
   position: [number, number, number]
@@ -48,7 +49,7 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   },
   projects: {
     enter: { position: [20, 4, -16], rotation: [0.7, 3.8, 0] },
-    stay:  { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
+    stay: { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
     leave: { position: [-26, 5, -20], rotation: [-0.7, 4, -0.3] },
   },
   tools: {
@@ -179,22 +180,22 @@ function JetController({
   useFrame((_, delta) => {
     const jet = jetRef.current
     if (!jet || !introDone.current) return
-  
+
     // progressRef now stores 0–100 per the tracker's contract; targetPose's
     // ENTER_END/LEAVE_START math is written for a 0–1 fraction, so normalize here.
     const progress = (progressRef.current?.[active] ?? 0) / 100
     const target = targetPose(active, progress)
-  
+
     if (SMOOTHING <= 0) {
       jet.position.set(...target.position)
       jet.rotation.set(...target.rotation)
       return
     }
-  
+
     jet.position.x = THREE.MathUtils.damp(jet.position.x, target.position[0], SMOOTHING, delta)
     jet.position.y = THREE.MathUtils.damp(jet.position.y, target.position[1], SMOOTHING, delta)
     jet.position.z = THREE.MathUtils.damp(jet.position.z, target.position[2], SMOOTHING, delta)
-  
+
     jet.rotation.x = THREE.MathUtils.damp(jet.rotation.x, target.rotation[0], SMOOTHING, delta)
     jet.rotation.y = THREE.MathUtils.damp(jet.rotation.y, target.rotation[1], SMOOTHING, delta)
     jet.rotation.z = THREE.MathUtils.damp(jet.rotation.z, target.rotation[2], SMOOTHING, delta)
@@ -216,9 +217,20 @@ export function JetScene({
   active: SectionId
   progressRef: RefObject<Record<SectionId, number>>
 }) {
+  const [visible, setVisible] = useState(() => typeof document === 'undefined' || !document.hidden)
+  const [glOK] = useState(isWebGLAvailable)
+
+  useEffect(() => {
+    const onVisibility = () => setVisible(!document.hidden)
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [])
+
+  if (!glOK) return null
+
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
-      <Canvas dpr={[1, 1.5]} gl={{ antialias: true }} frameloop="always">
+      <Canvas dpr={[1, 1.5]} gl={{ antialias: true }} frameloop={visible ? 'always' : 'never'}>
         <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />
         <directionalLight position={[0, 0.8, 7]} intensity={4.8} />
         <hemisphereLight args={['#ffffff', '#8B0606', 0.7]} />

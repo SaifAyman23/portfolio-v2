@@ -7,7 +7,6 @@ import { CyberFrame } from '@/components/ui/cyber-frame'
 import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
-
 export type ScrollBarProps = {
   appearDelayMs?: number
   className?: string

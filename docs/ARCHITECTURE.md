@@ -79,11 +79,24 @@ Global constraints: animate `transform` (`x`, `y`, `scale`, `xPercent`) + `autoA
        if (prefersReducedMotion()) return
        const split = SplitText.create('.my-title', { type: 'chars' })
        gsap.set('.my-title', { opacity: 0, filter: 'blur(10px)' })
-       const tl = gsap.timeline({ scrollTrigger: { trigger: '#my-section', start: 'top top', end: '+=200%', scrub: true, pin: true, anticipatePin: 1 } })
+       const tl = gsap.timeline({
+         scrollTrigger: {
+           trigger: '#my-section',
+           start: 'top top',
+           end: '+=200%',
+           scrub: true,
+           pin: true,
+           anticipatePin: 1,
+         },
+       })
        tl.to('.my-title', { opacity: 1, filter: 'blur(0px)', duration: 1 })
        return () => split.revert()
      }, [])
-     return <section id="my-section" data-section="my-section">...</section>
+     return (
+       <section id="my-section" data-section="my-section">
+         ...
+       </section>
+     )
    }
    ```
 2. Export it in `src/components/sections/index.ts`.

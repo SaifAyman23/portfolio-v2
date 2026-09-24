@@ -15,6 +15,9 @@ function Button({
   strokeWidth,
   fill,
   children,
+  href,
+  target,
+  rel,
   ...props
 }: React.ComponentProps<'button'> &
   ButtonVariants & {
@@ -22,6 +25,9 @@ function Button({
     stroke?: string
     strokeWidth?: number
     fill?: string
+    href?: string
+    target?: React.HTMLAttributeAnchorTarget
+    rel?: string
   }) {
   if (asChild) {
     return (
@@ -35,14 +41,8 @@ function Button({
     )
   }
 
-  return (
-    <button
-      data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={cn(buttonVariants({ variant, size }), 'relative', className)}
-      {...props}
-    >
+  const frame = (
+    <>
       <CyberFrame
         data-slot="button-frame"
         className="absolute inset-0"
@@ -53,9 +53,37 @@ function Button({
       >
         {children}
       </CyberFrame>
-      <span data-slot="button-spacer" className="invisible" aria-hidden="true">
+      <span data-slot="button-spacer" className="invisible" aria-hidden="true" inert>
         {children}
       </span>
+    </>
+  )
+
+  if (href !== undefined) {
+    return (
+      <a
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        className={cn(buttonVariants({ variant, size }), 'relative', className)}
+        href={href}
+        target={target}
+        rel={rel}
+      >
+        {frame}
+      </a>
+    )
+  }
+
+  return (
+    <button
+      data-slot="button"
+      data-variant={variant}
+      data-size={size}
+      className={cn(buttonVariants({ variant, size }), 'relative', className)}
+      {...props}
+    >
+      {frame}
     </button>
   )
 }

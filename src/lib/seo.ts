@@ -40,5 +40,5 @@ export function matchRouteSeo(pathname: string): RouteSeo {
 }
 
 export function getOgImage(): string {
-  return `${SITE_URL}/logo.webp`
+  return `${SITE_URL}/og.webp`
 }
