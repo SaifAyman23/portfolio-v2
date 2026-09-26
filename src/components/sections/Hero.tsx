@@ -14,7 +14,10 @@ gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function Hero() {
   useGSAP(() => {
-    if (prefersReducedMotion()) return
+    if (prefersReducedMotion()) {
+      window.dispatchEvent(new Event('hero-intro-start'))
+      return
+    }
 
     const hero = document.querySelector('#hero')
     const intro = document.querySelector('#hero-intro')
@@ -113,10 +116,42 @@ export function Hero() {
     }
 
     const tl = gsap.timeline({
+      paused: true,
       onComplete: () => {
         restoreScroll()
       },
     })
+
+    let alive = true
+    let started = false
+
+    const start = () => {
+      if (started || !alive) return
+      started = true
+      restoreScroll()
+      window.dispatchEvent(new Event('hero-intro-start'))
+      tl.play()
+    }
+
+    const skip = () => {
+      started = true
+      restoreScroll()
+      tl.progress(1)
+    }
+
+    window.addEventListener('scroll', skip, { passive: true, once: true })
+
+    const ready = Promise.race([
+      (async () => {
+        try {
+          await document.fonts?.ready
+        } catch {
+          return
+        }
+      })(),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 1200)),
+    ])
+    ready.then(() => start())
 
     // 1. LARGE CENTER TITLE
 
@@ -190,9 +225,6 @@ export function Hero() {
       duration: 0.3,
     })
 
-    // 6b. UNLOCK SCROLL EARLY — scrollbar (4.8s) + jet (3.8s) arrive unlocked
-    tl.call(restoreScroll)
-
     // 7. HERO INFO BUTTONS
 
     tl.to(
@@ -250,6 +282,8 @@ export function Hero() {
     )
 
     return () => {
+      alive = false
+      window.removeEventListener('scroll', skip)
       document.documentElement.style.overflow = ''
       lenis?.start()
       ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
@@ -277,7 +311,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 z-80 gap-10 flex flex-col items-center justify-center"
       >
         <span className="text-[5vw] font-cyberform font-bold leading-none text-black">
-          Brace Yourself
+          Engines Online
         </span>
         <div id="hero-loader" className="mx-auto flex gap-2">
           {Array.from({ length: 10 }).map((_, i) => (

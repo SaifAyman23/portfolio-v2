@@ -15,18 +15,14 @@ function dismissSkeleton(): void {
     skeleton.style.opacity = '0'
     window.setTimeout(() => skeleton.remove(), 350)
   }
-  if (document.fonts?.ready) {
-    let done = false
-    const finish = () => {
-      if (done) return
-      done = true
-      requestAnimationFrame(() => requestAnimationFrame(remove))
-    }
-    document.fonts.ready.then(finish).catch(finish)
-    window.setTimeout(finish, 6000)
-  } else {
-    remove()
+  let done = false
+  const finish = () => {
+    if (done) return
+    done = true
+    requestAnimationFrame(() => requestAnimationFrame(remove))
   }
+  window.addEventListener('hero-intro-start', finish, { once: true })
+  window.setTimeout(finish, 6000)
 }
 
 dismissSkeleton()
