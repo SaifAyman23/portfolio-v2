@@ -400,30 +400,6 @@
   animation: fade-out 0.65s ease forwards;
 }
 
-@keyframes fade-blur-out {
-  to {
-    opacity: 0;
-    filter: blur(8px);
-  }
-}
-
-.animate-fade-blur-out {
-  animation: fade-blur-out 0.65s ease forwards;
-}
-
-@keyframes blur-in {
-  from {
-    filter: blur(8px);
-  }
-  to {
-    filter: blur(0);
-  }
-}
-
-.animate-blur-in {
-  animation: blur-in 0.65s ease forwards;
-}
-
 @keyframes topbar-name-in {
   from {
     opacity: 0;

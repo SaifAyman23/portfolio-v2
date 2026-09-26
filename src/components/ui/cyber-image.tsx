@@ -98,7 +98,7 @@ export function CyberImage({
             decoding={decoding}
             draggable={false}
             className={cn(
-              'animate-blur-in absolute inset-0 z-0 h-full w-full object-cover',
+              'animate-fade-in absolute inset-0 z-0 h-full w-full object-cover',
               imgClassName
             )}
           />
@@ -118,7 +118,7 @@ export function CyberImage({
           draggable={false}
           className={cn(
             'absolute inset-0 z-10 h-full w-full object-cover',
-            fading && 'animate-fade-blur-out',
+            fading && 'animate-fade-out',
             imgClassName
           )}
         />

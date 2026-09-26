@@ -77,7 +77,7 @@ export function Projects() {
 
       const splits = panels.map((panel) =>
         SplitText.create(panel.querySelector('p'), {
-          type: 'words, chars',
+          type: 'words',
         })
       )
 
@@ -121,7 +121,7 @@ export function Projects() {
           y: 24,
         })
 
-        gsap.set(splits[i].chars, {
+        gsap.set(splits[i].words, {
           opacity: 0,
         })
 
@@ -251,7 +251,7 @@ export function Projects() {
        * First description
        */
       tl.to(
-        splits[0].chars,
+        splits[0].words,
         {
           opacity: 1,
           duration: 0.8,
@@ -292,8 +292,8 @@ export function Projects() {
 
         const next = panels[i + 1]
 
-        const currentChars = splits[i].chars
-        const nextChars = splits[i + 1].chars
+        const currentChars = splits[i].words
+        const nextChars = splits[i + 1].words
 
         const currentTags = panel.querySelectorAll('.tag')
         const nextTags = next.querySelectorAll('.tag')
@@ -445,8 +445,7 @@ export function Projects() {
         <div data-slot="projects-japanese" className="relative col-span-3 text-center">
           <JapaneseText
             text="最強"
-            border
-            className="font-bold text-[250px] [writ"
+            className="font-bold text-[250px]"
             color="var(--accent)"
           />
         </div>

@@ -6,7 +6,7 @@ import { SplitText } from 'gsap/SplitText'
 import about1Img from '@/assets/img/about/1.webp'
 import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { prefersReducedMotion } from '@/lib/motion'
+import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
@@ -19,24 +19,11 @@ export function About() {
 
       if (!section) return
 
-      const splitTitle = SplitText.create('.about-title', {
-        type: 'lines, words, chars',
-        linesClass: 'split-line',
-        wordsClass: 'split-word',
-        charsClass: 'split-char',
-      })
+      const splitTitle = splitFull('.about-title')
 
-      const splitRows1 = SplitText.create('.row-text-1', {
-        type: 'words, chars',
-        wordsClass: 'split-word',
-        charsClass: 'split-char',
-      })
+      const splitRows1 = splitWords('.row-text-1')
 
-      const splitRows2 = SplitText.create('.row-text-2', {
-        type: 'words, chars',
-        wordsClass: 'split-word',
-        charsClass: 'split-char',
-      })
+      const splitRows2 = splitWords('.row-text-2')
 
       gsap.set('.row-img-1', {
         opacity: 0,

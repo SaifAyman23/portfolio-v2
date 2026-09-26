@@ -341,7 +341,7 @@ export function Experience() {
                 decoding="async"
                 className="w-full h-full object-cover"
                 style={{
-                  filter: 'brightness(0.30) blur(10px)',
+                  filter: 'brightness(0.30)',
                 }}
               />
             </div>

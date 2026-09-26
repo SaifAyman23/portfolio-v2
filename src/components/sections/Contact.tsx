@@ -1,12 +1,11 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
-import { SplitText } from 'gsap/SplitText'
 import { useMemo } from 'react'
 
 import { CyberFrame } from '../ui/cyber-frame'
 
-import { prefersReducedMotion } from '@/lib/motion'
+import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(Observer)
 
@@ -48,18 +47,9 @@ export function Contact() {
       const h1 = document.querySelector<HTMLElement>('#contact h1')
       if (!p || !h1 || frames.length === 0) return
 
-      const splitP = SplitText.create(p, {
-        type: 'words, chars',
-        wordsClass: 'split-word',
-        charsClass: 'split-char',
-      })
+      const splitP = splitWords(p)
 
-      const splitH1 = SplitText.create(h1, {
-        type: 'lines, words, chars',
-        linesClass: 'split-line',
-        wordsClass: 'split-word',
-        charsClass: 'split-char',
-      })
+      const splitH1 = splitFull(h1)
 
       gsap.set(splitP.chars, { opacity: 0, y: 20 })
       gsap.set(frames, { opacity: 0, scale: 0.96 })

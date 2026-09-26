@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { BiLogoPostgresql } from 'react-icons/bi'
 import {
   SiCelery,
@@ -24,6 +24,7 @@ import {
 } from 'react-icons/si'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
+import { useNearView } from '@/hooks/useNearView'
 import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
@@ -379,10 +380,20 @@ export function Tools() {
   const [activeSkill, setActiveSkill] = useState(skillSets[0].skills[0])
   const [coolActive, setCoolActive] = useState(5)
   const [ktsValue, setKtsValue] = useState(320)
+  const near = useNearView('tools')
+  const loops = useRef<gsap.core.Tween[]>([])
+
+  useEffect(() => {
+    loops.current.forEach((tween) => {
+      if (near) tween.play()
+      else tween.pause()
+    })
+  }, [near])
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return
+      loops.current = []
       gsap.from(
         '[data-slot="radar"], [data-slot="tick-ring"], [data-slot="ruler-bar"], [data-slot="cool-meter"]',
         {
@@ -394,20 +405,21 @@ export function Tools() {
           scrollTrigger: { trigger: rootRef.current, start: 'top 70%', once: true },
         }
       )
-      gsap.to('[data-slot="radar-sweep"]', {
+      const sweep = gsap.to('[data-slot="radar-sweep"]', {
         rotation: 360,
         svgOrigin: '191 191',
         duration: 6,
         ease: 'none',
         repeat: -1,
       })
-      gsap.to('[data-slot="tick-ring-ticks"]', {
+      const ticks = gsap.to('[data-slot="tick-ring-ticks"]', {
         rotation: -360,
         svgOrigin: '100 100',
         duration: 60,
         ease: 'none',
         repeat: -1,
       })
+      loops.current.push(sweep, ticks)
 
       gsap.timeline({
         scrollTrigger: {
@@ -488,6 +500,7 @@ export function Tools() {
         repeatRefresh: true,
         onUpdate: () => setCoolActive(Math.round(obj.v)),
       })
+      loops.current.push(tween)
       return () => tween.kill()
     },
     { scope: rootRef }
@@ -506,6 +519,7 @@ export function Tools() {
         repeatRefresh: true,
         onUpdate: () => setKtsValue(Math.round(numObj.val)),
       })
+      loops.current.push(tween)
       return () => tween.kill()
     },
     { scope: rootRef }

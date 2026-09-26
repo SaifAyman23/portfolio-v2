@@ -1,10 +1,10 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import type Lenis from 'lenis'
 import { useEffect, useRef, useState } from 'react'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { prefersReducedMotion } from '@/lib/motion'
+import { getLenis } from '@/lib/smoothScroll'
 import { cn } from '@/lib/utils'
 
 export type ScrollBarProps = {
@@ -21,7 +21,7 @@ const MIN_THUMB = 28
  * prefers-reduced-motion, or this component used without smooth scroll.
  */
 function scrollTo(top: number, options?: { immediate?: boolean }) {
-  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis
+  const lenis = getLenis()
   if (lenis) {
     lenis.scrollTo(top, { immediate: options?.immediate ?? false })
     return

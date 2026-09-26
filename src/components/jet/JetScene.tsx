@@ -1,3 +1,4 @@
+import { useGSAP } from '@gsap/react'
 import { PerspectiveCamera } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { gsap } from 'gsap'
@@ -123,43 +124,39 @@ function JetController({
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const introDone = useRef(false)
 
-  useEffect(() => {
-    const begin = () => {
-      const jet = jetRef.current
-      if (!jet || introDone.current) return
+  useGSAP(() => {
+    const jet = jetRef.current
+    if (!jet) return
 
-      const heroStay = SECTION_POSES.hero.stay
+    const heroStay = SECTION_POSES.hero.stay
 
-      introRef.current = gsap
-        .timeline({
-          delay: 3.8,
-          onComplete: () => {
-            introDone.current = true
-          },
-        })
-        .to(jet.position, {
-          x: heroStay.position[0],
-          y: heroStay.position[1],
-          z: heroStay.position[2],
+    introRef.current = gsap
+      .timeline({
+        delay: 3,
+        onComplete: () => {
+          introDone.current = true
+        },
+      })
+      .to(jet.position, {
+        x: heroStay.position[0],
+        y: heroStay.position[1],
+        z: heroStay.position[2],
+        duration: 2,
+        ease: 'power2.out',
+      })
+      .to(
+        jet.rotation,
+        {
+          x: heroStay.rotation[0],
+          y: heroStay.rotation[1],
+          z: heroStay.rotation[2],
           duration: 2,
           ease: 'power2.out',
-        })
-        .to(
-          jet.rotation,
-          {
-            x: heroStay.rotation[0],
-            y: heroStay.rotation[1],
-            z: heroStay.rotation[2],
-            duration: 2,
-            ease: 'power2.out',
-          },
-          '<'
-        )
-    }
+        },
+        '<'
+      )
 
-    window.addEventListener('hero-intro-start', begin)
     return () => {
-      window.removeEventListener('hero-intro-start', begin)
       introRef.current?.kill()
     }
   }, [])
@@ -233,7 +230,7 @@ export function JetScene({
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
-      <Canvas dpr={[1, 1.5]} gl={{ antialias: true }} frameloop={visible ? 'always' : 'never'}>
+      <Canvas dpr={1} gl={{ antialias: true }} frameloop={visible ? 'always' : 'never'}>
         <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />
         <directionalLight position={[0, 0.8, 7]} intensity={4.8} />
         <hemisphereLight args={['#ffffff', '#8B0606', 0.7]} />
