@@ -4,7 +4,7 @@ import { SECTIONS } from '@/config/sections'
 
 const VIRTUAL_WIDTH = 2268
 const VIRTUAL_HEIGHT = 972
-const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/'
+const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 const LEVEL_BY_SECTION: Record<string, string> = {
   hero: '0',
