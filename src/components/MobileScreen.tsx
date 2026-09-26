@@ -13,7 +13,7 @@ const LEVEL_BY_SECTION: Record<string, string> = {
   projects: '3',
   tools: '4',
   contact: '5',
-  footer: '★',
+  footer: '✕',
 }
 
 const SECTION_IDS = ['hero', 'about', 'experience', 'projects', 'tools', 'contact', 'footer']
