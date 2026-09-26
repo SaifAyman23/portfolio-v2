@@ -32,13 +32,11 @@ export function HeroInfo({
             stroke={stroke}
             strokeWidth={strokeWidth}
             fill={fill}
+            href={link.href}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
           >
-            <a
-              href={link.href}
-              {...(external ? { target: '_blank' as const, rel: 'noopener noreferrer' } : {})}
-            >
-              {link.label}
-            </a>
+            {link.label}
           </Button>
         )
       })}

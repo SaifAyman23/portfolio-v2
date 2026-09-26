@@ -4,9 +4,9 @@
 > Owner order 2026-09-24: `src/components/sections/` reverted to original — section timelines,
 > targets and styling are byte-identical to `712d9b5`. Nothing in sections/* may be touched
 > without explicit permission (animations AND styling).
-> Gate status now: `typecheck` ✅ · `lint` ✅ · `format:check` ❌ (this file only) ·
-> `test` 9/12 ❌ (3 known failures documented below, all inside reverted section code) ·
-> Chromium headless: hero renders, zero console errors.
+> Gate status now: `typecheck` ✅ · `lint` ✅ · `format:check` ✅ · `test` 12/12 ✅ ·
+> Chromium headless scroll-through (Experience/Projects/Contact/Footer): correct pinned states,
+> zero console errors or pageerrors.
 
 ---
 
@@ -55,10 +55,10 @@
 
 ## P2 — hygiene / coverage
 
-17. ⚠️ **Section axe scans red (3)** — `Hero`/`Footer` (`nested-interactive`: `HeroInfo` nests `<a>`
-    in `<Button>`) and `Tools` (`svg-img-alt`: radar icon) fail because the fixes lived in reverted
-    section files. `ui/button.tsx` `href` support survives but is unused until `HeroInfo` adopts it.
-    Fix needs permission to touch `HeroInfo.tsx` + `Tools.tsx`. (BestPractices §6, AGENTS.md §14)
+17. ✅ **Section axe scans green (7/7)** — `HeroInfo` now passes `href`/`target`/`rel` to
+    `Button` (renders a real `<a>` root, no nested interactive) and the radar icon container is
+    `aria-hidden`. Fixed with owner permission; `ui/button.tsx` `href` support is now used.
+    (BestPractices §6, AGENTS.md §14)
 18. ✅ **`public/models` pruned** — 5 unreferenced screenshots (~3.7 MB) deleted (kept). (Performance §3)
 
 ---

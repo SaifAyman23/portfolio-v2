@@ -60,85 +60,88 @@ export function Footer() {
     { dependencies: [expanded] }
   )
 
-  useGSAP(() => {
-    if (prefersReducedMotion()) return
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
 
-    const japanese = document.querySelector('#footer-japanese')
-    const name = document.querySelector('.name')
-    const overlay = document.querySelector('.blurred-overlay')
-    const info = document.querySelector('[data-slot="footer-info"]')
+      const japanese = document.querySelector('#footer-japanese')
+      const name = document.querySelector('.name')
+      const overlay = document.querySelector('.blurred-overlay')
+      const info = document.querySelector('[data-slot="footer-info"]')
 
-    if (!japanese || !name || !info) {
-      return
-    }
+      if (!japanese || !name || !info) {
+        return
+      }
 
-    const infoItems = Array.from(info.children)
+      const infoItems = Array.from(info.children)
 
-    const splitJap = SplitText.create(japanese, {
-      type: 'chars',
-    })
+      const splitJap = SplitText.create(japanese, {
+        type: 'chars',
+      })
 
-    const splitName = SplitText.create(name, {
-      type: 'chars',
-    })
+      const splitName = SplitText.create(name, {
+        type: 'chars',
+      })
 
-    gsap.set(infoItems, {
-      opacity: 0,
-      y: 20,
-    })
+      gsap.set(infoItems, {
+        opacity: 0,
+        y: 20,
+      })
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        toggleActions: 'play none none reverse',
-        trigger: '#footer',
-        start: 'top 5%',
-        end: 'bottom bottom',
-        // scrub: true,
-      },
-    })
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          toggleActions: 'play none none reverse',
+          trigger: '#footer',
+          start: 'top 5%',
+          end: 'bottom bottom',
+          // scrub: true,
+        },
+      })
 
-    tl.from(overlay, {
-      opacity: 0,
-      stagger: {
-        amount: 1,
-        from: 'center',
-      },
-    })
+      tl.from(overlay, {
+        opacity: 0,
+        stagger: {
+          amount: 1,
+          from: 'center',
+        },
+      })
 
-    tl.from(splitJap.chars, {
-      opacity: 0,
-      y: 16,
-      stagger: {
-        amount: 0.2,
-        from: 'center',
-      },
-      duration: 0.2,
-    })
+      tl.from(splitJap.chars, {
+        opacity: 0,
+        y: 16,
+        stagger: {
+          amount: 0.2,
+          from: 'center',
+        },
+        duration: 0.2,
+      })
 
-    tl.from(splitName.chars, {
-      opacity: 0,
-      y: 16,
-      stagger: {
-        amount: 0.4,
-        from: 'start',
-      },
-      duration: 0.5,
-      delay: 0.5,
-      ease: 'steps(1)',
-    })
+      tl.from(splitName.chars, {
+        opacity: 0,
+        y: 16,
+        stagger: {
+          amount: 0.4,
+          from: 'start',
+        },
+        duration: 0.5,
+        delay: 0.5,
+        ease: 'steps(1)',
+      })
 
-    tl.to(infoItems, {
-      opacity: 1,
-      stagger: 0.2,
-      y: 0,
-      duration: 0.2,
-    })
+      tl.to(infoItems, {
+        opacity: 1,
+        stagger: 0.2,
+        y: 0,
+        duration: 0.2,
+      })
 
     return () => {
       splitJap.revert()
       splitName.revert()
     }
-  }, [])
+    },
+    []
+  )
 
   return (
     <section

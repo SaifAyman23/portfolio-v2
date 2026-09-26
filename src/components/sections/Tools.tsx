@@ -118,6 +118,7 @@ export function Radar({
       {(showIcon || children !== undefined) && (
         <div
           data-slot="radar-icon"
+          aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
         >
           {children ?? <span className="block h-3 w-3 rounded-full bg-accent" />}

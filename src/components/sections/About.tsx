@@ -11,123 +11,126 @@ import { prefersReducedMotion } from '@/lib/motion'
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function About() {
-  useGSAP(() => {
-    if (prefersReducedMotion()) return
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
 
-    const section = document.querySelector('#about')
+      const section = document.querySelector('#about')
 
-    if (!section) return
+      if (!section) return
 
-    const splitTitle = SplitText.create('.about-title', {
-      type: 'lines, words, chars',
-      linesClass: 'split-line',
-      wordsClass: 'split-word',
-      charsClass: 'split-char',
-    })
+      const splitTitle = SplitText.create('.about-title', {
+        type: 'lines, words, chars',
+        linesClass: 'split-line',
+        wordsClass: 'split-word',
+        charsClass: 'split-char',
+      })
 
-    const splitRows1 = SplitText.create('.row-text-1', {
-      type: 'words, chars',
-      wordsClass: 'split-word',
-      charsClass: 'split-char',
-    })
+      const splitRows1 = SplitText.create('.row-text-1', {
+        type: 'words, chars',
+        wordsClass: 'split-word',
+        charsClass: 'split-char',
+      })
 
-    const splitRows2 = SplitText.create('.row-text-2', {
-      type: 'words, chars',
-      wordsClass: 'split-word',
-      charsClass: 'split-char',
-    })
+      const splitRows2 = SplitText.create('.row-text-2', {
+        type: 'words, chars',
+        wordsClass: 'split-word',
+        charsClass: 'split-char',
+      })
 
-    gsap.set('.row-img-1', {
-      opacity: 0,
-      y: 24,
-    })
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: '+=1700',
-        scrub: true,
-        pin: true,
-        pinReparent: true,
-        anticipatePin: 1,
-      },
-    })
-
-    // 1. ABOUT TITLE
-
-    tl.from(splitTitle.chars, {
-      opacity: 0,
-      y: 24,
-      duration: 2,
-      stagger: 2,
-      ease: 'steps(1)',
-    })
-
-    // 1.5. JAPANESE TEXT
-
-    tl.from('#about-japanese-text', {
-      opacity: 0,
-      y: 100,
-      duration: 2,
-    })
-
-    // 2. FIRST ROW
-
-    tl.from(
-      splitRows1.chars,
-      {
+      gsap.set('.row-img-1', {
         opacity: 0,
-        y: 16,
-        duration: 2,
-        stagger: 0.02,
-        ease: 'steps(1)',
-      },
-      '<0.3'
-    )
+        y: 24,
+      })
 
-    tl.to(
-      '.row-img-1',
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'none',
-      },
-      '<0.3'
-    )
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=1700',
+          scrub: true,
+          pin: true,
+          pinReparent: true,
+          anticipatePin: 1,
+        },
+      })
 
-    // 3. SECOND ROW
+      // 1. ABOUT TITLE
 
-    tl.from(
-      splitRows2.chars,
-      {
+      tl.from(splitTitle.chars, {
         opacity: 0,
-        y: 16,
+        y: 24,
         duration: 2,
-        stagger: 0.02,
+        stagger: 2,
         ease: 'steps(1)',
-      },
-      '<0.3'
-    )
+      })
 
-    tl.to(
-      '.row-img-1',
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'none',
-      },
-      '<0.3'
-    )
+      // 1.5. JAPANESE TEXT
 
-    return () => {
-      splitTitle.revert()
-      splitRows1.revert()
-      splitRows2.revert()
-    }
-  }, [])
+      tl.from('#about-japanese-text', {
+        opacity: 0,
+        y: 100,
+        duration: 2,
+      })
+
+      // 2. FIRST ROW
+
+      tl.from(
+        splitRows1.chars,
+        {
+          opacity: 0,
+          y: 16,
+          duration: 2,
+          stagger: 0.02,
+          ease: 'steps(1)',
+        },
+        '<0.3'
+      )
+
+      tl.to(
+        '.row-img-1',
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'none',
+        },
+        '<0.3'
+      )
+
+      // 3. SECOND ROW
+
+      tl.from(
+        splitRows2.chars,
+        {
+          opacity: 0,
+          y: 16,
+          duration: 2,
+          stagger: 0.02,
+          ease: 'steps(1)',
+        },
+        '<0.3'
+      )
+
+      tl.to(
+        '.row-img-1',
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'none',
+        },
+        '<0.3'
+      )
+
+      return () => {
+        splitTitle.revert()
+        splitRows1.revert()
+        splitRows2.revert()
+      }
+    },
+    []
+  )
 
   return (
     <section

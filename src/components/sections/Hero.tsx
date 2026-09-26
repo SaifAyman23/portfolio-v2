@@ -94,8 +94,7 @@ export function Hero() {
 
     gsap.set(introSplit.chars, {
       opacity: 0,
-      // y: 20,
-      // filter: 'blur(20px)',
+      y: 20,
     })
 
     const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } })
@@ -105,12 +104,17 @@ export function Hero() {
     lenis?.stop()
     ScrollTrigger.getAll().forEach((trigger) => trigger.disable(false))
 
+    const restoreScroll = () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      lenis?.start()
+      ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
+      ScrollTrigger.refresh()
+    }
+
     const tl = gsap.timeline({
       onComplete: () => {
-        document.documentElement.style.overflow = ''
-        lenis?.start()
-        ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
-        ScrollTrigger.refresh()
+        restoreScroll()
       },
     })
 
@@ -119,10 +123,9 @@ export function Hero() {
     tl.to(introSplit.chars, {
       opacity: 1,
       y: 0,
-      // filter: 'blur(8px)',
-      stagger: 0.06,
-      duration: 0.5,
-      ease: 'steps(1)',
+      stagger: 0.04,
+      duration: 0.35,
+      ease: 'power3.out',
     })
 
     // 1.5. CYBER LOADER
@@ -131,20 +134,11 @@ export function Hero() {
       loaderItems,
       {
         opacity: 0,
+        scaleY: 0,
+        transformOrigin: '50% 100%',
         stagger: 0.06,
-        duration: 0.2,
-        ease: 'steps(1)',
-      },
-      '<0.1'
-    )
-
-    // 2. LARGE TITLE BECOMES SHARP
-
-    tl.to(
-      introSplit.chars,
-      {
-        duration: 0.5,
-        ease: 'none',
+        duration: 0.3,
+        ease: 'power2.out',
       },
       '<0.1'
     )
@@ -155,11 +149,10 @@ export function Hero() {
       intro,
       {
         opacity: 0,
-        scale: 1.05,
-        duration: 0.35,
+        duration: 0.25,
         ease: 'none',
       },
-      '+=0.15'
+      '+=0.1'
     )
 
     // 4. WHITE SCREEN DISAPPEARS
@@ -168,7 +161,7 @@ export function Hero() {
       overlay,
       {
         opacity: 0,
-        duration: 0.4,
+        duration: 0.3,
         ease: 'none',
       },
       '<0.1'
@@ -181,8 +174,8 @@ export function Hero() {
       {
         opacity: 1,
         y: 0,
-        stagger: 0.04,
-        duration: 0.5,
+        stagger: 0.025,
+        duration: 0.35,
         ease: 'steps(1)',
       },
       '>-0.05'
@@ -193,9 +186,12 @@ export function Hero() {
     tl.to(subtitleSplit.chars, {
       opacity: 1,
       y: 0,
-      stagger: 0.03,
-      duration: 0.4,
+      stagger: 0.02,
+      duration: 0.3,
     })
+
+    // 6b. UNLOCK SCROLL EARLY — scrollbar (4.8s) + jet (3.8s) arrive unlocked
+    tl.call(restoreScroll)
 
     // 7. HERO INFO BUTTONS
 

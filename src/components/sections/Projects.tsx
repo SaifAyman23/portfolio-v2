@@ -59,348 +59,351 @@ const projects = [
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
 
-  useGSAP(() => {
-    if (prefersReducedMotion()) return
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
 
-    const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
+      const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
-    if (panels.length === 0) return
+      if (panels.length === 0) return
 
-    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
+      const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
 
-    if (!intro) return
+      if (!intro) return
 
-    const introSplit = SplitText.create(intro, {
-      type: 'chars',
-    })
-
-    const splits = panels.map((panel) =>
-      SplitText.create(panel.querySelector('p'), {
-        type: 'words, chars',
+      const introSplit = SplitText.create(intro, {
+        type: 'chars',
       })
-    )
 
-    const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
+      const splits = panels.map((panel) =>
+        SplitText.create(panel.querySelector('p'), {
+          type: 'words, chars',
+        })
+      )
 
-    const japanese = document.querySelector<HTMLElement>('[data-slot="projects-japanese"]')
+      const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
 
-    /*
-     * ─────────────────────────────
-     * INITIAL STATES
-     * ─────────────────────────────
-     */
+      const japanese = document.querySelector<HTMLElement>('[data-slot="projects-japanese"]')
 
-    gsap.set(introSplit.chars, {
-      opacity: 0,
-      y: 30,
-    })
+      /*
+       * ─────────────────────────────
+       * INITIAL STATES
+       * ─────────────────────────────
+       */
 
-    gsap.set('#projects h1', {
-      opacity: 0,
-      y: 100,
-    })
-
-    if (image) {
-      gsap.set(image, {
+      gsap.set(introSplit.chars, {
         opacity: 0,
-        scale: 0.96,
+        y: 30,
       })
-    }
 
-    if (japanese) {
-      gsap.set(japanese, {
+      gsap.set('#projects h1', {
         opacity: 0,
-        y: 50,
-      })
-    }
-
-    panels.forEach((panel, i) => {
-      gsap.set(panel, {
-        autoAlpha: 0,
-        y: 24,
+        y: 100,
       })
 
-      gsap.set(splits[i].chars, {
-        opacity: 0,
+      if (image) {
+        gsap.set(image, {
+          opacity: 0,
+          scale: 0.96,
+        })
+      }
+
+      if (japanese) {
+        gsap.set(japanese, {
+          opacity: 0,
+          y: 50,
+        })
+      }
+
+      panels.forEach((panel, i) => {
+        gsap.set(panel, {
+          autoAlpha: 0,
+          y: 24,
+        })
+
+        gsap.set(splits[i].chars, {
+          opacity: 0,
+        })
+
+        gsap.set(panel.querySelectorAll('.tag'), {
+          autoAlpha: 0,
+          y: 10,
+        })
       })
 
-      gsap.set(panel.querySelectorAll('.tag'), {
-        autoAlpha: 0,
-        y: 10,
-      })
-    })
+      /*
+       * ─────────────────────────────
+       * MAIN TIMELINE
+       * ─────────────────────────────
+       */
 
-    /*
-     * ─────────────────────────────
-     * MAIN TIMELINE
-     * ─────────────────────────────
-     */
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#projects',
-        start: 'top top',
-        end: '+=400%',
-        scrub: true,
-        pin: true,
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#projects',
+          start: 'top top',
+          end: '+=400%',
+          scrub: true,
+          pin: true,
         pinReparent: true,
         anticipatePin: 2,
-      },
-    })
-
-    /*
-     * ─────────────────────────────
-     * 1. LARGE CENTER TITLE
-     * ─────────────────────────────
-     */
-
-    tl.to(introSplit.chars, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.08,
-      duration: 0.6,
-      ease: 'steps(1)',
-    })
-
-    tl.to({}, { duration: 0.3 })
-
-    /*
-     * ─────────────────────────────
-     * 2. LARGE TITLE OUT
-     * ─────────────────────────────
-     */
-
-    tl.to(introSplit.chars, {
-      opacity: 0,
-      y: -30,
-      stagger: {
-        amount: 0.5,
-        from: 'start',
-      },
-      duration: 2,
-      ease: 'steps(1)',
-    })
-
-    /*
-     * ─────────────────────────────
-     * 3. PROJECT COMPOSITION IN
-     * ─────────────────────────────
-     */
-
-    /*
-     * Outline Projects
-     */
-    tl.to('#projects h1', {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power2.out',
-    })
-
-    /*
-     * Image
-     *
-     * Enters once and stays visible.
-     * It is NOT animated during project switching.
-     */
-    if (image) {
-      tl.to(
-        image,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 2,
-          ease: 'power2.out',
         },
-        '<1'
-      )
-    }
+      })
 
-    /*
-     * Japanese text
-     */
-    if (japanese) {
-      tl.to(
-        japanese,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 2,
-          ease: 'power2.out',
-        },
-        '<1'
-      )
-    }
+      /*
+       * ─────────────────────────────
+       * 1. LARGE CENTER TITLE
+       * ─────────────────────────────
+       */
 
-    /*
-     * First project panel
-     */
-    tl.to(
-      panels[0],
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.9,
-        ease: 'power2.out',
-      },
-      '<0.25'
-    )
-
-    /*
-     * First description
-     */
-    tl.to(
-      splits[0].chars,
-      {
+      tl.to(introSplit.chars, {
         opacity: 1,
-        duration: 0.8,
-        stagger: 0.018,
-        ease: 'steps(1)',
-      },
-      '<0.15'
-    )
-
-    /*
-     * First tags
-     */
-    tl.to(
-      panels[0].querySelectorAll('.tag'),
-      {
-        autoAlpha: 1,
         y: 0,
-        duration: 0.55,
-        stagger: 1,
-        ease: 'power2.out',
-      },
-      '<0.2'
-    )
+        stagger: 0.08,
+        duration: 0.6,
+        ease: 'steps(1)',
+      })
 
-    /*
-     * Let the first project breathe.
-     */
-    tl.to({}, { duration: 0.6 })
-
-    /*
-     * ─────────────────────────────
-     * 4. PROJECT SWITCHING
-     * ─────────────────────────────
-     */
-
-    panels.forEach((panel, i) => {
-      if (i >= panels.length - 1) return
-
-      const next = panels[i + 1]
-
-      const currentChars = splits[i].chars
-      const nextChars = splits[i + 1].chars
-
-      const currentTags = panel.querySelectorAll('.tag')
-      const nextTags = next.querySelectorAll('.tag')
+      tl.to({}, { duration: 0.3 })
 
       /*
-       * Reading time.
+       * ─────────────────────────────
+       * 2. LARGE TITLE OUT
+       * ─────────────────────────────
        */
-      tl.to({}, { duration: 1 })
 
-      /*
-       * Current description out
-       */
-      tl.to(currentChars, {
+      tl.to(introSplit.chars, {
         opacity: 0,
-        duration: 0.65,
-        stagger: 0.012,
+        y: -30,
+        stagger: {
+          amount: 0.5,
+          from: 'start',
+        },
+        duration: 2,
         ease: 'steps(1)',
       })
 
       /*
-       * Current tags out
+       * ─────────────────────────────
+       * 3. PROJECT COMPOSITION IN
+       * ─────────────────────────────
        */
-      tl.to(
-        currentTags,
-        {
-          autoAlpha: 0,
-          y: -8,
-          duration: 0.5,
-          stagger: 0.2,
-          ease: 'power2.in',
-        },
-        '<0.05'
-      )
 
       /*
-       * Current panel out
+       * Outline Projects
        */
-      tl.to(
-        panel,
-        {
-          autoAlpha: 0,
-          y: -12,
-          duration: 0.7,
-          ease: 'power2.in',
-        },
-        '<'
-      )
-
-      /*
-       * Next panel in
-       */
-      tl.to(next, {
-        autoAlpha: 1,
+      tl.to('#projects h1', {
+        opacity: 1,
         y: 0,
-        duration: 0.75,
+        duration: 1,
         ease: 'power2.out',
       })
 
       /*
-       * Next description in
+       * Image
+       *
+       * Enters once and stays visible.
+       * It is NOT animated during project switching.
        */
-      tl.to(
-        nextChars,
-        {
-          opacity: 1,
-          duration: 0.75,
-          stagger: 0.025,
-          ease: 'steps(1)',
-        },
-        '<0.12'
-      )
+      if (image) {
+        tl.to(
+          image,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 2,
+            ease: 'power2.out',
+          },
+          '<1'
+        )
+      }
 
       /*
-       * Update image only.
-       *
-       * The image itself remains visible.
-       * React swaps its src without an
-       * additional GSAP fade/scale animation.
+       * Japanese text
        */
-      tl.call(
-        () => {
-          setActiveIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
+      if (japanese) {
+        tl.to(
+          japanese,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 2,
+            ease: 'power2.out',
+          },
+          '<1'
+        )
+      }
+
+      /*
+       * First project panel
+       */
+      tl.to(
+        panels[0],
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power2.out',
         },
-        [],
         '<0.25'
       )
 
       /*
-       * Next tags in
+       * First description
        */
       tl.to(
-        nextTags,
+        splits[0].chars,
         {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: 'power2.out',
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.018,
+          ease: 'steps(1)',
         },
         '<0.15'
       )
-    })
 
-    return () => {
-      introSplit.revert()
-      splits.forEach((split) => split.revert())
-    }
-  }, [])
+      /*
+       * First tags
+       */
+      tl.to(
+        panels[0].querySelectorAll('.tag'),
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 1,
+          ease: 'power2.out',
+        },
+        '<0.2'
+      )
+
+      /*
+       * Let the first project breathe.
+       */
+      tl.to({}, { duration: 0.6 })
+
+      /*
+       * ─────────────────────────────
+       * 4. PROJECT SWITCHING
+       * ─────────────────────────────
+       */
+
+      panels.forEach((panel, i) => {
+        if (i >= panels.length - 1) return
+
+        const next = panels[i + 1]
+
+        const currentChars = splits[i].chars
+        const nextChars = splits[i + 1].chars
+
+        const currentTags = panel.querySelectorAll('.tag')
+        const nextTags = next.querySelectorAll('.tag')
+
+        /*
+         * Reading time.
+         */
+        tl.to({}, { duration: 1 })
+
+        /*
+         * Current description out
+         */
+        tl.to(currentChars, {
+          opacity: 0,
+          duration: 0.65,
+          stagger: 0.012,
+          ease: 'steps(1)',
+        })
+
+        /*
+         * Current tags out
+         */
+        tl.to(
+          currentTags,
+          {
+            autoAlpha: 0,
+            y: -8,
+            duration: 0.5,
+            stagger: 0.2,
+            ease: 'power2.in',
+          },
+          '<0.05'
+        )
+
+        /*
+         * Current panel out
+         */
+        tl.to(
+          panel,
+          {
+            autoAlpha: 0,
+            y: -12,
+            duration: 0.7,
+            ease: 'power2.in',
+          },
+          '<'
+        )
+
+        /*
+         * Next panel in
+         */
+        tl.to(next, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.75,
+          ease: 'power2.out',
+        })
+
+        /*
+         * Next description in
+         */
+        tl.to(
+          nextChars,
+          {
+            opacity: 1,
+            duration: 0.75,
+            stagger: 0.025,
+            ease: 'steps(1)',
+          },
+          '<0.12'
+        )
+
+        /*
+         * Update image only.
+         *
+         * The image itself remains visible.
+         * React swaps its src without an
+         * additional GSAP fade/scale animation.
+         */
+        tl.call(
+          () => {
+            setActiveIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
+          },
+          [],
+          '<0.25'
+        )
+
+        /*
+         * Next tags in
+         */
+        tl.to(
+          nextTags,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: 'power2.out',
+          },
+          '<0.15'
+        )
+      })
+
+      return () => {
+        introSplit.revert()
+        splits.forEach((split) => split.revert())
+      }
+    },
+    []
+  )
 
   return (
     <section

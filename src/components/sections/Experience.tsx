@@ -30,216 +30,96 @@ const experiences = [
 ]
 
 export function Experience() {
-  useGSAP(() => {
-    if (prefersReducedMotion()) return
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
 
-    const solidTitle = document.querySelector<HTMLElement>('[data-slot="experience-solid-title"]')
+      const solidTitle = document.querySelector<HTMLElement>(
+        '[data-slot="experience-solid-title"]'
+      )
 
-    const outlineTitle = document.querySelector<HTMLElement>(
-      '[data-slot="experience-outline-title"]'
-    )
+      const outlineTitle = document.querySelector<HTMLElement>(
+        '[data-slot="experience-outline-title"]'
+      )
 
-    const covers = gsap.utils.toArray<HTMLElement>('[data-slot="experience-cover"]')
+      const covers = gsap.utils.toArray<HTMLElement>('[data-slot="experience-cover"]')
 
-    const descriptions = gsap.utils.toArray<HTMLElement>('[data-slot="experience-description"]')
+      const descriptions = gsap.utils.toArray<HTMLElement>('[data-slot="experience-description"]')
 
-    const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
+      const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
 
-    if (!solidTitle || !outlineTitle) return
+      if (!solidTitle || !outlineTitle) return
 
-    const split = SplitText.create(solidTitle, {
-      type: 'chars',
-    })
+      const split = SplitText.create(solidTitle, {
+        type: 'chars',
+      })
 
-    /*
-     * ─────────────────────────────
-     * INITIAL STATES
-     * ─────────────────────────────
-     */
+      /*
+       * ─────────────────────────────
+       * INITIAL STATES
+       * ─────────────────────────────
+       */
 
-    gsap.set(split.chars, {
-      scale: 1,
-      transformOrigin: 'center center',
-    })
+      gsap.set(split.chars, {
+        scale: 1,
+        transformOrigin: 'center center',
+      })
 
-    gsap.set(outlineTitle, {
-      opacity: 0,
-    })
+      gsap.set(outlineTitle, {
+        opacity: 0,
+      })
 
-    gsap.set(covers, {
-      xPercent: 100,
-    })
+      gsap.set(covers, {
+        xPercent: 100,
+      })
 
-    // gsap.set(contents, {
-    //   xPercent: 100,
-    // })
+      // gsap.set(contents, {
+      //   xPercent: 100,
+      // })
 
-    gsap.set(descriptions, {
-      xPercent: 150,
-    })
+      gsap.set(descriptions, {
+        xPercent: 150,
+      })
 
-    gsap.set(images, {
-      xPercent: -150,
-    })
+      gsap.set(images, {
+        xPercent: -150,
+      })
 
-    /*
-     * ─────────────────────────────
-     * MAIN TIMELINE
-     * ─────────────────────────────
-     */
+      /*
+       * ─────────────────────────────
+       * MAIN TIMELINE
+       * ─────────────────────────────
+       */
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#experience',
-        start: 'top top',
-        end: '+=400%',
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#experience',
+          start: 'top top',
+          end: '+=400%',
         scrub: true,
         pin: true,
         anticipatePin: 1,
-      },
-    })
-
-    /*
-     * ─────────────────────────────
-     * 1. TITLE
-     * ─────────────────────────────
-     *
-     * Characters gradually shrink into
-     * their final size.
-     */
-
-    tl.to(split.chars, {
-      scale: 1,
-      duration: 1.5,
-      stagger: 0.08,
-      ease: 'power2.out',
-    })
-
-    /*
-     * Small pause.
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.3,
-      }
-    )
-
-    /*
-     * ─────────────────────────────
-     * 2. OUTLINE TITLE
-     * ─────────────────────────────
-     */
-
-    tl.to(outlineTitle, {
-      opacity: 1,
-      duration: 0.3,
-      ease: 'none',
-    })
-
-    /*
-     * ─────────────────────────────
-     * 3. FIRST COVER
-     * ─────────────────────────────
-     *
-     * The cover has its own moment.
-     * It is NOT synchronized with the
-     * experience content.
-     */
-
-    tl.to(covers[0], {
-      xPercent: 0,
-      duration: 1.2,
-      ease: 'power2.inOut',
-    })
-
-    /*
-     * Let the cover settle.
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.35,
-      }
-    )
-
-    /*
-     * ─────────────────────────────
-     * 4. FIRST EXPERIENCE
-     * ─────────────────────────────
-     */
-
-    // tl.to(contents[0], {
-    //   xPercent: 0,
-    //   duration: 1.2,
-    //   ease: 'power2.out',
-    // })
-
-    tl.to(descriptions[0], {
-      xPercent: 0,
-      duration: 1.5,
-      ease: 'power2.out',
-    })
-
-    tl.to(
-      images[0],
-      {
-        xPercent: 0,
-        duration: 1.8,
-        ease: 'power2.out',
-      },
-      '<0.2'
-    )
-
-    /*
-     * Reading time.
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.9,
-      }
-    )
-
-    /*
-     * ─────────────────────────────
-     * 5. EXPERIENCE SWITCHING
-     * ─────────────────────────────
-     */
-
-    experiences.forEach((_, i) => {
-      if (i >= experiences.length - 1) return
-
-      const nextCover = covers[i + 1]
-
-      /*
-       * Current content smoothly leaves.
-       *
-       * The cover does NOT move yet.
-       */
-
-      tl.to(descriptions[i], {
-        xPercent: -150,
-        duration: 1.6,
-        ease: 'power2.inOut',
+        },
       })
 
-      tl.to(
-        images[i],
-        {
-          xPercent: 150,
-          duration: 1.8,
-          ease: 'power2.inOut',
-        },
-        '<0.15'
-      )
+      /*
+       * ─────────────────────────────
+       * 1. TITLE
+       * ─────────────────────────────
+       *
+       * Characters gradually shrink into
+       * their final size.
+       */
+
+      tl.to(split.chars, {
+        scale: 1,
+        duration: 1.5,
+        stagger: 0.08,
+        ease: 'power2.out',
+      })
 
       /*
-       * Small separation between the
-       * content swipe and the cover.
+       * Small pause.
        */
 
       tl.to(
@@ -250,41 +130,64 @@ export function Experience() {
       )
 
       /*
-       * NOW the next cover enters.
-       *
-       * Completely independent from the
-       * previous content movement.
+       * ─────────────────────────────
+       * 2. OUTLINE TITLE
+       * ─────────────────────────────
        */
 
-      tl.to(nextCover, {
+      tl.to(outlineTitle, {
+        opacity: 1,
+        duration: 0.3,
+        ease: 'none',
+      })
+
+      /*
+       * ─────────────────────────────
+       * 3. FIRST COVER
+       * ─────────────────────────────
+       *
+       * The cover has its own moment.
+       * It is NOT synchronized with the
+       * experience content.
+       */
+
+      tl.to(covers[0], {
         xPercent: 0,
         duration: 1.2,
         ease: 'power2.inOut',
       })
 
       /*
-       * Let the cover establish itself.
+       * Let the cover settle.
        */
 
       tl.to(
         {},
         {
-          duration: 0.25,
+          duration: 0.35,
         }
       )
 
       /*
-       * Next content enters smoothly.
+       * ─────────────────────────────
+       * 4. FIRST EXPERIENCE
+       * ─────────────────────────────
        */
 
-      tl.to(descriptions[i + 1], {
+      // tl.to(contents[0], {
+      //   xPercent: 0,
+      //   duration: 1.2,
+      //   ease: 'power2.out',
+      // })
+
+      tl.to(descriptions[0], {
         xPercent: 0,
-        duration: 1.6,
+        duration: 1.5,
         ease: 'power2.out',
       })
 
       tl.to(
-        images[i + 1],
+        images[0],
         {
           xPercent: 0,
           duration: 1.8,
@@ -303,15 +206,121 @@ export function Experience() {
           duration: 0.9,
         }
       )
-    })
+
+      /*
+       * ─────────────────────────────
+       * 5. EXPERIENCE SWITCHING
+       * ─────────────────────────────
+       */
+
+      experiences.forEach((_, i) => {
+        if (i >= experiences.length - 1) return
+
+        const nextCover = covers[i + 1]
+
+        /*
+         * Current content smoothly leaves.
+         *
+         * The cover does NOT move yet.
+         */
+
+        tl.to(descriptions[i], {
+          xPercent: -150,
+          duration: 1.6,
+          ease: 'power2.inOut',
+        })
+
+        tl.to(
+          images[i],
+          {
+            xPercent: 150,
+            duration: 1.8,
+            ease: 'power2.inOut',
+          },
+          '<0.15'
+        )
+
+        /*
+         * Small separation between the
+         * content swipe and the cover.
+         */
+
+        tl.to(
+          {},
+          {
+            duration: 0.3,
+          }
+        )
+
+        /*
+         * NOW the next cover enters.
+         *
+         * Completely independent from the
+         * previous content movement.
+         */
+
+        tl.to(nextCover, {
+          xPercent: 0,
+          duration: 1.2,
+          ease: 'power2.inOut',
+        })
+
+        /*
+         * Let the cover establish itself.
+         */
+
+        tl.to(
+          {},
+          {
+            duration: 0.25,
+          }
+        )
+
+        /*
+         * Next content enters smoothly.
+         */
+
+        tl.to(descriptions[i + 1], {
+          xPercent: 0,
+          duration: 1.6,
+          ease: 'power2.out',
+        })
+
+        tl.to(
+          images[i + 1],
+          {
+            xPercent: 0,
+            duration: 1.8,
+            ease: 'power2.out',
+          },
+          '<0.2'
+        )
+
+        /*
+         * Reading time.
+         */
+
+        tl.to(
+          {},
+          {
+            duration: 0.9,
+          }
+        )
+      })
 
     return () => {
       split.revert()
     }
-  }, [])
+    },
+    []
+  )
 
   return (
-    <section id="experience" data-section="experience" className="relative min-h-screen bg-black">
+    <section
+      id="experience"
+      data-section="experience"
+      className="relative min-h-screen bg-black"
+    >
       {/* Background / cover */}
       <div className="absolute inset-0 z-0 flex items-center justify-center">
         <div className="relative w-full h-100 overflow-hidden">

@@ -132,7 +132,7 @@ function JetController({
 
     introRef.current = gsap
       .timeline({
-        delay: 4,
+        delay: 3.8,
         onComplete: () => {
           introDone.current = true
         },
