@@ -150,7 +150,7 @@ export function Footer() {
       className="flex h-screen flex-col items-center relative justify-center overflow-hidden gap-3"
     >
       <div className="absolute w-full z-10">
-        <img src={bg} className="w-full object-cover" alt="background image" />
+        <img src={bg} className="w-full object-cover" alt="background image" decoding="async" />
       </div>
       <div className="w-full z-20 h-full flex items-center justify-center bg-red-900 mix-blend-multiply">
         <JapaneseText

@@ -338,6 +338,7 @@ export function Experience() {
               <img
                 src={experience.image}
                 alt=""
+                decoding="async"
                 className="w-full h-full object-cover"
                 style={{
                   filter: 'brightness(0.30) blur(10px)',
