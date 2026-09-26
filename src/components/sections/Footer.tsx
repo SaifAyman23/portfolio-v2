@@ -85,14 +85,13 @@ export function Footer() {
     gsap.set(infoItems, {
       opacity: 0,
       y: 20,
-      filter: 'blur(8px)',
     })
 
     const tl = gsap.timeline({
       scrollTrigger: {
         toggleActions: 'play none none reverse',
         trigger: '#footer',
-        start: 'top top',
+        start: 'top 5%',
         end: 'bottom bottom',
         // scrub: true,
       },
@@ -108,7 +107,7 @@ export function Footer() {
 
     tl.from(splitJap.chars, {
       opacity: 0,
-      filter: 'blur(10px)',
+      y: 16,
       stagger: {
         amount: 0.2,
         from: 'center',
@@ -118,6 +117,7 @@ export function Footer() {
 
     tl.from(splitName.chars, {
       opacity: 0,
+      y: 16,
       stagger: {
         amount: 0.4,
         from: 'start',
@@ -131,7 +131,6 @@ export function Footer() {
       opacity: 1,
       stagger: 0.2,
       y: 0,
-      filter: 'blur(0px)',
       duration: 0.2,
     })
 

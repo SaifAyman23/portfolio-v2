@@ -54,29 +54,36 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
     const thumb = thumbRef.current
     if (!track || !thumb) return
 
+    let raf = 0
     const update = () => {
       const content = document.documentElement.scrollHeight
       const viewport = window.innerHeight
       const maxTop = content - viewport
-      if (maxTop <= 0) {
-        setScrollable(false)
-        return
-      }
-      setScrollable(true)
+      const next = maxTop > 0
+      setScrollable((prev) => (prev === next ? prev : next))
+      if (!next) return
       const trackHeight = track.clientHeight
       const thumbHeight = Math.max((viewport / content) * trackHeight, MIN_THUMB)
       const ratio = window.scrollY / maxTop
       thumb.style.height = `${thumbHeight}px`
       thumb.style.transform = `translateY(${(trackHeight - thumbHeight) * ratio}px)`
     }
+    const schedule = () => {
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        update()
+      })
+    }
 
     update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
     window.addEventListener('load', update)
     return () => {
-      window.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
       window.removeEventListener('load', update)
     }
   }, [])

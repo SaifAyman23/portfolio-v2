@@ -72,12 +72,12 @@ export function Hero() {
 
     gsap.set(subtitleSplit.chars, {
       opacity: 0,
-      filter: 'blur(8px)',
+      y: 12,
     })
 
     gsap.set(japaneseSplit.chars, {
       opacity: 0,
-      filter: 'blur(10px)',
+      y: 12,
     })
 
     paragraphSplits.forEach((split) => {
@@ -90,7 +90,6 @@ export function Hero() {
     gsap.set(infoItems, {
       opacity: 0,
       y: 20,
-      filter: 'blur(8px)',
     })
 
     gsap.set(introSplit.chars, {
@@ -144,8 +143,6 @@ export function Hero() {
     tl.to(
       introSplit.chars,
       {
-        filter: 'blur(0px)',
-        stagger: 0.06,
         duration: 0.5,
         ease: 'none',
       },
@@ -158,7 +155,6 @@ export function Hero() {
       intro,
       {
         opacity: 0,
-        filter: 'blur(15px)',
         scale: 1.05,
         duration: 0.35,
         ease: 'none',
@@ -196,7 +192,7 @@ export function Hero() {
 
     tl.to(subtitleSplit.chars, {
       opacity: 1,
-      filter: 'blur(0px)',
+      y: 0,
       stagger: 0.03,
       duration: 0.4,
     })
@@ -208,9 +204,8 @@ export function Hero() {
       {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         stagger: 0.06,
-        duration: 1,
+        duration: 0.4,
         ease: 'none',
       },
       '<0.15'
@@ -250,8 +245,8 @@ export function Hero() {
       japaneseSplit.chars,
       {
         opacity: 1,
-        filter: 'blur(0px)',
-        stagger: 0.5,
+        y: 0,
+        // stagger: 0.5,
         duration: 0.4,
         ease: 'none',
       },

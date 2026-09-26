@@ -62,7 +62,7 @@ export function Contact() {
       })
 
       gsap.set(splitP.chars, { opacity: 0, y: 20 })
-      gsap.set(frames, { opacity: 0, filter: 'blur(10px)', scale: 0.96 })
+      gsap.set(frames, { opacity: 0, scale: 0.96 })
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -84,7 +84,6 @@ export function Contact() {
         frames,
         {
           opacity: 1,
-          filter: 'blur(0px)',
           scale: 1,
           duration: 0.8,
           stagger: { amount: 0.9, from: 'random' },

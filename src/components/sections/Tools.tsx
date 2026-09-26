@@ -436,11 +436,10 @@ export function Tools() {
       if (prefersReducedMotion()) return
       gsap.fromTo(
         '[data-slot="skills-panel"]',
-        { autoAlpha: 0, y: 18, filter: 'blur(6px)' },
+        { autoAlpha: 0, y: 18 },
         {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.45,
           ease: 'power3.out',
           stagger: 0.1,
@@ -449,11 +448,10 @@ export function Tools() {
       )
       gsap.fromTo(
         '[data-slot="skills-panel"] [data-slot="skill-btn"]',
-        { autoAlpha: 0, y: 14, filter: 'blur(6px)' },
+        { autoAlpha: 0, y: 14 },
         {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.4,
           ease: 'power3.out',
           stagger: 0.05,
@@ -469,8 +467,8 @@ export function Tools() {
       if (prefersReducedMotion()) return
       gsap.fromTo(
         '[data-slot="radar-icon"]',
-        { autoAlpha: 0, scale: 0.75, filter: 'blur(6px)' },
-        { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.32, ease: 'power3.out' }
+        { autoAlpha: 0, scale: 0.75 },
+        { autoAlpha: 1, scale: 1, duration: 0.32, ease: 'power3.out' }
       )
     },
     { dependencies: [activeSkill], scope: rootRef }

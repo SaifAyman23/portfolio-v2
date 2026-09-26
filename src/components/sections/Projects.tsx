@@ -98,14 +98,12 @@ export function Projects() {
     gsap.set('#projects h1', {
       opacity: 0,
       y: 100,
-      filter: 'blur(10px)',
     })
 
     if (image) {
       gsap.set(image, {
         opacity: 0,
         scale: 0.96,
-        filter: 'blur(14px)',
       })
     }
 
@@ -113,14 +111,13 @@ export function Projects() {
       gsap.set(japanese, {
         opacity: 0,
         y: 50,
-        filter: 'blur(14px)',
       })
     }
 
     panels.forEach((panel, i) => {
       gsap.set(panel, {
         autoAlpha: 0,
-        filter: 'blur(8px)',
+        y: 24,
       })
 
       gsap.set(splits[i].chars, {
@@ -130,7 +127,6 @@ export function Projects() {
       gsap.set(panel.querySelectorAll('.tag'), {
         autoAlpha: 0,
         y: 10,
-        filter: 'blur(6px)',
       })
     })
 
@@ -197,7 +193,6 @@ export function Projects() {
     tl.to('#projects h1', {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
       duration: 1,
       ease: 'power2.out',
     })
@@ -214,7 +209,6 @@ export function Projects() {
         {
           opacity: 1,
           scale: 1,
-          filter: 'blur(0px)',
           duration: 2,
           ease: 'power2.out',
         },
@@ -231,7 +225,6 @@ export function Projects() {
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 2,
           ease: 'power2.out',
         },
@@ -246,7 +239,7 @@ export function Projects() {
       panels[0],
       {
         autoAlpha: 1,
-        filter: 'blur(0px)',
+        y: 0,
         duration: 0.9,
         ease: 'power2.out',
       },
@@ -275,7 +268,6 @@ export function Projects() {
       {
         autoAlpha: 1,
         y: 0,
-        filter: 'blur(0px)',
         duration: 0.55,
         stagger: 1,
         ease: 'power2.out',
@@ -328,7 +320,6 @@ export function Projects() {
         {
           autoAlpha: 0,
           y: -8,
-          filter: 'blur(7px)',
           duration: 0.5,
           stagger: 0.2,
           ease: 'power2.in',
@@ -343,7 +334,7 @@ export function Projects() {
         panel,
         {
           autoAlpha: 0,
-          filter: 'blur(8px)',
+          y: -12,
           duration: 0.7,
           ease: 'power2.in',
         },
@@ -355,7 +346,7 @@ export function Projects() {
        */
       tl.to(next, {
         autoAlpha: 1,
-        filter: 'blur(0px)',
+        y: 0,
         duration: 0.75,
         ease: 'power2.out',
       })
@@ -397,7 +388,6 @@ export function Projects() {
         {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
           duration: 0.5,
           stagger: 0.1,
           ease: 'power2.out',

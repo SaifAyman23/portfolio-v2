@@ -39,7 +39,7 @@ export function About() {
 
     gsap.set('.row-img-1', {
       opacity: 0,
-      filter: 'blur(10px)',
+      y: 24,
     })
 
     const tl = gsap.timeline({
@@ -58,7 +58,7 @@ export function About() {
 
     tl.from(splitTitle.chars, {
       opacity: 0,
-      // filter: 'blur(10px)',
+      y: 24,
       duration: 2,
       stagger: 2,
       ease: 'steps(1)',
@@ -68,7 +68,6 @@ export function About() {
 
     tl.from('#about-japanese-text', {
       opacity: 0,
-      filter: 'blur(10px)',
       y: 100,
       duration: 2,
     })
@@ -79,7 +78,7 @@ export function About() {
       splitRows1.chars,
       {
         opacity: 0,
-        filter: 'blur(10px)',
+        y: 16,
         duration: 2,
         stagger: 0.02,
         ease: 'steps(1)',
@@ -91,7 +90,7 @@ export function About() {
       '.row-img-1',
       {
         opacity: 1,
-        filter: 'blur(0px)',
+        y: 0,
         duration: 1,
         ease: 'none',
       },
@@ -104,7 +103,7 @@ export function About() {
       splitRows2.chars,
       {
         opacity: 0,
-        filter: 'blur(10px)',
+        y: 16,
         duration: 2,
         stagger: 0.02,
         ease: 'steps(1)',
@@ -116,7 +115,7 @@ export function About() {
       '.row-img-1',
       {
         opacity: 1,
-        filter: 'blur(0px)',
+        y: 0,
         duration: 1,
         ease: 'none',
       },
