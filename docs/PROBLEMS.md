@@ -4,9 +4,9 @@
 > Owner order 2026-09-24: `src/components/sections/` reverted to original — section timelines,
 > targets and styling are byte-identical to `712d9b5`. Nothing in sections/* may be touched
 > without explicit permission (animations AND styling).
-> Gate status now: `typecheck` ✅ · `lint` ✅ · `format:check` ✅ · `test` 9/12 ❌ (3 known
-> failures documented below, all inside reverted section code) · Chromium headless: hero renders,
-> zero console errors.
+> Gate status now: `typecheck` ✅ · `lint` ✅ · `format:check` ❌ (this file only) ·
+> `test` 9/12 ❌ (3 known failures documented below, all inside reverted section code) ·
+> Chromium headless: hero renders, zero console errors.
 
 ---
 
@@ -32,23 +32,23 @@
 
 8. ✅ **`index.html` meta** — production canonical/OG/Twitter + JSON-LD (outside sections, kept).
    (AGENTS.md §10, SEO §3/§4)
-9. ✅ **OG image** — `public/og.webp` (1200×630, 10 KB, `scripts/og-image.mjs`) + `getOgImage()`.
-   (SEO §4)
+9. ✅ **OG image** — owner-supplied `public/og.png` (1200×630) wired into `og:image` /
+   `twitter:image` (+ dims) and `getOgImage()`; JSON-LD `logo` stays `logo.ico`. (SEO §4)
 10. ✅ **Empty `id={''}`** — removed from Hero `JapaneseText`. **Reverted with sections** (empty id
     is back). Needs permission to touch. (BestPractices §1)
 11. ✅ **Single `<h1>`** — demotions + `leading-[1.1]` pins reverted with sections (all `h1`s back).
     Needs permission to touch. (SEO §6, Accessibility §1.4)
 12. ✅ **Decorative alts + lazy covers** — reverted with sections (`alt="background image"` back,
     covers eager again). Needs permission to touch. (Accessibility §4.1, Performance §4)
-13. ✅ **`AboutRow.tsx` restored** — orphan is back (restore brought the file back). Needs permission
-    to delete again. (SPEC §5)
+13. ✅ **`AboutRow.tsx` deleted again** — removed in `8d06b04` with the other unused files;
+    `sections/index.ts` never exported it. (SPEC §5)
 14. ✅ **Jet canvas pauses + WebGL gate** — `JetScene.tsx` visibility freeze + `lib/webgl.ts` probe
     (outside sections, kept). Chromium proved the crash: no-GL device white-screened before the
     gate; hero renders after. (Performance §3.5)
 15. ✅ **Heavy libs split** — `JetScene`/`PixelBlast` `lazy()` chunks (outside sections, kept).
-   Bundle is LIGHTER, not heavier: router/query/framer-motion/radix/input-otp/axios/zustand/motion/ogl
-   removed (18 files, 10 deps, 37 packages) — `index` chunk 501→261 KB, CSS 63→44 KB.
-   (Performance §3)
+    Bundle is LIGHTER, not heavier (fresh `vite build` 2026-09-26): `index` 261 KB (was 501 KB),
+    CSS 44 KB (was 63 KB), `vendor-react` 11 KB (was 40 KB), `vendor-query`/`vendor-radix` chunks
+    gone — 18 files, 10 deps, 37 packages removed. (Performance §3)
 16. ✅ **Motion toggle documented** — JSDoc in `lib/motion.ts` (kept). (Accessibility §2)
 
 ---
