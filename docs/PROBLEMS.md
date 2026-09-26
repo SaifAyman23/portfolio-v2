@@ -71,6 +71,21 @@
   restart the dev server + hard refresh: HMR leaves stale pinned ScrollTriggers alive, which
   fight the new ones (jank). Production builds are unaffected.
 
+## Performance pass 2026-09-26 (measured on prod `dist`, not dev)
+
+- Your 26 MB / 21.4 s LCP report is a **dev-build artifact**: real production transfer is
+  **~1.6 MB total** (JS ~430 KB gzip, images ~870 KB, fonts ~25 KB), FCP 220 ms, **0 long tasks**,
+  0 console errors. `vite preview` + `perf.mjs`/`perf2.mjs` in temp dir reproduce it.
+- Fixed: **duplicated ScrollTrigger module** (dynamic `import()` in `useSectionTracker.ts` while
+  everything else static-imported it — build warning gone, ~30 KB dup gone) via static import.
+- Fixed: **favicon diet** — `logo.ico` (422 KB, fetched whole on every load) replaced by
+  `favicon-32x32.png` (848 B) + `apple-touch-icon.png` (5 KB) generated from the ICO via PIL.
+- Fixed: latest-ref assignments moved into `useEffect` (`useSectionTracker.ts`, `react-hooks/refs`).
+- Still needs your permission (all inside sections/): `filter: blur` scrub animations are
+  non-composited (the 4 flagged elements) — replacing them with opacity/transform-only motion
+  would cut paint cost but changes your animation feel; `loading="lazy"` on Experience covers;
+  `invalidateOnRefresh`/`scope` reverts from the earlier revert.
+
 ---
 
 ## Verified good (do not regress)

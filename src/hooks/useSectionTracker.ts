@@ -1,3 +1,4 @@
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useEffect, useRef, useState } from 'react'
 
 import { SECTION_IDS, type SectionId } from '@/config/sections'
@@ -10,10 +11,7 @@ type LenisLike = {
   off: (event: 'scroll', callback: (e: { direction: number }) => void) => void
 }
 
-// Types derived from a dynamic import rather than a static one, so gsap
-// is only ever *type-level* required (erased at build time), matching the
-// runtime dynamic-import used below.
-type ScrollTriggerCtor = typeof import('gsap/ScrollTrigger').ScrollTrigger
+type ScrollTriggerCtor = typeof ScrollTrigger
 type ScrollTriggerInstance = InstanceType<ScrollTriggerCtor>
 
 export type SectionTrackerOptions = {
@@ -74,9 +72,12 @@ export function useSectionTracker(
   // for an inline `() => window.__lenis`) shouldn't cause this effect to
   // tear down and rebuild every render.
   const getLenisRef = useRef(getLenis)
-  getLenisRef.current = getLenis
   const persistentObserverRef = useRef(persistentObserver)
-  persistentObserverRef.current = persistentObserver
+
+  useEffect(() => {
+    getLenisRef.current = getLenis
+    persistentObserverRef.current = persistentObserver
+  })
 
   const [active, setActive] = useState<SectionId>(ids[0])
   const [direction, setDirection] = useState<1 | -1>(1)
@@ -261,30 +262,12 @@ export function useSectionTracker(
       }
     }
 
-    async function setupTracking() {
-      // Dynamic + feature-detected rather than statically imported, so
-      // this hook doesn't hard-require gsap: no install, or ScrollTrigger
-      // never registered, just falls through to the plain path below
-      // instead of crashing.
-      //
-      // Caveat: most bundlers still statically resolve dynamic import()
-      // specifiers for code-splitting, so gsap needs to be *resolvable*
-      // (installed) even though this is wrapped in try/catch. For a
-      // project with literally zero gsap dependency, delete the try block
-      // and `setupScrollTriggerTracking` and keep only the fallback.
-      let ScrollTriggerClass: ScrollTriggerCtor | undefined
-      try {
-        const mod = await import('gsap/ScrollTrigger')
-        ScrollTriggerClass = mod.ScrollTrigger
-      } catch {
-        ScrollTriggerClass = undefined
-      }
-
+    function setupTracking() {
       if (cancelled) return
 
       teardownTracking =
-        ScrollTriggerClass && typeof ScrollTriggerClass.create === 'function'
-          ? setupScrollTriggerTracking(ScrollTriggerClass)
+        typeof ScrollTrigger.create === 'function'
+          ? setupScrollTriggerTracking(ScrollTrigger)
           : setupFallbackTracking()
     }
 
