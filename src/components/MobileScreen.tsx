@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { SECTIONS } from '@/config/sections'
 
-const VIRTUAL_WIDTH = 1536
-const VIRTUAL_HEIGHT = 864
+const VIRTUAL_WIDTH = 2268
+const VIRTUAL_HEIGHT = 972
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/'
 
 const LEVEL_BY_SECTION: Record<string, string> = {
@@ -21,13 +21,17 @@ const SECTION_IDS = ['hero', 'about', 'experience', 'projects', 'tools', 'contac
 export function MobileScreen() {
   const frameRef = useRef<HTMLDivElement>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [scale, setScale] = useState(0)
+  const [size, setSize] = useState({ width: VIRTUAL_WIDTH, height: VIRTUAL_HEIGHT })
   const [sectionId, setSectionId] = useState('hero')
 
   useEffect(() => {
     const el = frameRef.current
     if (!el) return
-    const measure = () => setScale(el.clientWidth / VIRTUAL_WIDTH)
+    const measure = () => {
+      const width = Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT))
+      const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
+      setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
+    }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
@@ -84,35 +88,31 @@ export function MobileScreen() {
 
   const label = SECTIONS.find((section) => section.id === sectionId)?.label ?? sectionId
   const level = LEVEL_BY_SECTION[sectionId] ?? '0'
+  const scale = size.width / VIRTUAL_WIDTH
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-black text-white sm:hidden z-99999">
-      <div
-        className="absolute top-1/2 left-1/2 flex h-full items-center justify-between gap-4 p-4"
-        style={{
-          width: '100dvh',
-          height: '100dvw',
-          transform: 'translate(-50%, -50%) rotate(90deg)',
-        }}
-      >
-        <div className="flex flex-1 w-max h-full shrink-0 flex-col justify-between items-center py-5">
+    <div className="fixed inset-0 overflow-hidden bg-black text-white">
+      <div className="absolute top-1/2 left-1/2 flex h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 flex-row items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:flex-col sm:p-8">
+        <div className="flex shrink-0 flex-col items-center justify-between h-full py-10 sm:hidden">
           <p className="font-ticking text-md tracking-[0.3em] text-white/60">Level</p>
-          <p className="font-cyberform text-[190px] leading-none text-white">{level}</p>
+          <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div>
-        <div
-          ref={frameRef}
-          className="relative aspect-video h-full shrink-0 overflow-hidden rounded-2xl"
-        >
-          <iframe
-            ref={iframeRef}
-            title="Saif Eldin Ayman portfolio desktop preview"
-            src={SITE_URL}
-            width={VIRTUAL_WIDTH}
-            height={VIRTUAL_HEIGHT}
-            className="absolute inset-0 z-99999"
-            style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
-          />
+        <div ref={frameRef} className="flex min-h-0 min-w-0 w-full flex-1 items-center justify-center">
+          <div
+            className="relative shrink-0 overflow-hidden rounded-2xl"
+            style={{ width: size.width, height: size.height }}
+          >
+            <iframe
+              ref={iframeRef}
+              title="Saif Eldin Ayman portfolio desktop preview"
+              src={SITE_URL}
+              width={VIRTUAL_WIDTH}
+              height={VIRTUAL_HEIGHT}
+              className="absolute top-0 left-0"
+              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+            />
+          </div>
         </div>
       </div>
     </div>

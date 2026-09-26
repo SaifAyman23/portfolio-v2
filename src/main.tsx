@@ -4,10 +4,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-import { initSmoothScroll } from '@/lib/smoothScroll'
-
-initSmoothScroll()
-
 function dismissSkeleton(): void {
   const skeleton = document.getElementById('loading-skeleton')
   if (!skeleton) return

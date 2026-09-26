@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
   const siteUrl = env.VITE_SITE_URL || DEFAULT_SITE_URL
 
   return {
-    base: '/portfolio/v2/',
+    base: '/portfolio/v0/',
     plugins: [
       react({
         babel: {
@@ -73,8 +73,6 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             'vendor-react': ['react', 'react-dom'],
-            'vendor-gsap': ['gsap'],
-            'vendor-three': ['three'],
           },
         },
       },
