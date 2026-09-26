@@ -7,6 +7,7 @@ import { lazy, Suspense } from 'react'
 import { useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
+import { MobileScreen } from '@/components/MobileScreen'
 import { SeoUpdater } from '@/components/SeoUpdater'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Observer)
@@ -22,12 +23,15 @@ function App() {
   return (
     <>
       <SeoUpdater />
-      <Suspense fallback={null}>
-        <JetScene active={active} progressRef={progressRef} />
-        <MainLayout>
-          <Home active={active} direction={direction} />
-        </MainLayout>
-      </Suspense>
+      <MobileScreen />
+      <div className="hidden sm:contents">
+        <Suspense fallback={null}>
+          <JetScene active={active} progressRef={progressRef} />
+          <MainLayout>
+            <Home active={active} direction={direction} />
+          </MainLayout>
+        </Suspense>
+      </div>
     </>
   )
 }
