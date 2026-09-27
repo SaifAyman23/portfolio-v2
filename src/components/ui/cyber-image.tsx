@@ -31,7 +31,7 @@ export function CyberImage({
   alt,
   width,
   height,
-  loading = 'lazy',
+  loading = 'eager',
   decoding = 'async',
   fetchPriority = 'auto',
   srcSet,
