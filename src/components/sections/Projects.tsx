@@ -12,6 +12,8 @@ import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
 import { prefersReducedMotion } from '@/lib/motion'
+import { Button } from '../ui/button'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const projects = [
   {
@@ -439,7 +441,7 @@ export function Projects() {
             Projects
           </h1>
 
-          <div className="flex justify-end pe-20">
+          <div className="flex relative justify-end pe-20">
             <div data-slot="project-image">
               <CyberImage
                 src={projects[activeIndex].image}
@@ -449,6 +451,10 @@ export function Projects() {
                 stroke="transparent"
                 frameClassName="w-2xl h-100"
               />
+            </div>
+            <div className='absolute flex gap-4 bottom-5 end-30'>
+              <Button className='py-8 cursor-pointer' stroke='black' fill='white' strokeWidth={4}><ChevronLeft className='size-12 font-bolder' /></Button>
+              <Button className='py-8 cursor-pointer' stroke='black' fill='white' strokeWidth={4}><ChevronRight className='size-12 font-bolder' /></Button>
             </div>
           </div>
         </div>

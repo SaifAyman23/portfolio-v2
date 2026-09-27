@@ -380,8 +380,8 @@ export function Hero() {
           <p className="text-pretty text-2xl leading-relaxed">SIGNAL STABLE</p>
         </div>
 
-        <div className="col-span-4 text-center">
-          <div id="hero-japanese" className="[writing-mode:vertical-rl]">
+        <div className="col-span-4">
+          <div id="hero-japanese" className=' text-center'>
             <JapaneseText
               text="ケン"
               border
