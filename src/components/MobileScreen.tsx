@@ -1,5 +1,5 @@
-import { Zap, ZapOff } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { Maximize, Minimize, Zap, ZapOff } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // import { SECTIONS } from '@/config/sections'
 
@@ -27,6 +27,21 @@ export function MobileScreen() {
   const [reduced, setReduced] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768
   )
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(document.fullscreenElement !== null)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => {})
+    } else {
+      void document.documentElement.requestFullscreen?.().catch(() => {})
+    }
+  }, [])
 
   useEffect(() => {
     const el = frameRef.current
@@ -127,6 +142,15 @@ export function MobileScreen() {
         className="fixed right-4 bottom-4 z-50 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/70 text-white sm:flex"
       >
         {reduced ? <ZapOff className="size-4" /> : <Zap className="size-4" />}
+      </button>
+      <button
+        type="button"
+        onClick={toggleFullscreen}
+        aria-pressed={isFullscreen}
+        title="Toggle fullscreen"
+        className="fixed bottom-4 left-4 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/70 text-white sm:hidden"
+      >
+        {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
       </button>
     </div>
   )
