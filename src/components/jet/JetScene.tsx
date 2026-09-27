@@ -8,6 +8,7 @@ import * as THREE from 'three'
 import { Jet } from './Jet'
 
 import type { SectionId } from '@/config/sections'
+import { prefersReducedMotion } from '@/lib/motion'
 import { isWebGLAvailable } from '@/lib/webgl'
 
 type Pose = {
@@ -90,33 +91,7 @@ const LEAVE_START = 0.7
  */
 const SMOOTHING = 6
 
-/**
- * Narrow viewports see less of the scene, so the far-flung enter/leave
- * poses (authored on desktop) swing out of frame. Below this aspect the
- * travel shrinks toward the stay pose; at and above it nothing changes.
- */
-const NARROW_ASPECT = 1
-const MIN_SCALE = 0.35
-
-/** 1 on desktop, shrinking toward MIN_SCALE on narrow screens. */
-function poseScale(aspect: number): number {
-  if (aspect >= NARROW_ASPECT) return 1
-  return Math.max(MIN_SCALE, aspect / NARROW_ASPECT)
-}
-
-function usePoseScale(): number {
-  const [scale, setScale] = useState(() =>
-    typeof window === 'undefined' ? 1 : poseScale(window.innerWidth / window.innerHeight)
-  )
-
-  useEffect(() => {
-    const onResize = () => setScale(poseScale(window.innerWidth / window.innerHeight))
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  return scale
-}
+const REDUCED_TRAVEL = 0.35
 
 function smoothstep(t: number) {
   const c = Math.min(Math.max(t, 0), 1)
@@ -130,15 +105,11 @@ function blend(a: Pose, b: Pose, t: number): Pose {
   return { position: lerp3(a.position, b.position), rotation: lerp3(a.rotation, b.rotation) }
 }
 
-/**
- * Pose the jet should be chasing right now, purely as a function of
- * progress. Scale pulls enter/leave toward stay on narrow screens;
- * at scale 1 the authored poses are used untouched.
- */
-function targetPose(section: SectionId, progress: number, scale = 1): Pose {
+/** Pose the jet should be chasing right now. Travel shrinks toward stay when reduced. */
+function targetPose(section: SectionId, progress: number, travel = 1): Pose {
   const { enter, stay, leave } = SECTION_POSES[section]
-  const nearEnter = blend(stay, enter, scale)
-  const nearLeave = blend(stay, leave, scale)
+  const nearEnter = blend(stay, enter, travel)
+  const nearLeave = blend(stay, leave, travel)
 
   if (progress <= ENTER_END) return blend(nearEnter, stay, smoothstep(progress / ENTER_END))
   if (progress >= LEAVE_START)
@@ -157,7 +128,7 @@ function JetController({
   const jetRef = useRef<THREE.Group | null>(null)
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const introDone = useRef(false)
-  const scale = usePoseScale()
+  const reduced = prefersReducedMotion()
 
   useGSAP(() => {
     const jet = jetRef.current
@@ -219,7 +190,7 @@ function JetController({
     // progressRef now stores 0–100 per the tracker's contract; targetPose's
     // ENTER_END/LEAVE_START math is written for a 0–1 fraction, so normalize here.
     const progress = (progressRef.current?.[active] ?? 0) / 100
-    const target = targetPose(active, progress, scale)
+    const target = targetPose(active, progress, reduced ? REDUCED_TRAVEL : 1)
 
     if (SMOOTHING <= 0) {
       jet.position.set(...target.position)
