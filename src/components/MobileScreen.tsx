@@ -23,6 +23,9 @@ export function MobileScreen() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [size, setSize] = useState({ width: VIRTUAL_WIDTH, height: VIRTUAL_HEIGHT })
   const [sectionId, setSectionId] = useState('hero')
+  const [frameIsMobile, setFrameIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 768
+  )
 
   useEffect(() => {
     const el = frameRef.current
@@ -31,6 +34,10 @@ export function MobileScreen() {
       const width = Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT))
       const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
       setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
+      setFrameIsMobile((prev) => {
+        const next = width < 768
+        return prev === next ? prev : next
+      })
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -106,7 +113,7 @@ export function MobileScreen() {
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
-              src={SITE_URL}
+              src={frameIsMobile ? `${SITE_URL}?is_mobile=true` : SITE_URL}
               width={VIRTUAL_WIDTH}
               height={VIRTUAL_HEIGHT}
               className="absolute top-0 left-0"
