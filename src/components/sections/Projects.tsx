@@ -11,6 +11,7 @@ import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
+import { prefersReducedMotion } from '@/lib/motion'
 
 const projects = [
   {
@@ -60,6 +61,25 @@ export function Projects() {
 
   useGSAP(
     () => {
+      if (prefersReducedMotion()) {
+        const section = document.querySelector('#projects')
+        if (!section) return
+        const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
+        if (panels.length > 1) gsap.set(panels.slice(1), { autoAlpha: 0 })
+        gsap.from(section, {
+          opacity: 0,
+          y: 40,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        })
+        return
+      }
+
       const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
       if (panels.length === 0) return
