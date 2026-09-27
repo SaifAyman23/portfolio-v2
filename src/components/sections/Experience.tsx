@@ -382,11 +382,10 @@ export function Experience() {
                 alt=""
                 decoding="async"
                 className="w-full h-full object-cover"
-                style={reduced ? { filter: 'brightness(0.30) blur(10px)' } : undefined}
+                style={{
+                  filter: 'brightness(0.30) blur(10px)',
+                }}
               />
-              {reduced ? null : (
-                <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
-              )}
             </div>
           ))}
 

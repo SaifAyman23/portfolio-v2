@@ -61,24 +61,7 @@ export function Projects() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
-        const section = document.querySelector('#projects')
-        if (!section) return
-        const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
-        if (panels.length > 1) gsap.set(panels.slice(1), { autoAlpha: 0 })
-        gsap.from(section, {
-          opacity: 0,
-          y: 40,
-          duration: 0.8,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        })
-        return
-      }
+      const reduced = prefersReducedMotion()
 
       const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
@@ -110,10 +93,7 @@ export function Projects() {
        * ─────────────────────────────
        */
 
-      gsap.set(introSplit.chars, {
-        opacity: 0,
-        y: 30,
-      })
+      gsap.set(introSplit.chars, reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 })
 
       gsap.set('#projects h1', {
         opacity: 0,
@@ -174,32 +154,34 @@ export function Projects() {
        * ─────────────────────────────
        */
 
-      tl.to(introSplit.chars, {
-        opacity: 1,
-        y: 0,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: 'steps(1)',
-      })
+      if (!reduced) {
+        tl.to(introSplit.chars, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'steps(1)',
+        })
 
-      tl.to({}, { duration: 0.3 })
+        tl.to({}, { duration: 0.3 })
 
-      /*
-       * ─────────────────────────────
-       * 2. LARGE TITLE OUT
-       * ─────────────────────────────
-       */
+        /*
+         * ─────────────────────────────
+         * 2. LARGE TITLE OUT
+         * ─────────────────────────────
+         */
 
-      tl.to(introSplit.chars, {
-        opacity: 0,
-        y: -30,
-        stagger: {
-          amount: 0.5,
-          from: 'start',
-        },
-        duration: 2,
-        ease: 'steps(1)',
-      })
+        tl.to(introSplit.chars, {
+          opacity: 0,
+          y: -30,
+          stagger: {
+            amount: 0.5,
+            from: 'start',
+          },
+          duration: 2,
+          ease: 'steps(1)',
+        })
+      }
 
       /*
        * ─────────────────────────────
