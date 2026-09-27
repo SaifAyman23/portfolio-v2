@@ -8,8 +8,6 @@ import * as THREE from 'three'
 import { Jet } from './Jet'
 
 import type { SectionId } from '@/config/sections'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { prefersReducedMotion } from '@/lib/motion'
 import { isWebGLAvailable } from '@/lib/webgl'
 
 type Pose = {
@@ -221,7 +219,6 @@ export function JetScene({
 }) {
   const [visible, setVisible] = useState(() => typeof document === 'undefined' || !document.hidden)
   const [glOK] = useState(isWebGLAvailable)
-  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     const onVisibility = () => setVisible(!document.hidden)
@@ -234,8 +231,8 @@ export function JetScene({
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
       <Canvas
-        dpr={1}
-        gl={{ antialias: !isMobile && !prefersReducedMotion() }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true }}
         frameloop={visible ? 'always' : 'never'}
       >
         <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />

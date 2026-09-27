@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
 import careerlyImg from '@/assets/img/projects/Careerly.webp'
@@ -59,6 +59,19 @@ const projects = [
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
 
+  useEffect(() => {
+    projects.forEach((project) => {
+      try {
+        const img = new Image()
+        img.decoding = 'async'
+        img.src = project.image
+        void img.decode().catch(() => {})
+      } catch {
+        /* preload is best-effort */
+      }
+    })
+  }, [])
+
   useGSAP(
     () => {
       const reduced = prefersReducedMotion()
@@ -71,10 +84,15 @@ export function Projects() {
 
       if (!intro) return
 
-      const introSplit = SplitText.create(intro, {
-        type: 'chars',
-        aria: 'none',
-      })
+      let introSplit: SplitText | undefined
+      if (!reduced) {
+        introSplit = SplitText.create(intro, {
+          type: 'chars',
+          aria: 'none',
+        })
+      } else {
+        gsap.set(intro, { opacity: 0 })
+      }
 
       const splits = panels.map((panel) =>
         SplitText.create(panel.querySelector('p'), {
@@ -93,7 +111,9 @@ export function Projects() {
        * ─────────────────────────────
        */
 
-      gsap.set(introSplit.chars, reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 })
+      if (introSplit) {
+        gsap.set(introSplit.chars, { opacity: 0, y: 30 })
+      }
 
       gsap.set('#projects h1', {
         opacity: 0,
@@ -154,7 +174,7 @@ export function Projects() {
        * ─────────────────────────────
        */
 
-      if (!reduced) {
+      if (!reduced && introSplit) {
         tl.to(introSplit.chars, {
           opacity: 1,
           y: 0,
@@ -401,7 +421,7 @@ export function Projects() {
       return () => {
         tl.scrollTrigger?.kill()
         tl.kill()
-        introSplit.revert()
+        introSplit?.revert()
         splits.forEach((split) => split.revert())
       }
     },
