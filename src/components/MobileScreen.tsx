@@ -95,13 +95,13 @@ export function MobileScreen() {
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
-      <div className="absolute top-1/2 left-1/2 flex h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 flex-row items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:flex-col sm:p-8">
-        <div className="flex shrink-0 flex-col items-center justify-between h-full py-10 sm:hidden">
+      <div className="absolute top-1/2 left-1/2 grid h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 grid-cols-[11rem_minmax(0,1fr)] items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:grid-cols-1 sm:p-8">
+        <div className="flex h-full flex-col items-center justify-between overflow-hidden py-10 sm:hidden">
           <p className="font-ticking text-md tracking-[0.3em] text-white/60">Level</p>
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div>
-        <div ref={frameRef} className="flex min-h-0 min-w-0 w-full flex-1 items-center justify-center">
+        <div ref={frameRef} className="flex min-h-0 min-w-0 items-center justify-center">
           <div
             className="relative shrink-0 overflow-hidden rounded-2xl"
             style={{ width: size.width, height: size.height }}
