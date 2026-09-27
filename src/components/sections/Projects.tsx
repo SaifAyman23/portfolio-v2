@@ -1,7 +1,10 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+
+import { Button } from '../ui/button'
 
 import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
 import careerlyImg from '@/assets/img/projects/Careerly.webp'
@@ -12,8 +15,6 @@ import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
 import { prefersReducedMotion } from '@/lib/motion'
-import { Button } from '../ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const projects = [
   {
@@ -60,362 +61,386 @@ const projects = [
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const reduced = prefersReducedMotion()
+  const prevIndex = useRef(activeIndex)
+  const initialIndex = useRef(activeIndex)
 
-  useGSAP(
-    () => {
-      const reduced = prefersReducedMotion()
-
-      const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
-
-      if (panels.length === 0) return
-
-      const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
-
-      if (!intro) return
-
-      let introSplit: SplitText | undefined
-      if (!reduced) {
-        introSplit = SplitText.create(intro, {
-          type: 'chars',
-          aria: 'none',
-        })
-      } else {
-        gsap.set(intro, { opacity: 0 })
-      }
-
-      const splits = panels.map((panel) =>
-        SplitText.create(panel.querySelector('p'), {
-          type: 'words',
-          aria: 'none',
-        })
-      )
-
-      const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
-
-      const japanese = document.querySelector<HTMLElement>('[data-slot="projects-japanese"]')
-
-      /*
-       * ─────────────────────────────
-       * INITIAL STATES
-       * ─────────────────────────────
-       */
-
-      if (introSplit) {
-        gsap.set(introSplit.chars, { opacity: 0, y: 30 })
-      }
-
-      gsap.set('#projects h1', {
-        opacity: 0,
-        y: 100,
+  useEffect(() => {
+    if (!reduced) return
+    const prev = prevIndex.current
+    prevIndex.current = activeIndex
+    if (prev === activeIndex) return
+    const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
+    if (panels[prev]) {
+      gsap.to(panels[prev], { autoAlpha: 0, duration: 0.4, ease: 'power2.out', overwrite: 'auto' })
+    }
+    if (panels[activeIndex]) {
+      gsap.to(panels[activeIndex], {
+        autoAlpha: 1,
+        duration: 0.4,
+        ease: 'power2.out',
+        overwrite: 'auto',
       })
+    }
+  }, [activeIndex, reduced])
 
-      if (image) {
-        gsap.set(image, {
-          opacity: 0,
-          scale: 0.96,
-        })
-      }
+  useGSAP(() => {
+    const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
-      if (japanese) {
-        gsap.set(japanese, {
-          opacity: 0,
-          y: 50,
-        })
-      }
+    if (panels.length === 0) return
 
+    if (reduced) {
       panels.forEach((panel, i) => {
-        gsap.set(panel, {
-          autoAlpha: 0,
-          y: 24,
-        })
+        if (i !== initialIndex.current) gsap.set(panel, { autoAlpha: 0 })
+      })
+      return
+    }
 
-        gsap.set(splits[i].words, {
-          opacity: 0,
-        })
+    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
 
-        gsap.set(panel.querySelectorAll('.tag'), {
-          autoAlpha: 0,
-          y: 10,
-        })
+    if (!intro) return
+
+    let introSplit: SplitText | undefined
+    if (!reduced) {
+      introSplit = SplitText.create(intro, {
+        type: 'chars',
+        aria: 'none',
+      })
+    } else {
+      gsap.set(intro, { opacity: 0 })
+    }
+
+    const splits = panels.map((panel) =>
+      SplitText.create(panel.querySelector('p'), {
+        type: 'words',
+        aria: 'none',
+      })
+    )
+
+    const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
+
+    const japanese = document.querySelector<HTMLElement>('[data-slot="projects-japanese"]')
+
+    /*
+     * ─────────────────────────────
+     * INITIAL STATES
+     * ─────────────────────────────
+     */
+
+    if (introSplit) {
+      gsap.set(introSplit.chars, { opacity: 0, y: 30 })
+    }
+
+    gsap.set('#projects h1', {
+      opacity: 0,
+      y: 100,
+    })
+
+    if (image) {
+      gsap.set(image, {
+        opacity: 0,
+        scale: 0.96,
+      })
+    }
+
+    if (japanese) {
+      gsap.set(japanese, {
+        opacity: 0,
+        y: 50,
+      })
+    }
+
+    panels.forEach((panel, i) => {
+      gsap.set(panel, {
+        autoAlpha: 0,
+        y: 24,
       })
 
-      /*
-       * ─────────────────────────────
-       * MAIN TIMELINE
-       * ─────────────────────────────
-       */
+      gsap.set(splits[i].words, {
+        opacity: 0,
+      })
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#projects',
-          start: 'top top',
-          end: '+=400%',
-          scrub: true,
-          pin: true,
+      gsap.set(panel.querySelectorAll('.tag'), {
+        autoAlpha: 0,
+        y: 10,
+      })
+    })
+
+    /*
+     * ─────────────────────────────
+     * MAIN TIMELINE
+     * ─────────────────────────────
+     */
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#projects',
+        start: 'top top',
+        end: '+=400%',
+        scrub: true,
+        pin: true,
         pinReparent: true,
         anticipatePin: 2,
+      },
+    })
+
+    /*
+     * ─────────────────────────────
+     * 1. LARGE CENTER TITLE
+     * ─────────────────────────────
+     */
+
+    if (!reduced && introSplit) {
+      tl.to(introSplit.chars, {
+        opacity: 1,
+        y: 0,
+        stagger: 0.08,
+        duration: 0.6,
+        ease: 'steps(1)',
+      })
+
+      tl.to({}, { duration: 0.3 })
+
+      /*
+       * ─────────────────────────────
+       * 2. LARGE TITLE OUT
+       * ─────────────────────────────
+       */
+
+      tl.to(introSplit.chars, {
+        opacity: 0,
+        y: -30,
+        stagger: {
+          amount: 0.5,
+          from: 'start',
         },
+        duration: 2,
+        ease: 'steps(1)',
+      })
+    }
+
+    /*
+     * ─────────────────────────────
+     * 3. PROJECT COMPOSITION IN
+     * ─────────────────────────────
+     */
+
+    /*
+     * Outline Projects
+     */
+    tl.to('#projects h1', {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power2.out',
+    })
+
+    /*
+     * Image
+     *
+     * Enters once and stays visible.
+     * It is NOT animated during project switching.
+     */
+    if (image) {
+      tl.to(
+        image,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 2,
+          ease: 'power2.out',
+        },
+        '<1'
+      )
+    }
+
+    /*
+     * Japanese text
+     */
+    if (japanese) {
+      tl.to(
+        japanese,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 2,
+          ease: 'power2.out',
+        },
+        '<1'
+      )
+    }
+
+    /*
+     * First project panel
+     */
+    tl.to(
+      panels[0],
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+      },
+      '<0.25'
+    )
+
+    /*
+     * First description
+     */
+    tl.to(
+      splits[0].words,
+      {
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.018,
+        ease: 'steps(1)',
+      },
+      '<0.15'
+    )
+
+    /*
+     * First tags
+     */
+    tl.to(
+      panels[0].querySelectorAll('.tag'),
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 1,
+        ease: 'power2.out',
+      },
+      '<0.2'
+    )
+
+    /*
+     * Let the first project breathe.
+     */
+    tl.to({}, { duration: 0.6 })
+
+    /*
+     * ─────────────────────────────
+     * 4. PROJECT SWITCHING
+     * ─────────────────────────────
+     */
+
+    panels.forEach((panel, i) => {
+      if (i >= panels.length - 1) return
+
+      const next = panels[i + 1]
+
+      const currentChars = splits[i].words
+      const nextChars = splits[i + 1].words
+
+      const currentTags = panel.querySelectorAll('.tag')
+      const nextTags = next.querySelectorAll('.tag')
+
+      /*
+       * Reading time.
+       */
+      tl.to({}, { duration: 1 })
+
+      /*
+       * Current description out
+       */
+      tl.to(currentChars, {
+        opacity: 0,
+        duration: 0.65,
+        stagger: 0.012,
+        ease: 'steps(1)',
       })
 
       /*
-       * ─────────────────────────────
-       * 1. LARGE CENTER TITLE
-       * ─────────────────────────────
+       * Current tags out
        */
-
-      if (!reduced && introSplit) {
-        tl.to(introSplit.chars, {
-          opacity: 1,
-          y: 0,
-          stagger: 0.08,
-          duration: 0.6,
-          ease: 'steps(1)',
-        })
-
-        tl.to({}, { duration: 0.3 })
-
-        /*
-         * ─────────────────────────────
-         * 2. LARGE TITLE OUT
-         * ─────────────────────────────
-         */
-
-        tl.to(introSplit.chars, {
-          opacity: 0,
-          y: -30,
-          stagger: {
-            amount: 0.5,
-            from: 'start',
-          },
-          duration: 2,
-          ease: 'steps(1)',
-        })
-      }
+      tl.to(
+        currentTags,
+        {
+          autoAlpha: 0,
+          y: -8,
+          duration: 0.5,
+          stagger: 0.2,
+          ease: 'power2.in',
+        },
+        '<0.05'
+      )
 
       /*
-       * ─────────────────────────────
-       * 3. PROJECT COMPOSITION IN
-       * ─────────────────────────────
+       * Current panel out
        */
+      tl.to(
+        panel,
+        {
+          autoAlpha: 0,
+          y: -12,
+          duration: 0.7,
+          ease: 'power2.in',
+        },
+        '<'
+      )
 
       /*
-       * Outline Projects
+       * Next panel in
        */
-      tl.to('#projects h1', {
-        opacity: 1,
+      tl.to(next, {
+        autoAlpha: 1,
         y: 0,
-        duration: 1,
+        duration: 0.75,
         ease: 'power2.out',
       })
 
       /*
-       * Image
-       *
-       * Enters once and stays visible.
-       * It is NOT animated during project switching.
-       */
-      if (image) {
-        tl.to(
-          image,
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 2,
-            ease: 'power2.out',
-          },
-          '<1'
-        )
-      }
-
-      /*
-       * Japanese text
-       */
-      if (japanese) {
-        tl.to(
-          japanese,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 2,
-            ease: 'power2.out',
-          },
-          '<1'
-        )
-      }
-
-      /*
-       * First project panel
+       * Next description in
        */
       tl.to(
-        panels[0],
+        nextChars,
         {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.9,
-          ease: 'power2.out',
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.025,
+          ease: 'steps(1)',
         },
+        '<0.12'
+      )
+
+      /*
+       * Update image only.
+       *
+       * The image itself remains visible.
+       * React swaps its src without an
+       * additional GSAP fade/scale animation.
+       */
+      tl.call(
+        () => {
+          setActiveIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
+        },
+        [],
         '<0.25'
       )
 
       /*
-       * First description
+       * Next tags in
        */
       tl.to(
-        splits[0].words,
+        nextTags,
         {
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.018,
-          ease: 'steps(1)',
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power2.out',
         },
         '<0.15'
       )
+    })
 
-      /*
-       * First tags
-       */
-      tl.to(
-        panels[0].querySelectorAll('.tag'),
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.55,
-          stagger: 1,
-          ease: 'power2.out',
-        },
-        '<0.2'
-      )
-
-      /*
-       * Let the first project breathe.
-       */
-      tl.to({}, { duration: 0.6 })
-
-      /*
-       * ─────────────────────────────
-       * 4. PROJECT SWITCHING
-       * ─────────────────────────────
-       */
-
-      panels.forEach((panel, i) => {
-        if (i >= panels.length - 1) return
-
-        const next = panels[i + 1]
-
-        const currentChars = splits[i].words
-        const nextChars = splits[i + 1].words
-
-        const currentTags = panel.querySelectorAll('.tag')
-        const nextTags = next.querySelectorAll('.tag')
-
-        /*
-         * Reading time.
-         */
-        tl.to({}, { duration: 1 })
-
-        /*
-         * Current description out
-         */
-        tl.to(currentChars, {
-          opacity: 0,
-          duration: 0.65,
-          stagger: 0.012,
-          ease: 'steps(1)',
-        })
-
-        /*
-         * Current tags out
-         */
-        tl.to(
-          currentTags,
-          {
-            autoAlpha: 0,
-            y: -8,
-            duration: 0.5,
-            stagger: 0.2,
-            ease: 'power2.in',
-          },
-          '<0.05'
-        )
-
-        /*
-         * Current panel out
-         */
-        tl.to(
-          panel,
-          {
-            autoAlpha: 0,
-            y: -12,
-            duration: 0.7,
-            ease: 'power2.in',
-          },
-          '<'
-        )
-
-        /*
-         * Next panel in
-         */
-        tl.to(next, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.75,
-          ease: 'power2.out',
-        })
-
-        /*
-         * Next description in
-         */
-        tl.to(
-          nextChars,
-          {
-            opacity: 1,
-            duration: 0.75,
-            stagger: 0.025,
-            ease: 'steps(1)',
-          },
-          '<0.12'
-        )
-
-        /*
-         * Update image only.
-         *
-         * The image itself remains visible.
-         * React swaps its src without an
-         * additional GSAP fade/scale animation.
-         */
-        tl.call(
-          () => {
-            setActiveIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
-          },
-          [],
-          '<0.25'
-        )
-
-        /*
-         * Next tags in
-         */
-        tl.to(
-          nextTags,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: 'power2.out',
-          },
-          '<0.15'
-        )
-      })
-
-      return () => {
-        tl.scrollTrigger?.kill()
-        tl.kill()
-        introSplit?.revert()
-        splits.forEach((split) => split.revert())
-      }
-    },
-    []
-  )
+    return () => {
+      tl.scrollTrigger?.kill()
+      tl.kill()
+      introSplit?.revert()
+      splits.forEach((split) => split.revert())
+    }
+  }, [])
 
   return (
     <section
@@ -452,19 +477,37 @@ export function Projects() {
                 frameClassName="w-2xl h-100"
               />
             </div>
-            <div className='absolute flex gap-4 bottom-5 end-30'>
-              <Button className='py-8 cursor-pointer' stroke='black' fill='white' strokeWidth={4}><ChevronLeft className='size-12 font-bolder' /></Button>
-              <Button className='py-8 cursor-pointer' stroke='black' fill='white' strokeWidth={4}><ChevronRight className='size-12 font-bolder' /></Button>
-            </div>
+            {reduced && (
+              <div className="absolute bottom-5 end-30 flex gap-4">
+                <Button
+                  className="py-8 cursor-pointer"
+                  stroke="black"
+                  fill="white"
+                  strokeWidth={4}
+                  aria-label="Previous project"
+                  disabled={activeIndex === 0}
+                  onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
+                >
+                  <ChevronLeft className="size-12 font-bolder" />
+                </Button>
+                <Button
+                  className="py-8 cursor-pointer"
+                  stroke="black"
+                  fill="white"
+                  strokeWidth={4}
+                  aria-label="Next project"
+                  disabled={activeIndex === projects.length - 1}
+                  onClick={() => setActiveIndex((i) => Math.min(projects.length - 1, i + 1))}
+                >
+                  <ChevronRight className="size-12 font-bolder" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
         <div data-slot="projects-japanese" className="relative col-span-3 text-center">
-          <JapaneseText
-            text="最強"
-            className="font-bold text-[250px]"
-            color="var(--accent)"
-          />
+          <JapaneseText text="最強" className="font-bold text-[250px]" color="var(--accent)" />
         </div>
       </div>
 
