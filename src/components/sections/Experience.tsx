@@ -1,6 +1,5 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { SplitText } from 'gsap/SplitText'
 
 import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
@@ -52,21 +51,11 @@ export function Experience() {
 
       if (!solidTitle || !outlineTitle) return
 
-      const split = SplitText.create(solidTitle, {
-        type: 'chars',
-        aria: 'none',
-      })
-
       /*
        * ─────────────────────────────
        * INITIAL STATES
        * ─────────────────────────────
        */
-
-      gsap.set(split.chars, {
-        scale: 1,
-        transformOrigin: 'center center',
-      })
 
       gsap.set(outlineTitle, {
         opacity: 0,
@@ -117,17 +106,9 @@ export function Experience() {
        * ─────────────────────────────
        * 1. TITLE
        * ─────────────────────────────
-       *
-       * Characters gradually shrink into
-       * their final size.
        */
 
-      tl.to(split.chars, {
-        scale: 1,
-        duration: 1.5,
-        stagger: 0.08,
-        ease: 'power2.out',
-      })
+      tl.to({}, { duration: 1.5 })
 
       /*
        * Small pause.
@@ -351,7 +332,6 @@ export function Experience() {
       return () => {
         tl.scrollTrigger?.kill()
         tl.kill()
-        split.revert()
       }
     },
     []
@@ -375,11 +355,12 @@ export function Experience() {
           </h1>
 
           {/* Cover images */}
-          {experiences.map((experience) => (
+          {experiences.map((experience, i) => (
             <div key={experience.title} data-slot="experience-cover" className="absolute inset-0">
               <img
                 src={experience.image}
                 alt=""
+                loading={i === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 className="w-full h-full object-cover"
                 style={{
@@ -404,7 +385,7 @@ export function Experience() {
 
       {/* Experience content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-50 px-4">
-        {experiences.map((experience) => (
+        {experiences.map((experience, i) => (
           <div
             key={experience.title}
             data-slot="experience-content"
@@ -418,6 +399,7 @@ export function Experience() {
               <CyberImage
                 src={experience.image}
                 alt={experience.title}
+                loading={i === 0 ? 'eager' : 'lazy'}
                 strokeWidth={0}
                 fill="transparent"
                 frameClassName="w-80 h-50"
