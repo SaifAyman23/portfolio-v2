@@ -83,7 +83,7 @@ export function MobileScreen() {
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div> */}
-        <div className="flex min-h-0 min-w-0 items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           <div className="relative h-full w-full overflow-hidden rounded-2xl">
             <iframe
               ref={iframeRef}
