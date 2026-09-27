@@ -1,9 +1,8 @@
+import { Zap, ZapOff } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 // import { SECTIONS } from '@/config/sections'
 
-const VIRTUAL_WIDTH = 2268
-const VIRTUAL_HEIGHT = 972
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 // const LEVEL_BY_SECTION: Record<string, string> = {
@@ -19,27 +18,11 @@ const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab
 const SECTION_IDS = ['hero', 'about', 'experience', 'projects', 'tools', 'contact', 'footer']
 
 export function MobileScreen() {
-  const frameRef = useRef<HTMLDivElement>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [size, setSize] = useState({ width: VIRTUAL_WIDTH, height: VIRTUAL_HEIGHT })
   const [, setSectionId] = useState('hero')
   const [reduced, setReduced] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768
   )
-
-  useEffect(() => {
-    const el = frameRef.current
-    if (!el) return
-    const measure = () => {
-      const width = Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT))
-      const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
-      setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
 
   useEffect(() => {
     const iframe = iframeRef.current
@@ -91,29 +74,23 @@ export function MobileScreen() {
 
   // const label = SECTIONS.find((section) => section.id === sectionId)?.label ?? sectionId
   // const level = LEVEL_BY_SECTION[sectionId] ?? '0'
-  const scale = size.width / VIRTUAL_WIDTH
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
-      <div className="absolute top-1/2 left-1/2 grid h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 grid-cols-[11rem_minmax(0,1fr)] items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:grid-cols-1 sm:p-8">
+      <div className="absolute top-1/2 left-1/2 grid h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 grid-cols-1 items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:p-8">
         {/* <div className="flex h-full flex-col items-center justify-between overflow-hidden py-10 sm:hidden">
           <p className="font-ticking text-md tracking-[0.3em] text-white/60">Level</p>
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div> */}
-        <div ref={frameRef} className="flex min-h-0 min-w-0 items-center justify-center">
-          <div
-            className="relative shrink-0 overflow-hidden rounded-2xl"
-            style={{ width: size.width, height: size.height }}
-          >
+        <div className="flex min-h-0 min-w-0 items-center justify-center">
+          <div className="relative h-full w-full overflow-hidden rounded-2xl">
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
               src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
-              width={VIRTUAL_WIDTH}
-              height={VIRTUAL_HEIGHT}
-              className="absolute top-0 left-0"
-              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+              className="absolute inset-0 h-full w-full"
+              style={{ border: 0 }}
             />
           </div>
         </div>
@@ -123,9 +100,9 @@ export function MobileScreen() {
         onClick={() => setReduced((prev) => !prev)}
         aria-pressed={reduced}
         title="Toggle reduced motion"
-        className="fixed right-4 bottom-4 z-50 cursor-pointer rounded-full border border-white/20 bg-black/70 px-4 py-2 font-ticking text-xs tracking-[0.2em] text-white"
+        className="fixed right-4 bottom-4 z-50 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/70 text-white sm:flex"
       >
-        {reduced ? 'MOTION: LOW' : 'MOTION: FULL'}
+        {reduced ? <ZapOff className="size-4" /> : <Zap className="size-4" />}
       </button>
     </div>
   )
