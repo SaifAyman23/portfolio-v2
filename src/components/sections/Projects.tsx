@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
 import careerlyImg from '@/assets/img/projects/Careerly.webp'
@@ -58,19 +58,6 @@ const projects = [
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
-
-  useEffect(() => {
-    projects.forEach((project) => {
-      try {
-        const img = new Image()
-        img.decoding = 'async'
-        img.src = project.image
-        void img.decode().catch(() => {})
-      } catch {
-        /* preload is best-effort */
-      }
-    })
-  }, [])
 
   useGSAP(
     () => {
@@ -457,6 +444,7 @@ export function Projects() {
               <CyberImage
                 src={projects[activeIndex].image}
                 alt={projects[activeIndex].title}
+                loading="lazy"
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-2xl h-100"
