@@ -9,9 +9,13 @@ export let reduceMotion: boolean | null = null
 
 export function prefersReducedMotion(): boolean {
   if (reduceMotion !== null) return reduceMotion
-  return (
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  if (typeof window !== 'undefined') {
+    const param = new URLSearchParams(window.location.search).get('reduce_motion')
+    if (param === 'true') return true
+    if (param === 'false') return false
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+  return false
 }
 
 export function setReducedMotion(value: boolean | null): void {
@@ -37,16 +41,6 @@ const FULL_SPLIT = {
   wordsClass: 'split-word',
   charsClass: 'split-char',
 } as const
-
-/**
- * True when the page is framed for a mobile-sized viewport
- * (`?is_mobile=true`). Targeted mobile relief — unlike reduced motion,
- * everything still mounts; only heavy animation work is skipped.
- */
-export function isMobileMode(): boolean {
-  if (typeof window === 'undefined') return false
-  return new URLSearchParams(window.location.search).get('is_mobile') === 'true'
-}
 
 /**
  * SplitText with the project's shared class names. `splitWords` for

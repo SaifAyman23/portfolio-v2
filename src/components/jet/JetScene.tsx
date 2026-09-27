@@ -9,7 +9,7 @@ import { Jet } from './Jet'
 
 import type { SectionId } from '@/config/sections'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
+import { prefersReducedMotion } from '@/lib/motion'
 import { isWebGLAvailable } from '@/lib/webgl'
 
 type Pose = {
@@ -230,12 +230,13 @@ export function JetScene({
   }, [])
 
   if (!glOK) return null
+  if (prefersReducedMotion()) return null
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
       <Canvas
         dpr={1}
-        gl={{ antialias: !isMobile && !isMobileMode() && !prefersReducedMotion() }}
+        gl={{ antialias: !isMobile && !prefersReducedMotion() }}
         frameloop={visible ? 'always' : 'never'}
       >
         <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />

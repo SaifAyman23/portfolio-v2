@@ -4,10 +4,9 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-import { isMobileMode } from '@/lib/motion'
 import { initSmoothScroll } from '@/lib/smoothScroll'
 
-if (!isMobileMode() && window.innerWidth >= 768) initSmoothScroll()
+if (window.innerWidth >= 768) initSmoothScroll()
 
 function dismissSkeleton(): void {
   const skeleton = document.getElementById('loading-skeleton')

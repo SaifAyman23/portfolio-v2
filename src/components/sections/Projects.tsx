@@ -11,7 +11,7 @@ import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
-import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
+import { prefersReducedMotion } from '@/lib/motion'
 
 const projects = [
   {
@@ -75,19 +75,11 @@ export function Projects() {
         type: 'chars',
       })
 
-      const mobile = isMobileMode()
-
-      const bodies = panels.map((panel) => panel.querySelector('p'))
-
-      const splits = mobile
-        ? []
-        : panels.map((panel) =>
-            SplitText.create(panel.querySelector('p'), {
-              type: 'words',
-            })
-          )
-
-      const wordsOf = (index: number) => (mobile ? bodies[index] : splits[index].words)
+      const splits = panels.map((panel) =>
+        SplitText.create(panel.querySelector('p'), {
+          type: 'words',
+        })
+      )
 
       const image = document.querySelector<HTMLElement>('[data-slot="project-image"]')
 
@@ -129,7 +121,7 @@ export function Projects() {
           y: 24,
         })
 
-        gsap.set(wordsOf(i), {
+        gsap.set(splits[i].words, {
           opacity: 0,
         })
 
@@ -259,7 +251,7 @@ export function Projects() {
        * First description
        */
       tl.to(
-        wordsOf(0),
+        splits[0].words,
         {
           opacity: 1,
           duration: 0.8,
@@ -300,8 +292,8 @@ export function Projects() {
 
         const next = panels[i + 1]
 
-        const currentChars = wordsOf(i)
-        const nextChars = wordsOf(i + 1)
+        const currentChars = splits[i].words
+        const nextChars = splits[i + 1].words
 
         const currentTags = panel.querySelectorAll('.tag')
         const nextTags = next.querySelectorAll('.tag')

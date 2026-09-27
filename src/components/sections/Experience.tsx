@@ -1,13 +1,12 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { useState } from 'react'
 
 import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
 import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
+import { prefersReducedMotion } from '@/lib/motion'
 
 const experiences = [
   {
@@ -31,9 +30,6 @@ const experiences = [
 ]
 
 export function Experience() {
-  const [mobileIndex, setMobileIndex] = useState(0)
-  const mobile = isMobileMode()
-
   useGSAP(
     () => {
       if (prefersReducedMotion()) return
@@ -232,21 +228,6 @@ export function Experience() {
 
         const nextCover = covers[i + 1]
 
-        if (mobile) {
-          tl.to({}, { duration: 1 })
-          tl.call(
-            () => {
-              setMobileIndex(tl.scrollTrigger?.direction === -1 ? i : i + 1)
-            },
-            [],
-            '<0.25'
-          )
-          tl.to({}, { duration: 0.3 })
-          tl.to({}, { duration: 0.25 })
-          tl.to({}, { duration: 0.9 })
-          return
-        }
-
         /*
          * Current content smoothly leaves.
          *
@@ -370,33 +351,17 @@ export function Experience() {
           </h1>
 
           {/* Cover images */}
-          {mobile ? (
-            <div data-slot="experience-cover" className="absolute inset-0">
+          {experiences.map((experience) => (
+            <div key={experience.title} data-slot="experience-cover" className="absolute inset-0">
               <img
-                src={experiences[mobileIndex].image}
+                src={experience.image}
                 alt=""
                 decoding="async"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
             </div>
-          ) : (
-            experiences.map((experience) => (
-              <div
-                key={experience.title}
-                data-slot="experience-cover"
-                className="absolute inset-0"
-              >
-                <img
-                  src={experience.image}
-                  alt=""
-                  decoding="async"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
-              </div>
-            ))
-          )}
+          ))}
 
           {/* Outline title */}
           <h1
@@ -413,48 +378,27 @@ export function Experience() {
 
       {/* Experience content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-50 px-4">
-        {mobile ? (
+        {experiences.map((experience) => (
           <div
+            key={experience.title}
             data-slot="experience-content"
             className="absolute inset-0 flex min-h-screen flex-col items-center justify-center gap-70 px-4"
           >
             <div data-slot="experience-description" className="text-start max-w-300">
-              <p className="text-4xl text-white">{experiences[mobileIndex].description}</p>
+              <p className="text-4xl text-white">{experience.description}</p>
             </div>
 
             <div data-slot="experience-image" className="w-2/3 flex justify-end">
               <CyberImage
-                src={experiences[mobileIndex].image}
-                alt={experiences[mobileIndex].title}
+                src={experience.image}
+                alt={experience.title}
                 strokeWidth={0}
                 fill="transparent"
                 frameClassName="w-80 h-50"
               />
             </div>
           </div>
-        ) : (
-          experiences.map((experience) => (
-            <div
-              key={experience.title}
-              data-slot="experience-content"
-              className="absolute inset-0 flex min-h-screen flex-col items-center justify-center gap-70 px-4"
-            >
-              <div data-slot="experience-description" className="text-start max-w-300">
-                <p className="text-4xl text-white">{experience.description}</p>
-              </div>
-
-              <div data-slot="experience-image" className="w-2/3 flex justify-end">
-                <CyberImage
-                  src={experience.image}
-                  alt={experience.title}
-                  strokeWidth={0}
-                  fill="transparent"
-                  frameClassName="w-80 h-50"
-                />
-              </div>
-            </div>
-          ))
-        )}
+        ))}
       </div>
     </section>
   )
