@@ -463,11 +463,15 @@ export function Projects() {
               <CyberImage
                 src={projects[activeIndex].image}
                 alt={projects[activeIndex].title}
-                loading="lazy"
                 strokeWidth={0}
                 stroke="transparent"
                 frameClassName="w-2xl h-100"
               />
+              <div aria-hidden="true" className="hidden">
+                {projects.map((project) => (
+                  <img key={project.title} src={project.image} alt="" />
+                ))}
+              </div>
             </div>
             {reduced && (
               <div className="absolute bottom-5 end-30 z-70 flex gap-4">

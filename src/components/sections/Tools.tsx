@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react'
 import { BiLogoPostgresql } from 'react-icons/bi'
 import {
   SiCelery,
@@ -335,51 +335,97 @@ export function CoolMeter({
   )
 }
 
+function LiveCoolMeter({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
+  const [coolActive, setCoolActive] = useState(5)
+
+  useGSAP(() => {
+    const obj = { v: 5 }
+    const tween = gsap.to(obj, {
+      v: () => gsap.utils.random(9, 14, 1),
+      duration: 1.1,
+      ease: 'power1.inOut',
+      repeat: -1,
+      repeatDelay: 0.7,
+      repeatRefresh: true,
+      onUpdate: () => setCoolActive(Math.round(obj.v)),
+    })
+    loops.current.push(tween)
+    return () => tween.kill()
+  }, [])
+
+  return <CoolMeter active={coolActive} bottomLabel="Cool-Ometer" topLabel="Too Cool" />
+}
+
+function LiveKts({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
+  const [ktsValue, setKtsValue] = useState(320)
+
+  useGSAP(() => {
+    const numObj = { val: 320 }
+    const tween = gsap.to(numObj, {
+      val: () => gsap.utils.random(285, 345, 1),
+      duration: 1.2,
+      ease: 'power1.inOut',
+      repeat: -1,
+      repeatDelay: 7,
+      repeatRefresh: true,
+      onUpdate: () => setKtsValue(Math.round(numObj.val)),
+    })
+    loops.current.push(tween)
+    return () => tween.kill()
+  }, [])
+
+  return <RulerBar label={`${ktsValue} KTS`} />
+}
+
 export function Tools() {
   const rootRef = useRef<HTMLElement>(null)
 
-  const skills = {
-    backend: {
-      title: 'Backend',
-      skills: [
-        { title: 'Python', icon: <SiPython className="size-35 drop-shadow-2xl" /> },
-        { title: 'Django', icon: <SiDjango className="size-35" /> },
-        { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35" /> },
-        { title: 'MySQL', icon: <SiMysql className="size-35" /> },
-        { title: 'Redis', icon: <SiRedis className="size-35" /> },
-        { title: 'Celery', icon: <SiCelery className="size-35" /> },
-        { title: 'Firebase', icon: <SiFirebase className="size-35" /> },
-      ],
-    },
-    frontend: {
-      title: 'Frontend',
-      skills: [
-        { title: 'React', icon: <SiReact className="size-35" /> },
-        { title: 'TypeScript', icon: <SiTypescript className="size-35" /> },
-        { title: 'JavaScript', icon: <SiJavascript className="size-35" /> },
-        { title: 'Tailwind', icon: <SiTailwindcss className="size-35" /> },
-        { title: 'TanStack Query', icon: <SiTanstack className="size-35" /> },
-        { title: 'GSAP', icon: <SiGsap className="size-35" /> },
-      ],
-    },
-    tools: {
-      title: 'Tools',
-      skills: [
-        { title: 'Git', icon: <SiGit className="size-35" /> },
-        { title: 'GitHub', icon: <SiGithub className="size-35" /> },
-        { title: 'Docker', icon: <SiDocker className="size-35" /> },
-        { title: 'Vercel', icon: <SiVercel className="size-35" /> },
-        { title: 'Figma', icon: <SiFigma className="size-35" /> },
-        { title: 'Postman', icon: <SiPostman className="size-35" /> },
-      ],
-    },
-  }
+  const skills = useMemo(
+    () => ({
+      backend: {
+        title: 'Backend',
+        skills: [
+          { title: 'Python', icon: <SiPython className="size-35 drop-shadow-2xl" /> },
+          { title: 'Django', icon: <SiDjango className="size-35" /> },
+          { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35" /> },
+          { title: 'MySQL', icon: <SiMysql className="size-35" /> },
+          { title: 'Redis', icon: <SiRedis className="size-35" /> },
+          { title: 'Celery', icon: <SiCelery className="size-35" /> },
+          { title: 'Firebase', icon: <SiFirebase className="size-35" /> },
+        ],
+      },
+      frontend: {
+        title: 'Frontend',
+        skills: [
+          { title: 'React', icon: <SiReact className="size-35" /> },
+          { title: 'TypeScript', icon: <SiTypescript className="size-35" /> },
+          { title: 'JavaScript', icon: <SiJavascript className="size-35" /> },
+          { title: 'Tailwind', icon: <SiTailwindcss className="size-35" /> },
+          { title: 'TanStack Query', icon: <SiTanstack className="size-35" /> },
+          { title: 'GSAP', icon: <SiGsap className="size-35" /> },
+        ],
+      },
+      tools: {
+        title: 'Tools',
+        skills: [
+          { title: 'Git', icon: <SiGit className="size-35" /> },
+          { title: 'GitHub', icon: <SiGithub className="size-35" /> },
+          { title: 'Docker', icon: <SiDocker className="size-35" /> },
+          { title: 'Vercel', icon: <SiVercel className="size-35" /> },
+          { title: 'Figma', icon: <SiFigma className="size-35" /> },
+          { title: 'Postman', icon: <SiPostman className="size-35" /> },
+        ],
+      },
+    }),
+    []
+  )
 
-  const skillSets = [skills.backend, skills.frontend, skills.tools] as const
+  const skillSets = useMemo(
+    () => [skills.backend, skills.frontend, skills.tools] as const,
+    [skills]
+  )
   const [activeSkillSet, setActiveSkillSet] = useState(skillSets[0])
   const [activeSkill, setActiveSkill] = useState(skillSets[0].skills[0])
-  const [coolActive, setCoolActive] = useState(5)
-  const [ktsValue, setKtsValue] = useState(320)
   const near = useNearView('tools')
   const loops = useRef<gsap.core.Tween[]>([])
 
@@ -489,42 +535,6 @@ export function Tools() {
     { dependencies: [activeSkill], scope: rootRef }
   )
 
-  useGSAP(
-    () => {
-      const obj = { v: coolActive }
-      const tween = gsap.to(obj, {
-        v: () => gsap.utils.random(9, 14, 1),
-        duration: 1.1,
-        ease: 'power1.inOut',
-        repeat: -1,
-        repeatDelay: 0.7,
-        repeatRefresh: true,
-        onUpdate: () => setCoolActive(Math.round(obj.v)),
-      })
-      loops.current.push(tween)
-      return () => tween.kill()
-    },
-    { scope: rootRef }
-  )
-
-  useGSAP(
-    () => {
-      const numObj = { val: ktsValue }
-      const tween = gsap.to(numObj, {
-        val: () => gsap.utils.random(285, 345, 1),
-        duration: 1.2,
-        ease: 'power1.inOut',
-        repeat: -1,
-        repeatDelay: 7,
-        repeatRefresh: true,
-        onUpdate: () => setKtsValue(Math.round(numObj.val)),
-      })
-      loops.current.push(tween)
-      return () => tween.kill()
-    },
-    { scope: rootRef }
-  )
-
   return (
     <section
       ref={rootRef}
@@ -572,11 +582,11 @@ export function Tools() {
             </div>
           </div>
           <div className="mx-auto flex items-end h-1/6 w-2/3">
-            <RulerBar label={`${ktsValue} KTS`} />
+            <LiveKts loops={loops} />
           </div>
         </div>
         <div className="col-span-3 flex justify-center items-center">
-          <CoolMeter active={coolActive} bottomLabel="Cool-Ometer" topLabel="Too Cool" />
+          <LiveCoolMeter loops={loops} />
         </div>
       </div>
     </section>
