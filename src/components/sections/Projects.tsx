@@ -89,26 +89,22 @@ export function Projects() {
 
     if (panels.length === 0) return
 
+    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
+
     if (reduced) {
+      if (intro) gsap.set(intro, { opacity: 0 })
       panels.forEach((panel, i) => {
         if (i !== initialIndex.current) gsap.set(panel, { autoAlpha: 0 })
       })
       return
     }
 
-    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
-
     if (!intro) return
 
-    let introSplit: SplitText | undefined
-    if (!reduced) {
-      introSplit = SplitText.create(intro, {
-        type: 'chars',
-        aria: 'none',
-      })
-    } else {
-      gsap.set(intro, { opacity: 0 })
-    }
+    const introSplit = SplitText.create(intro, {
+      type: 'chars',
+      aria: 'none',
+    })
 
     const splits = panels.map((panel) =>
       SplitText.create(panel.querySelector('p'), {
@@ -127,9 +123,7 @@ export function Projects() {
      * ─────────────────────────────
      */
 
-    if (introSplit) {
-      gsap.set(introSplit.chars, { opacity: 0, y: 30 })
-    }
+    gsap.set(introSplit.chars, { opacity: 0, y: 30 })
 
     gsap.set('#projects h1', {
       opacity: 0,
@@ -190,34 +184,32 @@ export function Projects() {
      * ─────────────────────────────
      */
 
-    if (!reduced && introSplit) {
-      tl.to(introSplit.chars, {
-        opacity: 1,
-        y: 0,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: 'steps(1)',
-      })
+    tl.to(introSplit.chars, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.08,
+      duration: 0.6,
+      ease: 'steps(1)',
+    })
 
-      tl.to({}, { duration: 0.3 })
+    tl.to({}, { duration: 0.3 })
 
-      /*
-       * ─────────────────────────────
-       * 2. LARGE TITLE OUT
-       * ─────────────────────────────
-       */
+    /*
+     * ─────────────────────────────
+     * 2. LARGE TITLE OUT
+     * ─────────────────────────────
+     */
 
-      tl.to(introSplit.chars, {
-        opacity: 0,
-        y: -30,
-        stagger: {
-          amount: 0.5,
-          from: 'start',
-        },
-        duration: 2,
-        ease: 'steps(1)',
-      })
-    }
+    tl.to(introSplit.chars, {
+      opacity: 0,
+      y: -30,
+      stagger: {
+        amount: 0.5,
+        from: 'start',
+      },
+      duration: 2,
+      ease: 'steps(1)',
+    })
 
     /*
      * ─────────────────────────────
@@ -478,7 +470,7 @@ export function Projects() {
               />
             </div>
             {reduced && (
-              <div className="absolute bottom-5 end-30 flex gap-4">
+              <div className="absolute bottom-5 end-30 z-70 flex gap-4">
                 <Button
                   className="py-8 cursor-pointer"
                   stroke="black"
