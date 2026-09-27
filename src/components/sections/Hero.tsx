@@ -10,7 +10,7 @@ import PixelBlast from '@/components/PixelBlast'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useNearView } from '@/hooks/useNearView'
-import { prefersReducedMotion } from '@/lib/motion'
+import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
 import { getLenis } from '@/lib/smoothScroll'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
@@ -328,7 +328,7 @@ export function Hero() {
         className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-60`}
       />
 
-      {!prefersReducedMotion() && !isMobile && blastOn && (
+      {!prefersReducedMotion() && !isMobile && !isMobileMode() && blastOn && (
         <div className="absolute z-0 h-full w-full opacity-30">
           <PixelBlast
             variant="circle"

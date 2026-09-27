@@ -25,7 +25,7 @@ import {
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { useNearView } from '@/hooks/useNearView'
-import { prefersReducedMotion } from '@/lib/motion'
+import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
@@ -385,7 +385,7 @@ export function Tools() {
 
   useEffect(() => {
     loops.current.forEach((tween) => {
-      if (near) tween.play()
+      if (near && !isMobileMode()) tween.play()
       else tween.pause()
     })
   }, [near])
