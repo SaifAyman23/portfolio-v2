@@ -381,7 +381,7 @@ export function Hero() {
         </div>
 
         <div className="col-span-4 text-center">
-          <div id="hero-japanese">
+          <div id="hero-japanese" className="[writing-mode:vertical-rl]">
             <JapaneseText
               text="ケン"
               border
