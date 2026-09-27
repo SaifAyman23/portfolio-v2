@@ -385,7 +385,7 @@ export function Tools() {
 
   useEffect(() => {
     loops.current.forEach((tween) => {
-      if (near && !isMobileMode()) tween.play()
+      if (near && !isMobileMode() && !prefersReducedMotion()) tween.play()
       else tween.pause()
     })
   }, [near])

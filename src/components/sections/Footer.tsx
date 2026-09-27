@@ -160,7 +160,7 @@ export function Footer() {
         />
       </div>
       <div
-        className={`absolute blurred-overlay inset-0 z-20 ${isMobileMode() ? '' : 'backdrop-blur-xl'}`}
+        className={`absolute blurred-overlay inset-0 z-20 ${isMobileMode() || prefersReducedMotion() ? '' : 'backdrop-blur-xl'}`}
         style={{
           maskImage:
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',
