@@ -340,10 +340,8 @@ export function Experience() {
                 alt=""
                 decoding="async"
                 className="w-full h-full object-cover"
-                style={{
-                  filter: 'brightness(0.30)',
-                }}
               />
+              <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
             </div>
           ))}
 

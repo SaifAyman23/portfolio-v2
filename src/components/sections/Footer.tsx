@@ -10,7 +10,7 @@ import { HeroInfo } from './HeroInfo'
 import bg from '@/assets/img/download-1.webp'
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { JapaneseText } from '@/components/ui/japanese-text'
-import { prefersReducedMotion } from '@/lib/motion'
+import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
 
 export function Footer() {
   const [expanded, setExpanded] = useState(false)
@@ -160,7 +160,7 @@ export function Footer() {
         />
       </div>
       <div
-        className="absolute blurred-overlay inset-0 z-20 backdrop-blur-xl"
+        className={`absolute blurred-overlay inset-0 z-20 ${isMobileMode() ? '' : 'backdrop-blur-xl'}`}
         style={{
           maskImage:
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',
