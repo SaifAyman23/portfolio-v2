@@ -6,7 +6,7 @@ import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
 import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { prefersReducedMotion } from '@/lib/motion'
+import { isMobileMode, prefersReducedMotion } from '@/lib/motion'
 
 const experiences = [
   {
@@ -51,6 +51,8 @@ export function Experience() {
       const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
 
       if (!solidTitle || !outlineTitle) return
+
+      const mobile = isMobileMode()
 
       const split = SplitText.create(solidTitle, {
         type: 'chars',
@@ -227,6 +229,17 @@ export function Experience() {
         if (i >= experiences.length - 1) return
 
         const nextCover = covers[i + 1]
+
+        if (mobile) {
+          tl.to({}, { duration: 1 })
+          tl.set([contents[i], covers[i]], { visibility: 'hidden' })
+          tl.set([covers[i + 1], contents[i + 1]], { visibility: 'visible' })
+          tl.set([covers[i + 1], descriptions[i + 1], images[i + 1]], { xPercent: 0 })
+          tl.to({}, { duration: 0.3 })
+          tl.to({}, { duration: 0.25 })
+          tl.to({}, { duration: 0.9 })
+          return
+        }
 
         /*
          * Current content smoothly leaves.
