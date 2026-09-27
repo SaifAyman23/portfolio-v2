@@ -44,6 +44,8 @@ export function Experience() {
 
       const covers = gsap.utils.toArray<HTMLElement>('[data-slot="experience-cover"]')
 
+      const contents = gsap.utils.toArray<HTMLElement>('[data-slot="experience-content"]')
+
       const descriptions = gsap.utils.toArray<HTMLElement>('[data-slot="experience-description"]')
 
       const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
@@ -83,6 +85,14 @@ export function Experience() {
 
       gsap.set(images, {
         xPercent: -150,
+      })
+
+      gsap.set(covers.slice(1), {
+        visibility: 'hidden',
+      })
+
+      gsap.set(contents.slice(1), {
+        visibility: 'hidden',
       })
 
       /*
@@ -240,6 +250,8 @@ export function Experience() {
           '<0.15'
         )
 
+        tl.set(contents[i], { visibility: 'hidden' }, '>')
+
         /*
          * Small separation between the
          * content swipe and the cover.
@@ -259,11 +271,15 @@ export function Experience() {
          * previous content movement.
          */
 
+        tl.set(nextCover, { visibility: 'visible' })
+
         tl.to(nextCover, {
           xPercent: 0,
           duration: 1.2,
           ease: 'power2.inOut',
         })
+
+        tl.set(covers[i], { visibility: 'hidden' }, '>')
 
         /*
          * Let the cover establish itself.
@@ -279,6 +295,8 @@ export function Experience() {
         /*
          * Next content enters smoothly.
          */
+
+        tl.set(contents[i + 1], { visibility: 'visible' })
 
         tl.to(descriptions[i + 1], {
           xPercent: 0,
