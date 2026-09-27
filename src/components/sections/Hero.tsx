@@ -20,11 +20,6 @@ export function Hero() {
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   useGSAP(() => {
-    if (prefersReducedMotion()) {
-      window.dispatchEvent(new Event('hero-intro-start'))
-      return
-    }
-
     const hero = document.querySelector('#hero')
     const intro = document.querySelector('#hero-intro')
     const title = document.querySelector('#hero-title')
@@ -50,18 +45,22 @@ export function Hero() {
 
     const introSplit = SplitText.create(intro, {
       type: 'chars',
+      aria: 'none',
     })
 
     const titleSplit = SplitText.create(title, {
       type: 'chars',
+      aria: 'none',
     })
 
     const subtitleSplit = SplitText.create(subtitle, {
       type: 'chars',
+      aria: 'none',
     })
 
     const japaneseSplit = SplitText.create(japanese, {
       type: 'chars',
+      aria: 'none',
     })
 
     const paragraphSplits = Array.from(paragraphs).map((p) =>
@@ -69,6 +68,7 @@ export function Hero() {
         type: 'lines',
         mask: 'lines',
         linesClass: 'hero-line',
+        aria: 'none',
       })
     )
 

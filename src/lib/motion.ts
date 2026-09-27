@@ -33,6 +33,7 @@ const WORD_SPLIT = {
   type: 'words, chars',
   wordsClass: 'split-word',
   charsClass: 'split-char',
+  aria: 'none',
 } as const
 
 const FULL_SPLIT = {
@@ -40,6 +41,7 @@ const FULL_SPLIT = {
   linesClass: 'split-line',
   wordsClass: 'split-word',
   charsClass: 'split-char',
+  aria: 'none',
 } as const
 
 /**

@@ -2,16 +2,12 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
-import { prefersReducedMotion } from '@/lib/motion'
-
 /** The active Lenis instance, if smooth scroll is running. */
 export function getLenis(): Lenis | undefined {
   return (window as unknown as { __lenis?: Lenis }).__lenis
 }
 
 export function initSmoothScroll() {
-  if (prefersReducedMotion()) return null
-
   const lenis = new Lenis({
     lerp: 0.08,
     smoothWheel: true,

@@ -10,7 +10,6 @@ import { HeroInfo } from './HeroInfo'
 import bg from '@/assets/img/download-1.webp'
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { JapaneseText } from '@/components/ui/japanese-text'
-import { prefersReducedMotion } from '@/lib/motion'
 
 export function Footer() {
   const [expanded, setExpanded] = useState(false)
@@ -21,16 +20,6 @@ export function Footer() {
   useGSAP(
     () => {
       if (!btnRef.current) return
-      if (prefersReducedMotion()) {
-        gsap.set(btnRef.current, {
-          width: expanded ? 360 : 56,
-        })
-        if (iconRef.current)
-          gsap.set(iconRef.current, { scale: expanded ? 0 : 1, autoAlpha: expanded ? 0 : 1 })
-        if (contentRef.current)
-          gsap.set(contentRef.current, { autoAlpha: expanded ? 1 : 0, x: expanded ? 0 : -8 })
-        return
-      }
       gsap.to(btnRef.current, {
         width: expanded ? 360 : 56,
         duration: 0.6,
@@ -62,8 +51,6 @@ export function Footer() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
-
       const japanese = document.querySelector('#footer-japanese')
       const name = document.querySelector('.name')
       const overlay = document.querySelector('.blurred-overlay')
@@ -77,10 +64,12 @@ export function Footer() {
 
       const splitJap = SplitText.create(japanese, {
         type: 'chars',
+        aria: 'none',
       })
 
       const splitName = SplitText.create(name, {
         type: 'chars',
+        aria: 'none',
       })
 
       gsap.set(infoItems, {
@@ -160,7 +149,7 @@ export function Footer() {
         />
       </div>
       <div
-        className={`absolute blurred-overlay inset-0 z-20 ${prefersReducedMotion() ? '' : 'backdrop-blur-xl'}`}
+        className="absolute blurred-overlay inset-0 z-20 backdrop-blur-xl"
         style={{
           maskImage:
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',

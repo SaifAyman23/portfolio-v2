@@ -392,7 +392,6 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
       loops.current = []
       gsap.from(
         '[data-slot="radar"], [data-slot="tick-ring"], [data-slot="ruler-bar"], [data-slot="cool-meter"]',
@@ -421,7 +420,7 @@ export function Tools() {
       })
       loops.current.push(sweep, ticks)
 
-      gsap.timeline({
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: rootRef.current,
           start: 'top top',
@@ -440,13 +439,17 @@ export function Tools() {
           },
         },
       })
+
+      return () => {
+        tl.scrollTrigger?.kill()
+        tl.kill()
+      }
     },
     { scope: rootRef }
   )
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
       gsap.fromTo(
         '[data-slot="skills-panel"]',
         { autoAlpha: 0, y: 18 },
@@ -477,7 +480,6 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
       gsap.fromTo(
         '[data-slot="radar-icon"]',
         { autoAlpha: 0, scale: 0.75 },
@@ -489,7 +491,6 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
       const obj = { v: coolActive }
       const tween = gsap.to(obj, {
         v: () => gsap.utils.random(9, 14, 1),
@@ -508,7 +509,6 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
       const numObj = { val: ktsValue }
       const tween = gsap.to(numObj, {
         val: () => gsap.utils.random(285, 345, 1),

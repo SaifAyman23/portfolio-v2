@@ -30,10 +30,10 @@ const experiences = [
 ]
 
 export function Experience() {
+  const reduced = prefersReducedMotion()
+
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
-
       const solidTitle = document.querySelector<HTMLElement>(
         '[data-slot="experience-solid-title"]'
       )
@@ -54,6 +54,7 @@ export function Experience() {
 
       const split = SplitText.create(solidTitle, {
         type: 'chars',
+        aria: 'none',
       })
 
       /*
@@ -228,6 +229,27 @@ export function Experience() {
 
         const nextCover = covers[i + 1]
 
+        if (reduced) {
+          tl.to({}, { duration: 1 })
+          tl.to([descriptions[i], images[i], covers[i]], {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'none',
+          })
+          tl.set([contents[i], covers[i]], { visibility: 'hidden' }, '>')
+          tl.set([covers[i + 1], contents[i + 1]], { visibility: 'visible' })
+          tl.set([covers[i + 1], descriptions[i + 1], images[i + 1]], { xPercent: 0 })
+          tl.fromTo(
+            [covers[i + 1], descriptions[i + 1], images[i + 1]],
+            { opacity: 0 },
+            { opacity: 1, duration: 0.5, ease: 'none' }
+          )
+          tl.to({}, { duration: 0.3 })
+          tl.to({}, { duration: 0.25 })
+          tl.to({}, { duration: 0.9 })
+          return
+        }
+
         /*
          * Current content smoothly leaves.
          *
@@ -326,9 +348,11 @@ export function Experience() {
         )
       })
 
-    return () => {
-      split.revert()
-    }
+      return () => {
+        tl.scrollTrigger?.kill()
+        tl.kill()
+        split.revert()
+      }
     },
     []
   )
@@ -358,8 +382,11 @@ export function Experience() {
                 alt=""
                 decoding="async"
                 className="w-full h-full object-cover"
+                style={reduced ? { filter: 'brightness(0.30) blur(10px)' } : undefined}
               />
-              <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
+              {reduced ? null : (
+                <div className="absolute inset-0 bg-black/70" aria-hidden="true" />
+              )}
             </div>
           ))}
 

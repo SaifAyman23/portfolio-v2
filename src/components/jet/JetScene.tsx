@@ -230,7 +230,6 @@ export function JetScene({
   }, [])
 
   if (!glOK) return null
-  if (prefersReducedMotion()) return null
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">

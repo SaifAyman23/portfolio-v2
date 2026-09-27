@@ -11,7 +11,6 @@ import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
-import { prefersReducedMotion } from '@/lib/motion'
 
 const projects = [
   {
@@ -61,8 +60,6 @@ export function Projects() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
-
       const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
       if (panels.length === 0) return
@@ -73,11 +70,13 @@ export function Projects() {
 
       const introSplit = SplitText.create(intro, {
         type: 'chars',
+        aria: 'none',
       })
 
       const splits = panels.map((panel) =>
         SplitText.create(panel.querySelector('p'), {
           type: 'words',
+          aria: 'none',
         })
       )
 
@@ -398,6 +397,8 @@ export function Projects() {
       })
 
       return () => {
+        tl.scrollTrigger?.kill()
+        tl.kill()
         introSplit.revert()
         splits.forEach((split) => split.revert())
       }

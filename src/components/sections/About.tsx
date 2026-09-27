@@ -111,6 +111,8 @@ export function About() {
       )
 
       return () => {
+        tl.scrollTrigger?.kill()
+        tl.kill()
         splitTitle.revert()
         splitRows1.revert()
         splitRows2.revert()

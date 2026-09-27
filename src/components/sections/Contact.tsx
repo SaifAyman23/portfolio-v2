@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { CyberFrame } from '../ui/cyber-frame'
 
-import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
+import { splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(Observer)
 
@@ -40,8 +40,6 @@ export function Contact() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
-
       const p = document.querySelector<HTMLElement>('#contact p')
       const frames = gsap.utils.toArray<HTMLElement>('#contact .size-1\\/12')
       const h1 = document.querySelector<HTMLElement>('#contact h1')
