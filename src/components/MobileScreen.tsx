@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 
 // import { SECTIONS } from '@/config/sections'
 
+const VIRTUAL_WIDTH = 2268
+const VIRTUAL_HEIGHT = 972
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 // const LEVEL_BY_SECTION: Record<string, string> = {
@@ -18,11 +20,27 @@ const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab
 const SECTION_IDS = ['hero', 'about', 'experience', 'projects', 'tools', 'contact', 'footer']
 
 export function MobileScreen() {
+  const frameRef = useRef<HTMLDivElement>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [size, setSize] = useState({ width: VIRTUAL_WIDTH, height: VIRTUAL_HEIGHT })
   const [, setSectionId] = useState('hero')
   const [reduced, setReduced] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768
   )
+
+  useEffect(() => {
+    const el = frameRef.current
+    if (!el) return
+    const measure = () => {
+      const width = Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT))
+      const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
+      setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   useEffect(() => {
     const iframe = iframeRef.current
@@ -74,6 +92,7 @@ export function MobileScreen() {
 
   // const label = SECTIONS.find((section) => section.id === sectionId)?.label ?? sectionId
   // const level = LEVEL_BY_SECTION[sectionId] ?? '0'
+  const scale = size.width / VIRTUAL_WIDTH
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
@@ -83,14 +102,19 @@ export function MobileScreen() {
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div> */}
-        <div className="flex h-full w-full items-center justify-center">
-          <div className="relative h-full w-full overflow-hidden rounded-2xl">
+        <div ref={frameRef} className="flex h-full w-full items-center justify-center">
+          <div
+            className="relative shrink-0 overflow-hidden rounded-2xl"
+            style={{ width: size.width, height: size.height }}
+          >
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
               src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
-              className="absolute inset-0 h-full w-full"
-              style={{ border: 0 }}
+              width={VIRTUAL_WIDTH}
+              height={VIRTUAL_HEIGHT}
+              className="absolute top-0 left-0"
+              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
             />
           </div>
         </div>
