@@ -379,6 +379,7 @@ function LiveKts({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
 
 export function Tools() {
   const rootRef = useRef<HTMLElement>(null)
+  const reduced = prefersReducedMotion()
 
   const skills = useMemo(
     () => ({
@@ -431,10 +432,10 @@ export function Tools() {
 
   useEffect(() => {
     loops.current.forEach((tween) => {
-      if (near && !prefersReducedMotion()) tween.play()
+      if (near && !reduced) tween.play()
       else tween.pause()
     })
-  }, [near])
+  }, [near, reduced])
 
   useGSAP(
     () => {

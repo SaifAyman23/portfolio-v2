@@ -11,9 +11,11 @@ import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function About() {
+  const reduced = prefersReducedMotion()
+
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return
+      if (reduced) return
 
       const section = document.querySelector('#about')
 
