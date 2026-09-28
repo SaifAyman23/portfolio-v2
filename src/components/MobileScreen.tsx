@@ -124,25 +124,17 @@ export function MobileScreen() {
         </div> */}
         <div ref={frameRef} className="flex h-full w-full items-center justify-center">
           <div
-            className="relative overflow-hidden rounded-2xl"
-            style={
-              isMobile
-                ? { width: '100%', height: '100%' }
-                : { width: size.width, height: size.height }
-            }
+            className="relative shrink-0 overflow-hidden rounded-2xl"
+            style={{ width: size.width, height: size.height }}
           >
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
               src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
-              width={isMobile ? undefined : VIRTUAL_WIDTH}
-              height={isMobile ? undefined : VIRTUAL_HEIGHT}
-              className="absolute inset-0 h-full w-full"
-              style={
-                isMobile
-                  ? { border: 0 }
-                  : { border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }
-              }
+              width={VIRTUAL_WIDTH}
+              height={VIRTUAL_HEIGHT}
+              className="absolute top-0 left-0"
+              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
             />
           </div>
         </div>
