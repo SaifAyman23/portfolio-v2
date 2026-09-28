@@ -1,6 +1,8 @@
 import { Maximize, Minimize, Zap, ZapOff } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+
 // import { SECTIONS } from '@/config/sections'
 
 const VIRTUAL_WIDTH = 2268
@@ -24,9 +26,9 @@ export function MobileScreen() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [size, setSize] = useState({ width: VIRTUAL_WIDTH, height: VIRTUAL_HEIGHT })
   const [, setSectionId] = useState('hero')
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth < 768
-  )
+  const breakpoint = useMediaQuery()
+  const isMobile = breakpoint === 'xs' || breakpoint === 'sm'
+  const [reduced, setReduced] = useState(isMobile)
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
@@ -47,7 +49,10 @@ export function MobileScreen() {
     const el = frameRef.current
     if (!el) return
     const measure = () => {
-      const width = Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT))
+      const width = Math.max(
+        1,
+        Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT)
+      )
       const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
       setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
     }
@@ -119,17 +124,25 @@ export function MobileScreen() {
         </div> */}
         <div ref={frameRef} className="flex h-full w-full items-center justify-center">
           <div
-            className="relative shrink-0 overflow-hidden rounded-2xl"
-            style={{ width: size.width, height: size.height }}
+            className="relative overflow-hidden rounded-2xl"
+            style={
+              isMobile
+                ? { width: '100%', height: '100%' }
+                : { width: size.width, height: size.height }
+            }
           >
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
               src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
-              width={VIRTUAL_WIDTH}
-              height={VIRTUAL_HEIGHT}
-              className="absolute top-0 left-0"
-              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+              width={isMobile ? undefined : VIRTUAL_WIDTH}
+              height={isMobile ? undefined : VIRTUAL_HEIGHT}
+              className="absolute inset-0 h-full w-full"
+              style={
+                isMobile
+                  ? { border: 0 }
+                  : { border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }
+              }
             />
           </div>
         </div>
