@@ -467,7 +467,7 @@ export function Projects() {
                 stroke="transparent"
                 frameClassName="w-2xl h-100"
               />
-              <div aria-hidden="true" className="hidden">
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0">
                 {projects.map((project) => (
                   <img key={project.title} src={project.image} alt="" />
                 ))}
