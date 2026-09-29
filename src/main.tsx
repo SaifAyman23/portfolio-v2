@@ -1,3 +1,4 @@
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -7,6 +8,10 @@ import App from './App.tsx'
 import { initSmoothScroll } from '@/lib/smoothScroll'
 
 if (window.innerWidth >= 768) initSmoothScroll()
+
+if (document.fonts?.ready) {
+  document.fonts.ready.then(() => ScrollTrigger.refresh()).catch(() => {})
+}
 
 function dismissSkeleton(): void {
   const skeleton = document.getElementById('loading-skeleton')
