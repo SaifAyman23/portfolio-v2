@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 const VIRTUAL_WIDTH = 2268
 const VIRTUAL_HEIGHT = 972
-const FIT_SCALE = 0.9
+const IFRAME_ZOOM = 1.05
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 // const LEVEL_BY_SECTION: Record<string, string> = {
@@ -50,9 +50,10 @@ export function MobileScreen() {
     const el = frameRef.current
     if (!el) return
     const measure = () => {
-      const width =
-        Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT)) *
-        FIT_SCALE
+      const width = Math.max(
+        1,
+        Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT)
+      )
       const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
       setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
     }
@@ -112,7 +113,7 @@ export function MobileScreen() {
 
   // const label = SECTIONS.find((section) => section.id === sectionId)?.label ?? sectionId
   // const level = LEVEL_BY_SECTION[sectionId] ?? '0'
-  const scale = size.width / VIRTUAL_WIDTH
+  const scale = (size.width / VIRTUAL_WIDTH) * IFRAME_ZOOM
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
@@ -134,7 +135,7 @@ export function MobileScreen() {
               width={VIRTUAL_WIDTH}
               height={VIRTUAL_HEIGHT}
               className="absolute top-0 left-0"
-              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'center' }}
             />
           </div>
         </div>
