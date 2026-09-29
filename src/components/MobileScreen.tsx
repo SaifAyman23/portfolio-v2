@@ -1,4 +1,4 @@
-import { Maximize, Minimize, Zap, ZapOff } from 'lucide-react'
+import { Maximize, Minimize } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -7,6 +7,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 const VIRTUAL_WIDTH = 2268
 const VIRTUAL_HEIGHT = 972
+const FIT_SCALE = 0.97
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 // const LEVEL_BY_SECTION: Record<string, string> = {
@@ -28,7 +29,7 @@ export function MobileScreen() {
   const [, setSectionId] = useState('hero')
   const breakpoint = useMediaQuery()
   const isMobile = breakpoint === 'xs' || breakpoint === 'sm'
-  const [reduced, setReduced] = useState(isMobile)
+  const [reduced] = useState(isMobile)
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
@@ -49,10 +50,9 @@ export function MobileScreen() {
     const el = frameRef.current
     if (!el) return
     const measure = () => {
-      const width = Math.max(
-        1,
-        Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT)
-      )
+      const width =
+        Math.max(1, Math.min(el.clientWidth, (el.clientHeight * VIRTUAL_WIDTH) / VIRTUAL_HEIGHT)) *
+        FIT_SCALE
       const height = Math.max(1, (width * VIRTUAL_HEIGHT) / VIRTUAL_WIDTH)
       setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }))
     }
@@ -139,15 +139,6 @@ export function MobileScreen() {
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => setReduced((prev) => !prev)}
-        aria-pressed={reduced}
-        title="Toggle reduced motion"
-        className="fixed right-4 bottom-4 z-50 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/70 text-white sm:flex"
-      >
-        {reduced ? <ZapOff className="size-4" /> : <Zap className="size-4" />}
-      </button>
       <button
         type="button"
         onClick={toggleFullscreen}
