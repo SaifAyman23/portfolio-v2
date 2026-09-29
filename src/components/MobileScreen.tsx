@@ -7,7 +7,6 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 const VIRTUAL_WIDTH = 2268
 const VIRTUAL_HEIGHT = 972
-const WIDTH_SCALE = 0.97
 const SITE_URL = 'https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/'
 
 // const LEVEL_BY_SECTION: Record<string, string> = {
@@ -135,11 +134,7 @@ export function MobileScreen() {
               width={VIRTUAL_WIDTH}
               height={VIRTUAL_HEIGHT}
               className="absolute top-0 left-0"
-              style={{
-                border: 0,
-                transform: `scale(${scale * WIDTH_SCALE}, ${scale})`,
-                transformOrigin: 'center',
-              }}
+              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
             />
           </div>
         </div>
