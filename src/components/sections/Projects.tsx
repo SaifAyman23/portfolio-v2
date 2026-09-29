@@ -2,7 +2,7 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import { Button } from '../ui/button'
 
@@ -58,6 +58,27 @@ const projects = [
     stack: ['React', 'Django', 'WebSockets'],
   },
 ]
+
+type Project = (typeof projects)[number]
+
+const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project }) {
+  return (
+    <div data-slot="project-panel" className="grid grid-cols-9 gap-5 w-full [grid-area:1/1]">
+      <div className="relative text-center flex flex-col justify-center items-center col-span-6 gap-10">
+        <p className="text-3xl max-w-3xl">
+          <span className="font-bold">{project.title} — </span>
+          {project.description}
+        </p>
+
+        <div className="flex max-w-xl flex-wrap justify-center gap-3">
+          {project.stack.map((skill) => (
+            <Tag key={skill} text={skill} className="text-white" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+})
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -509,24 +530,7 @@ export function Projects() {
 
       <div className="grid w-full">
         {projects.map((project) => (
-          <div
-            key={project.title}
-            data-slot="project-panel"
-            className="grid grid-cols-9 gap-5 w-full [grid-area:1/1]"
-          >
-            <div className="relative text-center flex flex-col justify-center items-center col-span-6 gap-10">
-              <p className="text-3xl max-w-3xl">
-                <span className="font-bold">{project.title} — </span>
-                {project.description}
-              </p>
-
-              <div className="flex max-w-xl flex-wrap justify-center gap-3">
-                {project.stack.map((skill) => (
-                  <Tag key={skill} text={skill} className="text-white" />
-                ))}
-              </div>
-            </div>
-          </div>
+          <ProjectPanel key={project.title} project={project} />
         ))}
       </div>
     </section>
