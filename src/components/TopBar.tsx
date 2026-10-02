@@ -39,7 +39,7 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
     <header
       data-slot="top-bar"
       className={cn(
-        'pointer-events-none fixed inset-x-0 top-0 z-50 flex flex-col items-center pt-3',
+        'pointer-events-none fixed inset-x-0 top-0 z-50 flex max-md:hidden flex-col items-center pt-3',
         className
       )}
     >

@@ -304,7 +304,7 @@ export function Hero() {
     <section
       id="hero"
       data-section="hero"
-      className="relative flex min-h-screen flex-col items-center justify-center gap-3 overflow-hidden px-6"
+      className="relative flex min-h-screen flex-col items-center max-sm:pt-15 sm:justify-center gap-3 overflow-hidden px-6"
     >
       {/* White screen */}
       <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-70 bg-white" />
@@ -314,22 +314,22 @@ export function Hero() {
         id="hero-intro"
         className="pointer-events-none absolute inset-0 z-80 gap-10 flex flex-col items-center justify-center"
       >
-        <span className="text-[5vw] font-cyberform font-bold leading-none text-black">
+        <span className="text-3xl sm:text-[5vw] font-cyberform font-bold leading-none text-black">
           Engines Online
         </span>
-        <div id="hero-loader" className="mx-auto flex gap-2">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <CyberFrame key={i} className="h-10 w-20" fill="var(--accent)" strokeWidth={0} />
+        <div id="hero-loader" className="mx-auto flex xl:gap-2">
+          {Array.from({ length: isMobile ? 10 : 10 }).map((_, i) => (
+            <CyberFrame key={i} className="w-[6vw] sm:h-[4vh] sm:w-[4vw]" fill="var(--accent)" strokeWidth={0} />
           ))}
         </div>
       </div>
 
       <HeroInfo
         dataSlot={'hero-info'}
-        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 gap-2 z-60`}
+        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 xl:gap-2 z-60`}
       />
 
-      {!reduced && !isMobile && blastOn && (
+      {/* {!reduced && !isMobile && blastOn && ( */}
         <div className="absolute z-0 h-full w-full opacity-30">
           <PixelBlast
             variant="circle"
@@ -351,54 +351,54 @@ export function Hero() {
             transparent
           />
         </div>
-      )}
+      {/* )} */}
 
-      <div className="z-10 mb-20 flex flex-col">
+      <div className="z-10 max-sm:mt-15 mb-20 flex flex-col">
         <JapaneseText
           id={''}
           text="サイフ"
-          className="ms-15 hero-subtitle -mb-5 text-5xl font-bold text-accent"
+          className="ms-6 xl:ms-15 hero-subtitle -mb-3 xl:-mb-5 text-2xl xl:text-5xl font-bold text-accent"
         />
 
-        <h1 id="hero-title" className="text-center xl:text-9xl">
+        <h1 id="hero-title" className="text-center text-6xl xl:text-9xl">
           Saif Eldin
         </h1>
 
         <div className="relative text-end font-ticking">
           <h2
             // id="hero-subtitle"
-            className="absolute hero-subtitle -end-20 text-accent xl:text-3xl"
+            className="absolute hero-subtitle -end-5 xl:-end-20 text-accent text-lg xl:text-3xl"
           >
             Full-Stack Engineer
           </h2>
         </div>
       </div>
 
-      <div className="grid h-[50vh] grid-cols-8 gap-3 xl:px-60">
-        <div className="col-span-2 text-start" data-slot="hero-blurb">
-          <p className="text-pretty text-2xl leading-relaxed">ASAKURA // 2087</p>
-          <p className="text-pretty text-2xl leading-relaxed">NETWORK ONLINE</p>
-          <p className="text-pretty text-2xl leading-relaxed">SIGNAL STABLE</p>
+      <div className="flex flex-col max-sm:items-center max-sm:justify-between xl:grid h-[50vh] xl:grid-cols-8 gap-3 xl:px-60">
+        <div className="xl:col-span-2 text-start" data-slot="hero-blurb">
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">ASAKURA // 2087</p>
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">NETWORK ONLINE</p>
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">SIGNAL STABLE</p>
         </div>
 
-        <div className="col-span-4">
-          <div id="hero-japanese" className=' text-center'>
+        <div className="xl:col-span-4">
+          <div id="hero-japanese" className='text-center'>
             <JapaneseText
               text="ケン"
               border
               color="black"
-              className="text-[250px] font-bold text-foreground [writing-mode:vertical-rl]"
+              className="text-9xl xl:text-[250px] font-bold text-foreground [writing-mode:vertical-rl]"
             />
           </div>
         </div>
 
         <div
           data-slot="hero-blurb"
-          className="col-span-2 flex h-full flex-col justify-end text-start"
+          className="xl:col-span-2 flex h-full flex-col justify-end text-start"
         >
-          <p className="text-pretty text-2xl leading-relaxed">SYSTEMS IN MOTION</p>
-          <p className="text-pretty text-2xl leading-relaxed">CODE / DATA / INTERFACE</p>
-          <p className="text-pretty text-2xl leading-relaxed">ROUTE: ACTIVE</p>
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">SYSTEMS IN MOTION</p>
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">CODE / DATA / INTERFACE</p>
+          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">ROUTE: ACTIVE</p>
         </div>
       </div>
     </section>

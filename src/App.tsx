@@ -23,7 +23,7 @@ function App() {
     <>
       <SeoUpdater />
       <Suspense fallback={null}>
-        <JetScene active={active} progressRef={progressRef} />
+        {/* <JetScene active={active} progressRef={progressRef} /> */}
         <MainLayout>
           <Home active={active} direction={direction} />
         </MainLayout>

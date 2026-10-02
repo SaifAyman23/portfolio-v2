@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { email, github, linkedin, resume } from '@/constants/info'
+import { useMediaQuery } from '@/hooks'
+
 
 const links = [
   { label: 'Email', href: `mailto:${email}` },
@@ -21,6 +23,9 @@ export function HeroInfo({
   fill?: string
   dataSlot?: string
 }) {
+
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
     <div className={className} data-slot={dataSlot}>
       {links.map((link) => {
@@ -28,7 +33,7 @@ export function HeroInfo({
         return (
           <Button
             key={link.label}
-            className="px-8 xl:text-lg"
+            className="px-5 py-2 sm:px-8 text-sm md:text-lg"
             stroke={stroke}
             strokeWidth={strokeWidth}
             fill={fill}

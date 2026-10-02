@@ -110,22 +110,12 @@ export function Projects() {
 
     if (panels.length === 0) return
 
-    const intro = document.querySelector<HTMLElement>('[data-slot="projects-intro"]')
-
     if (reduced) {
-      if (intro) gsap.set(intro, { opacity: 0 })
       panels.forEach((panel, i) => {
         if (i !== initialIndex.current) gsap.set(panel, { autoAlpha: 0 })
       })
       return
     }
-
-    if (!intro) return
-
-    const introSplit = SplitText.create(intro, {
-      type: 'chars',
-      aria: 'none',
-    })
 
     const splits = panels.map((panel) =>
       SplitText.create(panel.querySelector('p'), {
@@ -143,8 +133,6 @@ export function Projects() {
      * INITIAL STATES
      * ─────────────────────────────
      */
-
-    gsap.set(introSplit.chars, { opacity: 0, y: 30 })
 
     gsap.set('#projects h1', {
       opacity: 0,
@@ -201,40 +189,7 @@ export function Projects() {
 
     /*
      * ─────────────────────────────
-     * 1. LARGE CENTER TITLE
-     * ─────────────────────────────
-     */
-
-    tl.to(introSplit.chars, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.08,
-      duration: 0.6,
-      ease: 'steps(1)',
-    })
-
-    tl.to({}, { duration: 0.3 })
-
-    /*
-     * ─────────────────────────────
-     * 2. LARGE TITLE OUT
-     * ─────────────────────────────
-     */
-
-    tl.to(introSplit.chars, {
-      opacity: 0,
-      y: -30,
-      stagger: {
-        amount: 0.5,
-        from: 'start',
-      },
-      duration: 2,
-      ease: 'steps(1)',
-    })
-
-    /*
-     * ─────────────────────────────
-     * 3. PROJECT COMPOSITION IN
+     * 1. PROJECT COMPOSITION IN
      * ─────────────────────────────
      */
 
@@ -450,7 +405,6 @@ export function Projects() {
     return () => {
       tl.scrollTrigger?.kill()
       tl.kill()
-      introSplit?.revert()
       splits.forEach((split) => split.revert())
     }
   }, [])
@@ -461,13 +415,6 @@ export function Projects() {
       data-section="projects"
       className="flex relative min-h-screen flex-col items-center justify-center gap-10 px-6"
     >
-      <h2
-        data-slot="projects-intro"
-        className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center text-[180px] font-bold"
-      >
-        Projects
-      </h2>
-
       <div className="grid grid-cols-9 gap-5 w-full items-center">
         <div className="relative col-span-6">
           <h1

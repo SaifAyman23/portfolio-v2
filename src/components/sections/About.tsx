@@ -129,17 +129,18 @@ export function About() {
       data-section="about"
       className="grid min-h-screen grid-cols-6 flex-col items-center justify-center gap-3 bg-black px-6"
     >
-      <div className="col-span-2 flex">
+      <div className="col-span-2 flex relative flex-1 bg-red-100">
         <h1
           id="about-japanese-text"
-          className="rotate-90 break-keep text-[330px] font-bold text-transparent font-inter"
+          className="rotate-90 break-keep z-5 text-[330px] font-bold text-transparent font-inter"
           style={{ WebkitTextStroke: `3px var(--accent)` }}
         >
           進化
         </h1>
+        <div className='h-full w-full z-10 bg-linear-to-r from-black/50 to-transparent absolute' />
       </div>
 
-      <div className="z-10 col-span-4 mb-20 flex flex-col gap-10">
+      <div className="z-10 col-span-4 mb-20 flex flex-col gap-10 bg-red-200">
         <h1 className="about-title text-start text-white xl:text-9xl">About</h1>
 
         <div className="about-rows flex flex-col gap-10">
