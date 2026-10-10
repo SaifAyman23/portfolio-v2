@@ -1,10 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { memo, useEffect, useRef, useState } from 'react'
-
-import { Button } from '../ui/button'
+import { memo, useState } from 'react'
 
 import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
 import careerlyImg from '@/assets/img/projects/Careerly.webp'
@@ -14,7 +11,6 @@ import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
-import { prefersReducedMotion } from '@/lib/motion'
 
 const projects = [
   {
@@ -85,40 +81,11 @@ const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project 
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const reduced = prefersReducedMotion()
-  const prevIndex = useRef(activeIndex)
-  const initialIndex = useRef(activeIndex)
-
-  useEffect(() => {
-    if (!reduced) return
-    const prev = prevIndex.current
-    prevIndex.current = activeIndex
-    if (prev === activeIndex) return
-    const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
-    if (panels[prev]) {
-      gsap.to(panels[prev], { autoAlpha: 0, duration: 0.4, ease: 'power2.out', overwrite: 'auto' })
-    }
-    if (panels[activeIndex]) {
-      gsap.to(panels[activeIndex], {
-        autoAlpha: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto',
-      })
-    }
-  }, [activeIndex, reduced])
 
   useGSAP(() => {
     const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
     if (panels.length === 0) return
-
-    if (reduced) {
-      panels.forEach((panel, i) => {
-        if (i !== initialIndex.current) gsap.set(panel, { autoAlpha: 0 })
-      })
-      return
-    }
 
     const splits = panels.map((panel) =>
       SplitText.create(panel.querySelector('p'), {
@@ -448,32 +415,6 @@ export function Projects() {
                 ))}
               </div>
             </div>
-            {reduced && (
-              <div className="absolute end-3 bottom-3 z-70 flex gap-3 lg:end-30 lg:bottom-5 lg:gap-4">
-                <Button
-                  className="cursor-pointer py-5 lg:py-8"
-                  stroke="black"
-                  fill="white"
-                  strokeWidth={4}
-                  aria-label="Previous project"
-                  disabled={activeIndex === 0}
-                  onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
-                >
-                  <ChevronLeft className="font-bolder size-8 lg:size-12" />
-                </Button>
-                <Button
-                  className="cursor-pointer py-5 lg:py-8"
-                  stroke="black"
-                  fill="white"
-                  strokeWidth={4}
-                  aria-label="Next project"
-                  disabled={activeIndex === projects.length - 1}
-                  onClick={() => setActiveIndex((i) => Math.min(projects.length - 1, i + 1))}
-                >
-                  <ChevronRight className="font-bolder size-8 lg:size-12" />
-                </Button>
-              </div>
-            )}
           </div>
         </div>
 

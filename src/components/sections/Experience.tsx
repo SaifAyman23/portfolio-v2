@@ -6,7 +6,7 @@ import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
 import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
+import { splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -35,8 +35,6 @@ const DESKTOP_QUERY = '(min-width: 1024px)'
 const MOBILE_QUERY = '(max-width: 1023px)'
 
 export function Experience() {
-  const reduced = prefersReducedMotion()
-
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
@@ -159,27 +157,6 @@ export function Experience() {
 
           const nextCover = covers[i + 1]
 
-          if (reduced) {
-            tl.to({}, { duration: 1 })
-            tl.to([descriptions[i], images[i], covers[i]], {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'none',
-            })
-            tl.set([contents[i], covers[i]], { visibility: 'hidden' }, '>')
-            tl.set([covers[i + 1], contents[i + 1]], { visibility: 'visible' })
-            tl.set([covers[i + 1], descriptions[i + 1], images[i + 1]], { xPercent: 0 })
-            tl.fromTo(
-              [covers[i + 1], descriptions[i + 1], images[i + 1]],
-              { opacity: 0 },
-              { opacity: 1, duration: 0.5, ease: 'none' }
-            )
-            tl.to({}, { duration: 0.3 })
-            tl.to({}, { duration: 0.25 })
-            tl.to({}, { duration: 0.9 })
-            return
-          }
-
           // Current content smoothly leaves (cover does NOT move yet).
           tl.to(descriptions[i], {
             xPercent: -150,
@@ -255,8 +232,6 @@ export function Experience() {
        * ─────────────────────────────────────────────
        */
       mm.add(MOBILE_QUERY, () => {
-        if (reduced) return
-
         const splitTitle = splitFull('.experience-title')
 
         const contents = gsap.utils.toArray<HTMLElement>('[data-slot="experience-content"]')

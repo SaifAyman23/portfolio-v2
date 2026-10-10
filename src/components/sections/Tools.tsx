@@ -25,7 +25,6 @@ import {
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { useNearView } from '@/hooks/useNearView'
-import { prefersReducedMotion } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
@@ -397,7 +396,6 @@ function LiveKts({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
 
 export function Tools() {
   const rootRef = useRef<HTMLElement>(null)
-  const reduced = prefersReducedMotion()
   const isDesktop = useIsDesktop()
 
   const skills = useMemo(
@@ -451,10 +449,10 @@ export function Tools() {
 
   useEffect(() => {
     loops.current.forEach((tween) => {
-      if (near && !reduced) tween.play()
+      if (near) tween.play()
       else tween.pause()
     })
-  }, [near, reduced])
+  }, [near])
 
   useGSAP(
     () => {

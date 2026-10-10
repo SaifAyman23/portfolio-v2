@@ -6,17 +6,13 @@ import { SplitText } from 'gsap/SplitText'
 import about1Img from '@/assets/img/about/1.webp'
 import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { prefersReducedMotion, splitFull, splitWords } from '@/lib/motion'
+import { splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function About() {
-  const reduced = prefersReducedMotion()
-
   useGSAP(
     () => {
-      if (reduced) return
-
       const section = document.querySelector('#about')
 
       if (!section) return

@@ -10,6 +10,15 @@ import { runAxe, summarizeViolations } from '@/test/axe'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Observer)
 
+function webglAvailable(): boolean {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(canvas.getContext('webgl2') ?? canvas.getContext('webgl'))
+  } catch {
+    return false
+  }
+}
+
 function scan(ui: React.ReactNode) {
   const { container } = render(ui)
   return runAxe(container).then((results) => {
@@ -18,7 +27,7 @@ function scan(ui: React.ReactNode) {
 }
 
 describe('section a11y scans', () => {
-  it('Hero has no aXe violations', async () => {
+  it.runIf(webglAvailable())('Hero has no aXe violations', async () => {
     await scan(<Hero />)
   })
 

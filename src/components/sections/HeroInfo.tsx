@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { email, github, linkedin, resume } from '@/constants/info'
-import { useMediaQuery } from '@/hooks'
 
 
 const links = [
@@ -23,8 +22,6 @@ export function HeroInfo({
   fill?: string
   dataSlot?: string
 }) {
-
-  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <div className={className} data-slot={dataSlot}>

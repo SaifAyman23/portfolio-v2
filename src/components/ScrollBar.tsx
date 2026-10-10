@@ -17,7 +17,7 @@ const MIN_THUMB = 28
  * Routes a scroll request through Lenis when it's mounted (window.__lenis,
  * set by initSmoothScroll) so we don't fight its own per-frame position
  * updates. Falls back to native scrollTo when Lenis isn't running — e.g.
- * prefers-reduced-motion, or this component used without smooth scroll.
+ * this component used without smooth scroll.
  */
 function scrollTo(top: number, options?: { immediate?: boolean }) {
   const lenis = getLenis()

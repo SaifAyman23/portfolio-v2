@@ -1,32 +1,5 @@
 import { SplitText } from 'gsap/SplitText'
 
-/**
- * Manual override: true forces reduced motion, false forces full motion,
- * null (default) follows the OS setting. Changing it after timelines are
- * created needs a reload to take effect.
- */
-export let reduceMotion: boolean | null = null
-
-export function prefersReducedMotion(): boolean {
-  if (reduceMotion !== null) return reduceMotion
-  if (typeof window !== 'undefined') {
-    const param = new URLSearchParams(window.location.search).get('reduce_motion')
-    if (param === 'true') return true
-    if (param === 'false') return false
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  }
-  return false
-}
-
-export function setReducedMotion(value: boolean | null): void {
-  reduceMotion = value
-}
-
-export function toggleReducedMotion(): boolean {
-  reduceMotion = !prefersReducedMotion()
-  return reduceMotion as boolean
-}
-
 type SplitTarget = Parameters<typeof SplitText.create>[0]
 
 const WORD_SPLIT = {
