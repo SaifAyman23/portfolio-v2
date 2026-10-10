@@ -1,5 +1,4 @@
-import { Maximize, Minimize } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 
@@ -29,21 +28,6 @@ export function MobileScreen() {
   const breakpoint = useMediaQuery()
   const isMobile = breakpoint === 'xs' || breakpoint === 'sm'
   const [reduced] = useState(isMobile)
-  const [isFullscreen, setIsFullscreen] = useState(false)
-
-  useEffect(() => {
-    const onChange = () => setIsFullscreen(document.fullscreenElement !== null)
-    document.addEventListener('fullscreenchange', onChange)
-    return () => document.removeEventListener('fullscreenchange', onChange)
-  }, [])
-
-  const toggleFullscreen = useCallback(() => {
-    if (document.fullscreenElement) {
-      void document.exitFullscreen().catch(() => {})
-    } else {
-      void document.documentElement.requestFullscreen?.().catch(() => {})
-    }
-  }, [])
 
   useEffect(() => {
     const el = frameRef.current
@@ -116,38 +100,33 @@ export function MobileScreen() {
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
-      <div className="absolute top-1/2 left-1/2 grid h-[100dvw] w-[100dvh] -translate-x-1/2 -translate-y-1/2 rotate-90 grid-cols-1 items-center justify-center gap-4 p-4 sm:static sm:h-full sm:w-full sm:translate-x-0 sm:translate-y-0 sm:rotate-0 sm:p-8">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 sm:p-8">
         {/* <div className="flex h-full flex-col items-center justify-between overflow-hidden py-10 sm:hidden">
           <p className="font-ticking text-md tracking-[0.3em] text-white/60">Level</p>
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
           <p className="mt-2 font-ticking text-md tracking-[0.2em] text-accent">{label}</p>
         </div> */}
-        <div ref={frameRef} className="flex h-full w-full items-center justify-center">
+        <div ref={frameRef} className="flex h-full w-full min-h-0 items-center justify-center">
           <div
-            className="relative shrink-0 overflow-hidden rounded-2xl"
-            style={{ width: size.width, height: size.height }}
+            className={`relative overflow-hidden rounded-2xl ${isMobile ? 'h-full w-full' : 'shrink-0'}`}
+            style={isMobile ? undefined : { width: size.width, height: size.height }}
           >
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
               src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
-              width={VIRTUAL_WIDTH}
-              height={VIRTUAL_HEIGHT}
-              className="absolute top-0 left-0"
-              style={{ border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+              width={isMobile ? undefined : VIRTUAL_WIDTH}
+              height={isMobile ? undefined : VIRTUAL_HEIGHT}
+              className={isMobile ? 'absolute inset-0 h-full w-full' : 'absolute top-0 left-0'}
+              style={
+                isMobile
+                  ? { border: 0 }
+                  : { border: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }
+              }
             />
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        onClick={toggleFullscreen}
-        aria-pressed={isFullscreen}
-        title="Toggle fullscreen"
-        className="fixed bottom-4 left-4 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/70 text-white sm:hidden"
-      >
-        {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
-      </button>
     </div>
   )
 }
