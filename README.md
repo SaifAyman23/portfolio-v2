@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/"><img src="https://img.shields.io/badge/Live-Demo-b50000?style=for-the-badge&logo=github&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://saifayman23.github.io/portfolio/v2/"><img src="https://img.shields.io/badge/Live-Demo-b50000?style=for-the-badge&logo=github&logoColor=white" alt="Live Demo" /></a>
   <a href="https://github.com/SaifAyman23/portfolio-v2/actions"><img src="https://img.shields.io/github/actions/workflow/status/SaifAyman23/portfolio-v2/ci.yml?branch=main&label=CI&style=flat-square&logo=github" alt="CI" /></a>
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TS" />
@@ -35,7 +35,7 @@ Portfolio for Saif Eldin Ayman — the code is the first impression. Dark, atmos
 - **Tools** — radar sweep, tick ring, live meters (paused off-screen), skill switcher
 - **Contact / Footer** — chamfered cyber shapes, footer reveal, expandable widget
 
-Live: **https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/**
+Live: **https://saifayman23.github.io/portfolio/v2/**
 
 ## // Stack
 
