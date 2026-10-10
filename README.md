@@ -1,180 +1,116 @@
-# REACT RAPIDO
+<p align="center">
+  <img src="public/og.png" alt="Saif Eldin Ayman — portfolio" width="520" />
+</p>
 
-**Starter that stays out of your way. React 19 + TS 5 + Vite 7 + Tailwind v4.**
+<p align="center">
+  <b>Saif Eldin Ayman</b> — Full-stack engineer<br/>
+  React, Django, PostgreSQL, real-time systems. No filler.
+</p>
 
-This is the starter I wish I had. No tutorial project. No demo fluff. Just a clean base that handles auth, routing, and performance so you can start building the real thing on day one.
+<p align="center">
+  <a href="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/"><img src="https://img.shields.io/badge/Live-Demo-b50000?style=for-the-badge&logo=github&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://github.com/SaifAyman23/portfolio-v2/actions"><img src="https://img.shields.io/github/actions/workflow/status/SaifAyman23/portfolio-v2/ci.yml?branch=main&label=CI&style=flat-square&logo=github" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TS" />
+  <img src="https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/GSAP-3-88CE02?style=flat-square&logo=gsap&logoColor=white" alt="GSAP" />
+</p>
 
-| RR // 01 | REACT RAPIDO V1.0 2026 |
-| -------- | ---------------------- |
-| Build    | Faster                 |
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=react,ts,tailwind,vite,threejs,python,django,postgres,redis,docker,figma&perline=11" alt="stack icons" />
+</p>
 
----
+<p align="center">
+  <code>react</code> <code>typescript</code> <code>vite</code> <code>tailwind</code> <code>gsap</code> <code>three</code> <code>lenis</code> <code>radix-ui</code> <code>vitest</code>
+</p>
 
-### TAGS
+## // What this is
 
-![React](https://img.shields.io/badge/REACT-19-000000?style=flat-square&labelColor=8B5CF6&color=000000)
-![TypeScript](https://img.shields.io/badge/TYPESCRIPT-5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
-![Vite](https://img.shields.io/badge/VITE-7-000000?style=flat-square&labelColor=000000&color=8B5CF6)
-![Tailwind](https://img.shields.io/badge/TAILWIND-v4-000000?style=flat-square&labelColor=000000&color=8B5CF6)
-![Zustand](https://img.shields.io/badge/ZUSTAND-persist-000000?style=flat-square)
-![TanStack](https://img.shields.io/badge/TANSTACK-QUERY_5-000000?style=flat-square&labelColor=8B5CF6&color=000000)
-![CI](https://img.shields.io/badge/CI-PASSING-000000?style=flat-square&labelColor=000000&color=22C55E)
-![LCP](https://img.shields.io/badge/LCP-%E2%89%A42.5s-000000?style=flat-square)
-![CLS](https://img.shields.io/badge/CLS-0.00-000000?style=flat-square)
-![License](https://img.shields.io/badge/LICENSE-MIT-000000?style=flat-square)
+Portfolio for Saif Eldin Ayman — the code is the first impression. Dark, atmospheric, over-engineered on purpose.
 
-`CLEAN` `FAST` `SOLID`
+- **Hero** — WebGL `PixelBlast` backdrop (guarded, DPR-capped), staggered intro, R3F jet flyby on `xl`+
+- **About / Experience** — pinned scrub on desktop, scrub-no-pin on small screens, split-char type-ins
+- **Projects** — pinned showcase: outline title, cover crossfades, scroll-driven project switching
+- **Tools** — radar sweep, tick ring, live meters (paused off-screen), skill switcher
+- **Contact / Footer** — chamfered cyber shapes, footer reveal, expandable widget
 
----
+Live: **https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/**
 
-### TABLE OF CONTENTS
+## // Stack
 
-| #   | SECTION      |
-| --- | ------------ |
-| 01  | SPECS        |
-| 02  | QUICK START  |
-| 03  | STRUCTURE    |
-| 04  | STACK        |
-| 05  | ROUTING      |
-| 06  | QUALITY GATE |
-| 07  | SECURITY     |
-| 08  | DOCS         |
+| Layer     | Tech                                                  |
+| --------- | ----------------------------------------------------- |
+| Framework | **React 19** + **TypeScript (strict)**                |
+| Bundler   | **Vite 7** — HMR, `manualChunks`                      |
+| Styling   | **Tailwind CSS v4** + CSS variable tokens             |
+| UI        | **Radix UI** + custom cyber primitives + **Lucide**   |
+| Motion    | **GSAP** + **Lenis** — `transform` and `opacity` only |
+| Shaders   | **three.js** / **R3F** (`PixelBlast`, jet)            |
+| Testing   | **Vitest + RTL + axe-core**                           |
 
----
-
-### 01 SPECS
-
-| Metric | Value                    | Status  |
-| ------ | ------------------------ | ------- |
-| LCP    | 2.5s                     | GOOD    |
-| CLS    | 0.00                     | PERFECT |
-| TBT    | 200ms                    | FAST    |
-| AUTH   | JWT + OTP                | READY   |
-| SEO    | per-route meta + sitemap | READY   |
-| A11Y   | axe-core + focus ring    | PASS    |
-
-If you blow the budget by 100KB, the build fails. On purpose.
-
----
-
-### 02 QUICK START
+## // Quick start
 
 ```bash
-# 01 clone
-git clone https://github.com/SaifAyman23/react-rapido my-app
-cd my-app
-
-# 02 install
-npm i
-
-# 03 env
-cp .env.example .env
-# set VITE_API_URL, VITE_SITE_URL, VITE_APP_NAME
-
-# 04 dev
-npm run dev
-# http://localhost:5173
+git clone https://github.com/SaifAyman23/portfolio-v2.git
+cd portfolio-v2
+npm install
+npm run dev            # http://localhost:5173
 ```
 
-| Command         | Time               |
-| --------------- | ------------------ |
-| `npm run dev`   | HMR 40ms           |
-| `npm run check` | type/lint/fmt/test |
+> Node 20+ / npm 10+
 
----
+## // Scripts
 
-### 03 STRUCTURE
+| Command             | What it does                                    |
+| ------------------- | ----------------------------------------------- |
+| `npm run dev`       | Dev + HMR                                       |
+| `npm run build`     | `tsc -b && vite build` to `dist/`               |
+| `npm run preview`   | Preview `dist/`                                 |
+| `npm run check`     | `typecheck, lint, format:check, test`           |
+| `npm run typecheck` | `tsc -b --noEmit`                               |
+| `npm run lint`      | ESLint flat                                     |
+| `npm run format`    | Prettier write                                  |
+| `npm run test`      | Vitest + axe                                    |
+| `npm run img:webp`  | Convert images to WebP (`scripts/img2webp.mjs`) |
+| `npm run deploy`    | Build + publish `dist/` to the token path       |
+
+## // Structure
 
 ```
 src/
-├── api/               # 3-file pattern per domain
-│   ├── axiosInstance.ts
-│   └── accounts/      # endpoints.ts + hooks.ts + index.ts
 ├── components/
-│   ├── landing/       # LandingPage with marquee and spec sheet
-│   ├── auth/          # AuthLayout, FormError, OAuthButtons
-│   ├── bits/          # AccordionGallery, FlowingMenu, ScrollReveal
-│   ├── ui/            # shadcn + Radix (button, card, input, FadeImage, stack)
-│   └── theme/         # ThemeProvider
-├── hooks/             # useDebounce, useIsMobile
-├── lib/               # constants, seo, validators, color, smoothScroll, utils
-├── pages/             # Home (thin) + auth/* (lazy)
-├── store/auth/        # Zustand persist
-└── test/              # axe, setup
+│   ├── sections/       # Hero, About, Experience, Projects, Tools, Contact, Footer
+│   ├── jet/            # R3F jet scene (xl only, WebGL-guarded)
+│   ├── ui/             # CyberFrame, CyberImage, JapaneseText, Tag, primitives
+│   └── PixelBlast.tsx  # WebGL backdrop
+├── hooks/              # useMediaQuery, useNearView, useSectionTracker
+├── lib/                # seo, motion, smoothScroll, webgl, scroll-refresh, utils
+├── pages/              # Home (thin orchestrator)
+└── test/               # Vitest + axe
 ```
 
-Pages stay thin. Components get props, not hooks. That is how it stays readable six months from now.
+Full conventions in [`AGENTS.md`](./AGENTS.md). Playbooks in [`docs/`](./docs).
 
----
+## // Perf and SEO
 
-### 04 STACK
+- WebP everywhere (`npm run img:webp`), explicit frame sizes, `loading="lazy"` below fold
+- Fonts non-blocking with `font-display: swap`, skeleton until React mounts
+- `manualChunks` splits, heavy 3D behind WebGL guards + off-screen pauses
+- `robots.txt` + `sitemap.xml` via Vite plugin, `SeoUpdater` per route
 
-| LAYER     | CHOICE                                                    |
-| --------- | --------------------------------------------------------- |
-| Framework | React 19 + TS 5 strict                                    |
-| Bundler   | Vite 7 + manualChunks (react / query / radix / gsap)      |
-| Styling   | Tailwind v4 + CSS vars + `border-[3px] border-black`      |
-| State     | Zustand persist + TanStack Query 5                        |
-| HTTP      | Axios + interceptors + `extractErrorMessage`              |
-| Router    | React Router 7 lazy + `basename`                          |
-| FX        | GSAP + Lenis on demand, respects `prefers-reduced-motion` |
+## // Env
 
-Accent `#8B5CF6` on `bg-white` and `bg-black`. High contrast, WCAG AA.
+All optional, typed in `src/vite-env.d.ts`:
 
----
-
-### 05 ROUTING
-
-```tsx
-// App.tsx, lazy and split. No bloat in the first chunk.
-const Home = lazy(() => import('@/pages/Home')) // LandingPage 17KB
-const Login = lazy(() => import('@/pages/auth/Login'))
+```
+VITE_API_URL=https://api.example.com/api/v1
+VITE_APP_NAME=Portfolio
+VITE_SITE_URL=https://saifayman23.github.io/portfolio/v2
 ```
 
-Every route is its own chunk. Heavy libs never touch the first paint.
+## // Deploy
 
----
+`npm run deploy` builds and pushes `dist/` to the token path via `gh-pages --dest`. The frame shells (`/v2/`, `/v0/`) assemble in the sibling `portfolio` repo and publish with `gh-pages --add` so hashed assets are never pruned.
 
-### 06 QUALITY GATE
-
-```bash
-npm run check   # typecheck + lint + format:check + test
-npm run typecheck
-npm run lint
-npm run format
-npm run test        # Vitest + RTL + axe-core
-npm run build       # to dist/
-```
-
-CI runs the same gate on every push. `.github/workflows/ci.yml` does `npm ci` then typecheck, lint, format, test, build. Red means do not merge.
-
----
-
-### 07 SECURITY
-
-| Check                        | Status |
-| ---------------------------- | ------ |
-| VITE_API_URL points to prod  | [ ]    |
-| CORS allows prod origin only | [ ]    |
-| HTTPS everywhere             | [ ]    |
-| No secrets in client bundle  | [ ]    |
-| CSP headers set              | [ ]    |
-
----
-
-### 08 DOCS
-
-| File                    | Covers                                    |
-| ----------------------- | ----------------------------------------- |
-| `docs/Performance.md`   | LCP, INP, CLS, TBT, WebP 82, vendor split |
-| `docs/SEO.md`           | crawlability, meta, JSON-LD               |
-| `docs/Accessibility.md` | skip link, focus, axe                     |
-| `docs/BestPractices.md` | 3-file API, thin pages, CI                |
-
----
-
-| © 2026 REACT RAPIDO   | SHIP IT |
-| --------------------- | ------- |
-| RAW // CLEAN // SOLID | MIT     |
-
-_Built to be forked. Make it yours._
+SPA: rewrite all paths to `index.html`.
