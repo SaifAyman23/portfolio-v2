@@ -27,7 +27,6 @@ export function MobileScreen() {
   const [, setSectionId] = useState('hero')
   const breakpoint = useMediaQuery()
   const isMobile = breakpoint === 'xs' || breakpoint === 'sm'
-  const [reduced] = useState(isMobile)
 
   useEffect(() => {
     const el = frameRef.current
@@ -114,7 +113,7 @@ export function MobileScreen() {
             <iframe
               ref={iframeRef}
               title="Saif Eldin Ayman portfolio desktop preview"
-              src={reduced ? `${SITE_URL}?reduce_motion=true` : SITE_URL}
+              src={SITE_URL}
               width={isMobile ? undefined : VIRTUAL_WIDTH}
               height={isMobile ? undefined : VIRTUAL_HEIGHT}
               className={isMobile ? 'absolute inset-0 h-full w-full' : 'absolute top-0 left-0'}
