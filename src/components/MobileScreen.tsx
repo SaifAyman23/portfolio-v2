@@ -100,7 +100,7 @@ export function MobileScreen() {
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-black text-white">
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 sm:p-8">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-2 sm:gap-4 sm:p-8">
         {/* <div className="flex h-full flex-col items-center justify-between overflow-hidden py-10 sm:hidden">
           <p className="font-ticking text-md tracking-[0.3em] text-white/60">Level</p>
           <p className="font-cyberform text-[96px] leading-none text-white">{level}</p>
