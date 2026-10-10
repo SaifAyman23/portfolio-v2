@@ -112,7 +112,7 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
       fill="rgba(127, 127, 127, 0.12)"
       contentClassName="h-full p-1"
       className={cn(
-        'fixed top-24 right-3 bottom-6 z-50 w-3 backdrop-blur-md',
+        'fixed top-24 right-3 bottom-6 z-50 hidden w-3 backdrop-blur-md xl:block',
         !scrollable && 'invisible',
         className
       )}

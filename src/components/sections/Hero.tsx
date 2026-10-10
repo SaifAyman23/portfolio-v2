@@ -75,6 +75,20 @@ export function Hero() {
 
     const infoItems = Array.from(info.children)
 
+    // Once the intro is over the text goes back to normal, unsplit markup. The line splits are
+    // fixed at the width the page had at load, so keeping them would leave stale line breaks
+    // after a resize or a phone rotation.
+    let splitsReverted = false
+    const revertSplits = () => {
+      if (splitsReverted) return
+      splitsReverted = true
+      introSplit.revert()
+      titleSplit.revert()
+      subtitleSplit.revert()
+      japaneseSplit.revert()
+      paragraphSplits.forEach((s) => s.revert())
+    }
+
     gsap.set(titleSplit.chars, {
       opacity: 0,
       // y: 20,
@@ -124,6 +138,7 @@ export function Hero() {
       paused: true,
       onComplete: () => {
         restoreScroll()
+        revertSplits()
       },
     })
 
@@ -141,6 +156,7 @@ export function Hero() {
       started = true
       restoreScroll()
       tl.progress(1)
+      revertSplits()
     }
 
     window.addEventListener('scroll', skip, { passive: true, once: true })
@@ -292,19 +308,16 @@ export function Hero() {
       lenis?.start()
       ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
       ScrollTrigger.refresh()
-      introSplit.revert()
-      titleSplit.revert()
-      subtitleSplit.revert()
-      japaneseSplit.revert()
-      paragraphSplits.forEach((s) => s.revert())
+      revertSplits()
     }
   }, [])
 
   return (
+    // svh = the visible height on mobile (ignores the collapsing browser bar)
     <section
       id="hero"
       data-section="hero"
-      className="relative flex min-h-screen flex-col items-center max-sm:pt-15 sm:justify-center gap-3 overflow-hidden px-6"
+      className="relative flex min-h-[100svh] flex-col items-center gap-3 overflow-hidden px-6 max-sm:pt-15 sm:justify-center sm:px-10 xl:px-6"
     >
       {/* White screen */}
       <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-70 bg-white" />
@@ -314,91 +327,118 @@ export function Hero() {
         id="hero-intro"
         className="pointer-events-none absolute inset-0 z-80 gap-10 flex flex-col items-center justify-center"
       >
-        <span className="text-3xl sm:text-[5vw] font-cyberform font-bold leading-none text-black">
+        <span className="text-[clamp(1.5rem,8vw,1.875rem)] sm:text-[5vw] font-cyberform font-bold leading-none text-black">
           Engines Online
         </span>
         <div id="hero-loader" className="mx-auto flex xl:gap-2">
           {Array.from({ length: isMobile ? 10 : 10 }).map((_, i) => (
-            <CyberFrame key={i} className="w-[6vw] sm:h-[4vh] sm:w-[4vw]" fill="var(--accent)" strokeWidth={0} />
+            <CyberFrame
+              key={i}
+              className="w-[6vw] sm:h-[4vh] sm:w-[4vw]"
+              fill="var(--accent)"
+              strokeWidth={0}
+            />
           ))}
         </div>
       </div>
 
+      {/* Below xl the info sits in the page flow at the top and may wrap; from xl it is the rotated side bar */}
       <HeroInfo
         dataSlot={'hero-info'}
-        className={`flex xl:absolute text-foreground -start-50 xl:rotate-90 xl:gap-2 z-60`}
+        className={`flex flex-wrap justify-center xl:flex-nowrap xl:justify-start xl:absolute text-foreground -start-50 xl:rotate-90 xl:gap-2 z-60`}
       />
 
       {/* {!reduced && !isMobile && blastOn && ( */}
-        <div className="absolute z-0 h-full w-full opacity-30">
-          <PixelBlast
-            variant="circle"
-            pixelSize={4}
-            color="#b50000"
-            patternScale={4}
-            patternDensity={1}
-            pixelSizeJitter={2}
-            enableRipples
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.5}
-            liquid={false}
-            liquidStrength={0.12}
-            liquidRadius={1.2}
-            liquidWobbleSpeed={5}
-            speed={2}
-            edgeFade={0.25}
-            transparent
-          />
-        </div>
+      <div className="absolute z-0 h-full w-full opacity-30">
+        <PixelBlast
+          variant="circle"
+          pixelSize={4}
+          color="#b50000"
+          patternScale={4}
+          patternDensity={1}
+          pixelSizeJitter={2}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid={false}
+          liquidStrength={0.12}
+          liquidRadius={1.2}
+          liquidWobbleSpeed={5}
+          speed={2}
+          edgeFade={0.25}
+          transparent
+        />
+      </div>
       {/* )} */}
 
-      <div className="z-10 max-sm:mt-15 mb-20 flex flex-col">
+      {/* Name block */}
+      <div className="z-10 mb-10 flex flex-col max-sm:mt-15 sm:mb-14 xl:mb-20">
         <JapaneseText
           id={''}
           text="サイフ"
-          className="ms-6 xl:ms-15 hero-subtitle -mb-3 xl:-mb-5 text-2xl xl:text-5xl font-bold text-accent"
+          className="ms-4 sm:ms-6 xl:ms-15 hero-subtitle -mb-2 sm:-mb-3 xl:-mb-5 text-xl sm:text-3xl xl:text-5xl font-bold text-accent"
         />
 
-        <h1 id="hero-title" className="text-center text-6xl xl:text-9xl">
+        {/* Scales with the screen width so the name never overflows a narrow phone, and stops at the original size from xl */}
+        <h1
+          id="hero-title"
+          className="text-center text-[clamp(2.5rem,13vw,7rem)] xl:text-9xl"
+        >
           Saif Eldin
         </h1>
 
         <div className="relative text-end font-ticking">
           <h2
             // id="hero-subtitle"
-            className="absolute hero-subtitle -end-5 xl:-end-20 text-accent text-lg xl:text-3xl"
+            className="absolute hero-subtitle -end-2 sm:-end-6 xl:-end-20 text-base sm:text-xl lg:text-2xl xl:text-3xl text-accent"
           >
             Full-Stack Engineer
           </h2>
         </div>
       </div>
 
-      <div className="flex flex-col max-sm:items-center max-sm:justify-between xl:grid h-[50vh] xl:grid-cols-8 gap-3 xl:px-60">
-        <div className="xl:col-span-2 text-start" data-slot="hero-blurb">
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">ASAKURA // 2087</p>
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">NETWORK ONLINE</p>
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">SIGNAL STABLE</p>
+      {/* Bottom block:
+          - below lg: one centered column, first blurb, then the Japanese text, then the second blurb
+          - from lg: a three-part row, with the Japanese text between the blurbs
+          - from xl: the original 8-column grid and its wide side padding */}
+      <div className="grid w-full grid-cols-1 justify-items-center gap-y-4 sm:gap-y-6 lg:h-[50vh] lg:grid-cols-8 lg:justify-items-stretch lg:gap-3 lg:px-10 xl:px-60">
+        <div className="text-start lg:col-span-2" data-slot="hero-blurb">
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            ASAKURA // 2087
+          </p>
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            NETWORK ONLINE
+          </p>
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            SIGNAL STABLE
+          </p>
         </div>
 
-        <div className="xl:col-span-4">
-          <div id="hero-japanese" className='text-center'>
+        <div className="lg:col-span-4">
+          <div id="hero-japanese" className="text-center">
             <JapaneseText
               text="ケン"
               border
               color="black"
-              className="text-9xl xl:text-[250px] font-bold text-foreground [writing-mode:vertical-rl]"
+              className="text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] font-bold text-foreground [writing-mode:vertical-rl]"
             />
           </div>
         </div>
 
         <div
           data-slot="hero-blurb"
-          className="xl:col-span-2 flex h-full flex-col justify-end text-start"
+          className="flex h-full flex-col justify-start text-start lg:col-span-2 lg:justify-end"
         >
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">SYSTEMS IN MOTION</p>
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">CODE / DATA / INTERFACE</p>
-          <p className="text-pretty text-lg xl:text-2xl leading-relaxed">ROUTE: ACTIVE</p>
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            SYSTEMS IN MOTION
+          </p>
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            CODE / DATA / INTERFACE
+          </p>
+          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+            ROUTE: ACTIVE
+          </p>
         </div>
       </div>
     </section>

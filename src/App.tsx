@@ -8,6 +8,7 @@ import { useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
 import { SeoUpdater } from '@/components/SeoUpdater'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Observer)
 
@@ -18,12 +19,13 @@ const JetScene = lazy(() =>
 
 function App() {
   const { active, direction, progressRef } = useSectionTracker()
+  const isXl = useMediaQuery('(min-width: 1280px)')
 
   return (
     <>
       <SeoUpdater />
       <Suspense fallback={null}>
-        {/* <JetScene active={active} progressRef={progressRef} /> */}
+        {isXl && <JetScene active={active} progressRef={progressRef} />}
         <MainLayout>
           <Home active={active} direction={direction} />
         </MainLayout>

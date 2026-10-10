@@ -24,7 +24,7 @@ export function Tag({
   return (
     <CyberFrame
       data-slot="tag"
-      className={cn('inline-flex', className)}
+      className={cn('inline-flex text-xl', className)}
       contentClassName={cn('px-3 py-1', contentClassName)}
       stroke={stroke}
       strokeWidth={strokeWidth}
@@ -32,7 +32,7 @@ export function Tag({
     >
       <span
         data-slot="tag-text"
-        className={cn('font-ticking text-xl px-5 tracking-wide', textClassName)}
+        className={cn('font-ticking px-5 tracking-wide', textClassName)}
       >
         {text}
       </span>

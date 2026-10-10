@@ -39,6 +39,23 @@ function wedgePath(cx: number, cy: number, r: number, startDeg: number, spanDeg:
   return `M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${spanDeg > 180 ? 1 : 0} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`
 }
 
+/** True from the `lg` breakpoint (1024px) and up. */
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const onChange = () => setIsDesktop(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  return isDesktop
+}
+
 export type RadarProps = {
   size?: number
   rings?: Array<{ r: number; color: string }>
@@ -120,7 +137,7 @@ export function Radar({
         <div
           data-slot="radar-icon"
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center max-lg:[&_svg]:size-20"
         >
           {children ?? <span className="block h-3 w-3 rounded-full bg-accent" />}
         </div>
@@ -130,7 +147,8 @@ export function Radar({
 }
 
 export type TickRingProps = {
-  size?: number
+  /** px number, or any CSS size (e.g. "100%") */
+  size?: number | string
   ticks?: number
   color?: string
   strokeWidth?: number
@@ -380,6 +398,7 @@ function LiveKts({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
 export function Tools() {
   const rootRef = useRef<HTMLElement>(null)
   const reduced = prefersReducedMotion()
+  const isDesktop = useIsDesktop()
 
   const skills = useMemo(
     () => ({
@@ -541,24 +560,30 @@ export function Tools() {
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="relative flex h-screen z-900 flex-col items-center justify-center gap-8 bg-transparent px-6 py-10"
+      className="relative z-900 flex h-svh flex-col items-center justify-center gap-8 bg-transparent px-5 py-6 lg:h-screen lg:px-6 lg:py-10"
     >
-      <div className="grid h-full w-full gap-10 md:grid-cols-12">
-        <div className="relative col-span-3 flex flex-col items-center justify-between py-10">
+      {/*
+        Small screens: one vertical column → skills panel, big circle, radar (spread out).
+        The KTS bar, Cool-Ometer and the "TOT ACQ" label are hidden.
+        lg and up: original 3-column layout.
+      */}
+      <div className="flex h-full w-full flex-col items-center justify-between gap-4 lg:grid lg:grid-cols-12 lg:gap-10">
+        {/* `contents` on small screens lets the panel and radar join the column and be re-ordered */}
+        <div className="contents lg:relative lg:col-span-3 lg:flex lg:flex-col lg:items-center lg:justify-between lg:py-10">
           <CyberFrame
             data-slot="skills-panel"
-            className="w-3/6 relative"
+            className="relative order-1 w-3/5 sm:w-2/5 lg:order-none lg:w-3/6"
             strokeWidth={3}
             stroke="black"
           >
-            <div className="flex flex-col items-center gap-2 z-60">
+            <div className="z-60 flex flex-col items-center gap-1 lg:gap-2">
               {activeSkillSet.skills.map((skill) => (
                 <button
                   key={skill.title}
                   data-slot="skill-btn"
                   type="button"
                   className={cn(
-                    'flex cursor-pointer items-center gap-3 font-motivate text-lg',
+                    'flex cursor-pointer items-center gap-3 font-motivate text-sm lg:text-lg',
                     activeSkill.title === skill.title && 'text-accent'
                   )}
                   onClick={() => setActiveSkill(skill)}
@@ -571,24 +596,50 @@ export function Tools() {
               <p className="text-accent tracking-wider">{activeSkillSet.title}</p>
             </div>
           </CyberFrame>
-          <Radar showIcon={true} children={activeSkill.icon} />
+          <Radar
+            className="order-3 lg:order-none"
+            size={isDesktop ? 320 : 200}
+            showIcon={isDesktop}
+            children={isDesktop ? activeSkill.icon : undefined}
+          />
         </div>
-        <div className="col-span-6 flex flex-col items-center justify-center">
-          <div className="h-5/6 relative w-full flex justify-center items-end mb-5">
-            <TickRing size={670} />
-            <div className="absolute end-20">
+
+        {/* Big circle: fills all the space left between the panel and the radar on small screens */}
+        <div className="order-2 flex min-h-0 w-full flex-1 flex-col items-center justify-center lg:order-none lg:col-span-6 lg:flex-none">
+          <div className="relative flex min-h-0 w-full flex-1 items-center justify-center max-lg:[container-type:size] lg:mb-5 lg:h-5/6 lg:flex-none lg:items-end">
+            <div className="relative size-[min(100cqw,100cqh)] lg:size-[670px]">
+              <TickRing size="100%" />
+              {/* Small screens: the active skill icon sits in the middle of the big circle
+                  (the radar below stays empty). Uses the same data-slot so it keeps the
+                  same pop-in animation when the skill changes. */}
+              {!isDesktop && (
+                <div
+                  data-slot="radar-icon"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center [&_svg]:size-[40%]"
+                >
+                  {activeSkill.icon}
+                </div>
+              )}
+            </div>
+            <div className="absolute end-20 hidden lg:block">
               <p className="text-accent text-xl">
                 1.2 km <br /> TOT ACQ
               </p>
             </div>
           </div>
-          <div className="mx-auto flex items-end h-1/6 w-2/3">
-            <LiveKts loops={loops} />
+          {isDesktop && (
+            <div className="mx-auto flex h-1/6 w-2/3 items-end">
+              <LiveKts loops={loops} />
+            </div>
+          )}
+        </div>
+
+        {isDesktop && (
+          <div className="col-span-3 flex items-center justify-center">
+            <LiveCoolMeter loops={loops} />
           </div>
-        </div>
-        <div className="col-span-3 flex justify-center items-center">
-          <LiveCoolMeter loops={loops} />
-        </div>
+        )}
       </div>
     </section>
   )

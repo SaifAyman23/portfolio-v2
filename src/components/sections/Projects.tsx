@@ -63,16 +63,19 @@ type Project = (typeof projects)[number]
 
 const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project }) {
   return (
-    <div data-slot="project-panel" className="grid grid-cols-9 gap-5 w-full [grid-area:1/1]">
-      <div className="relative text-center flex flex-col justify-center items-center col-span-6 gap-10">
-        <p className="text-3xl max-w-3xl">
+    <div
+      data-slot="project-panel"
+      className="grid h-full w-full grid-cols-1 gap-5 [grid-area:1/1] lg:grid-cols-9"
+    >
+      <div className="relative flex flex-col items-center justify-evenly gap-6 text-center lg:col-span-6 lg:justify-center lg:gap-10">
+        <p className="max-w-3xl text-xl leading-snug sm:text-3xl lg:text-3xl lg:leading-normal">
           <span className="font-bold">{project.title} — </span>
           {project.description}
         </p>
 
-        <div className="flex max-w-xl flex-wrap justify-center gap-3">
+        <div className="flex max-w-xl flex-wrap justify-center gap-1.5 lg:gap-3">
           {project.stack.map((skill) => (
-            <Tag key={skill} text={skill} className="text-white" />
+            <Tag key={skill} text={skill} className="text-white max-sm:text-[16px] sm:max-lg:text-xs" />
           ))}
         </div>
       </div>
@@ -413,12 +416,16 @@ export function Projects() {
     <section
       id="projects"
       data-section="projects"
-      className="flex relative min-h-screen flex-col items-center justify-center gap-10 px-6"
+      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 lg:min-h-screen lg:justify-center lg:gap-10 lg:py-0"
     >
-      <div className="grid grid-cols-9 gap-5 w-full items-center">
-        <div className="relative col-span-6">
+      {/*
+        Mobile / tablet: single column  →  image, then description, then tags.
+        lg and up: original 9-column layout.
+      */}
+      <div className="relative grid w-full grid-cols-1 items-center gap-5 lg:grid-cols-9">
+        <div className="relative lg:col-span-6">
           <h1
-            className="absolute start-20 top-20 -rotate-30 text-transparent xl:text-[150px]"
+            className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[150px]"
             style={{
               WebkitTextStroke: '3px var(--foreground)',
             }}
@@ -426,14 +433,14 @@ export function Projects() {
             Projects
           </h1>
 
-          <div className="flex relative justify-end pe-20">
+          <div className="relative flex justify-center pt-16 sm:pt-20 lg:justify-end lg:pe-20 lg:pt-0">
             <div data-slot="project-image">
               <CyberImage
                 src={projects[activeIndex].image}
                 alt={projects[activeIndex].title}
                 strokeWidth={0}
                 stroke="transparent"
-                frameClassName="w-2xl h-100"
+                frameClassName="h-[32svh] w-[88vw] max-w-xl lg:h-100 lg:w-2xl lg:max-w-none"
               />
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0">
                 {projects.map((project) => (
@@ -442,9 +449,9 @@ export function Projects() {
               </div>
             </div>
             {reduced && (
-              <div className="absolute bottom-5 end-30 z-70 flex gap-4">
+              <div className="absolute end-3 bottom-3 z-70 flex gap-3 lg:end-30 lg:bottom-5 lg:gap-4">
                 <Button
-                  className="py-8 cursor-pointer"
+                  className="cursor-pointer py-5 lg:py-8"
                   stroke="black"
                   fill="white"
                   strokeWidth={4}
@@ -452,10 +459,10 @@ export function Projects() {
                   disabled={activeIndex === 0}
                   onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
                 >
-                  <ChevronLeft className="size-12 font-bolder" />
+                  <ChevronLeft className="font-bolder size-8 lg:size-12" />
                 </Button>
                 <Button
-                  className="py-8 cursor-pointer"
+                  className="cursor-pointer py-5 lg:py-8"
                   stroke="black"
                   fill="white"
                   strokeWidth={4}
@@ -463,19 +470,29 @@ export function Projects() {
                   disabled={activeIndex === projects.length - 1}
                   onClick={() => setActiveIndex((i) => Math.min(projects.length - 1, i + 1))}
                 >
-                  <ChevronRight className="size-12 font-bolder" />
+                  <ChevronRight className="font-bolder size-8 lg:size-12" />
                 </Button>
               </div>
             )}
           </div>
         </div>
 
-        <div data-slot="projects-japanese" className="relative col-span-3 text-center">
-          <JapaneseText text="最強" className="font-bold text-[250px]" color="var(--accent)" />
+        {/* Japanese text: tucked behind the image on small screens, own column on lg+ */}
+        <div
+          data-slot="projects-japanese"
+          className="pointer-events-none absolute top-15 -right-2 z-0 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
+        >
+          <JapaneseText
+            text="最強"
+            className="text-[80px] var(--accent) sm:font-bold sm:text-[170px] lg:text-[250px]"
+            color="var(--accent)"
+            border
+          />
         </div>
       </div>
 
-      <div className="grid w-full">
+      {/* On small screens this block takes all remaining height so description and tags spread out */}
+      <div className="grid w-full flex-1 lg:flex-none">
         {projects.map((project) => (
           <ProjectPanel key={project.title} project={project} />
         ))}

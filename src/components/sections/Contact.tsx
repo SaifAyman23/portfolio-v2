@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { CyberFrame } from '../ui/cyber-frame'
 
@@ -9,7 +9,29 @@ import { splitFull, splitWords } from '@/lib/motion'
 
 gsap.registerPlugin(Observer)
 
+/** How many shapes to show on small screens (12 per row → 4 rows). */
+const MOBILE_SHAPES = 48
+
+/** True from the `lg` breakpoint (1024px) and up. */
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const onChange = () => setIsDesktop(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  return isDesktop
+}
+
 export function Contact() {
+  const isDesktop = useIsDesktop()
+
   const fills = useMemo(() => {
     const total = 100
     const whiteCount = Math.floor((total * 4) / 7)
@@ -122,36 +144,41 @@ export function Contact() {
         observers.forEach((o) => o.kill())
       }
     },
-    { dependencies: [] }
+    { dependencies: [isDesktop] }
   )
 
   return (
     <section
       id="contact"
       data-section="contact"
-      className="grid grid-cols-2 min-h-screen flex items-center relative z-70 justify-center gap-3 px-6"
+      className="relative z-70 flex min-h-screen grid-cols-2 items-center justify-center gap-3 px-6 max-lg:flex-col max-lg:items-stretch max-lg:justify-start max-lg:gap-6 max-lg:py-10 lg:grid"
     >
-      <div className="h-full bottom-0 start-0 flex flex-col justify-between z-20">
-        <div className="w-4/6 bg-white h-2/3 p-10">
-          <p className="text-start max-w-4xl xl:text-5xl">
+      <div className="start-0 bottom-0 z-20 flex flex-col flex-1 justify-between gap-6 lg:h-full lg:gap-0">
+        <div className="h-auto w-full bg-white p-5 sm:p-8 lg:h-2/3 lg:w-4/6 lg:p-10">
+          <p className="max-w-4xl text-start text-xl sm:text-xl lg:text-base xl:text-5xl">
             You bring the vision, I’ll own the build. From architecture to launch, turning your
             project into a live service that holds, scales, and ships.
           </p>
         </div>
         <h1
-          className="text-start m-10 max-w-7xl xl:text-9xl"
+          className="max-w-7xl text-start max-sm:text-5xl sm:max-lg:text-7xl lg:m-10 xl:text-9xl"
           style={{ WebkitTextStroke: '2px white' }}
         >
           Let’s Work Together
         </h1>
       </div>
-      <div className="flex flex-wrap h-full p-10 content-start gap-3">
-        {fills.map((fill, i) => (
+
+      {/*
+        Small screens: the shapes fill the full width below the text (12 per row, no gaps).
+        lg and up: original layout.
+      */}
+      <div className="flex h-auto w-full flex-wrap content-start gap-0 p-0 max-lg:order-first lg:h-full lg:w-auto lg:gap-3 lg:p-10">
+        {(isDesktop ? fills : fills.slice(0, MOBILE_SHAPES)).map((fill, i) => (
           <CyberFrame
             key={i}
-            className="size-1/12 hover:scale-75"
-            chamferX={40}
-            chamferY={30}
+            className="size-1/12 hover:scale-75 max-lg:aspect-square max-lg:h-auto"
+            chamferX={isDesktop ? 40 : 6}
+            chamferY={isDesktop ? 30 : 5}
             strokeWidth={0}
             stroke="transparent"
             fill={fill}

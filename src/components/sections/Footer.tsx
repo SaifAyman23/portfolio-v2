@@ -21,7 +21,8 @@ export function Footer() {
     () => {
       if (!btnRef.current) return
       gsap.to(btnRef.current, {
-        width: expanded ? 360 : 56,
+        // never wider than the screen (16px margin on each side)
+        width: expanded ? Math.min(360, window.innerWidth - 32) : 56,
         duration: 0.6,
         ease: 'expo.inOut',
         overwrite: 'auto',
@@ -124,10 +125,10 @@ export function Footer() {
         duration: 0.2,
       })
 
-    return () => {
-      splitJap.revert()
-      splitName.revert()
-    }
+      return () => {
+        splitJap.revert()
+        splitName.revert()
+      }
     },
     []
   )
@@ -136,7 +137,7 @@ export function Footer() {
     <section
       id="footer"
       data-section="footer"
-      className="flex h-screen flex-col items-center relative justify-center overflow-hidden gap-3"
+      className="relative flex h-svh flex-col items-center justify-center gap-3 overflow-hidden lg:h-screen"
     >
       <div className="absolute inset-0 z-10">
         <img
@@ -146,15 +147,23 @@ export function Footer() {
           decoding="async"
         />
       </div>
-      <div className="w-full z-20 h-full flex items-center justify-center bg-red-900 mix-blend-multiply">
+
+      {/*
+        Japanese text.
+        Small screens: written vertically (サ / イ / フ stacked) so it fills the tall screen;
+        sized by whichever is smaller, the width or a third of the height.
+        lg and up: original horizontal 590px text.
+      */}
+      <div className="z-20 flex h-full w-full items-center justify-center bg-red-900 mix-blend-multiply">
         <JapaneseText
           id="footer-japanese"
           text={'サイフ'}
-          className="text-blue-800 text-[590px] font-bold"
+          className="text-[length:min(60vw,22svh)] font-bold text-blue-800 max-lg:leading-none max-lg:[writing-mode:vertical-rl] lg:text-[590px]"
         />
       </div>
+
       <div
-        className="absolute blurred-overlay inset-0 z-20 backdrop-blur-xl"
+        className="blurred-overlay absolute inset-0 z-20 backdrop-blur-xl"
         style={{
           maskImage:
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',
@@ -162,19 +171,24 @@ export function Footer() {
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 80%, black 100%)',
         }}
       />
-      <div className="w-full z-20 h-full flex items-center justify-center absolute">
-        <h1 className="text-[300px] name font-ticking text-white">Saif Eldin</h1>
+
+      {/* Name: two lines (Saif / Eldin) on small screens, one line on lg+ */}
+      <div className="absolute z-20 flex h-full w-full items-center justify-center px-4 lg:px-0">
+        <h1 className="name font-ticking text-center text-white max-lg:text-[30vw] max-lg:leading-[0.9] lg:text-[300px]">
+          Saif <br className="lg:hidden" />
+          Eldin
+        </h1>
       </div>
 
       <HeroInfo
         dataSlot={'footer-info'}
-        className="flex gap-2 info *:text-white bottom-20 z-60 xl:absolute"
+        className="info bottom-20 z-60 flex gap-2 *:text-white max-xl:absolute max-xl:inset-x-4 max-xl:bottom-24 max-xl:flex-wrap max-xl:justify-center xl:absolute"
         fill="black"
       />
 
       <CyberFrame
         ref={btnRef}
-        className="absolute bottom-6 right-10 z-50 overflow-hidden"
+        className="absolute right-4 bottom-6 z-50 overflow-hidden sm:right-10"
         style={{ width: 56, height: 56 }}
         fill="black"
         stroke="transparent"
@@ -196,7 +210,7 @@ export function Footer() {
           ref={contentRef}
           className="absolute inset-0 flex items-center justify-between gap-3 px-4"
         >
-          <p className="whitespace-nowrap text-sm text-white">
+          <p className="text-xs whitespace-nowrap text-white sm:text-sm">
             Not your aesthetic? What about{' '}
             <a
               href="https://saifayman23.github.io/portfolio/"
