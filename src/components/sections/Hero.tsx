@@ -2,19 +2,20 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
+import { useState } from 'react'
 
 import { HeroInfo } from './HeroInfo'
 import { CyberFrame } from '../ui/cyber-frame'
 
 import PixelBlast from '@/components/PixelBlast'
 import { JapaneseText } from '@/components/ui/japanese-text'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { getLenis } from '@/lib/smoothScroll'
+import { isWebGLAvailable } from '@/lib/webgl'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function Hero() {
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const [glOK] = useState(isWebGLAvailable)
 
   useGSAP(() => {
     const hero = document.querySelector('#hero')
@@ -327,7 +328,7 @@ export function Hero() {
           Engines Online
         </span>
         <div id="hero-loader" className="mx-auto flex xl:gap-2">
-          {Array.from({ length: isMobile ? 10 : 10 }).map((_, i) => (
+          {Array.from({ length: 10 }).map((_, i) => (
             <CyberFrame
               key={i}
               className="w-[6vw] sm:h-[4vh] sm:w-[4vw]"
@@ -344,41 +345,39 @@ export function Hero() {
         className={`flex flex-wrap justify-center xl:flex-nowrap xl:justify-start xl:absolute text-foreground -start-50 xl:rotate-90 xl:gap-2 z-60`}
       />
 
-      <div className="absolute z-0 h-full w-full opacity-30">
-        <PixelBlast
-          variant="circle"
-          pixelSize={4}
-          color="#b50000"
-          patternScale={4}
-          patternDensity={1}
-          pixelSizeJitter={2}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid={false}
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={2}
-          edgeFade={0.25}
-          transparent
-        />
-      </div>
+      {glOK && (
+        <div className="absolute z-0 h-full w-full opacity-30">
+          <PixelBlast
+            variant="circle"
+            pixelSize={4}
+            color="#b50000"
+            patternScale={4}
+            patternDensity={1}
+            pixelSizeJitter={2}
+            enableRipples
+            rippleSpeed={0.4}
+            rippleThickness={0.12}
+            rippleIntensityScale={1.5}
+            liquid={false}
+            liquidStrength={0.12}
+            liquidRadius={1.2}
+            liquidWobbleSpeed={5}
+            speed={2}
+            edgeFade={0.25}
+            transparent
+          />
+        </div>
+      )}
 
       {/* Name block */}
       <div className="z-10 mb-10 flex flex-col max-sm:mt-15 sm:mb-14 xl:mb-20">
         <JapaneseText
-          id={''}
           text="サイフ"
           className="ms-4 sm:ms-6 xl:ms-15 hero-subtitle -mb-2 sm:-mb-3 xl:-mb-5 text-xl sm:text-3xl xl:text-5xl font-bold text-accent"
         />
 
         {/* Scales with the screen width so the name never overflows a narrow phone, and stops at the original size from xl */}
-        <h1
-          id="hero-title"
-          className="text-center text-[clamp(2.5rem,13vw,7rem)] xl:text-9xl"
-        >
+        <h1 id="hero-title" className="text-center text-[clamp(2.5rem,13vw,7rem)] xl:text-9xl">
           Saif Eldin
         </h1>
 

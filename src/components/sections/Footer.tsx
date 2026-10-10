@@ -50,88 +50,85 @@ export function Footer() {
     { dependencies: [expanded] }
   )
 
-  useGSAP(
-    () => {
-      const japanese = document.querySelector('#footer-japanese')
-      const name = document.querySelector('.name')
-      const overlay = document.querySelector('.blurred-overlay')
-      const info = document.querySelector('[data-slot="footer-info"]')
+  useGSAP(() => {
+    const japanese = document.querySelector('#footer-japanese')
+    const name = document.querySelector('.name')
+    const overlay = document.querySelector('.blurred-overlay')
+    const info = document.querySelector('[data-slot="footer-info"]')
 
-      if (!japanese || !name || !info) {
-        return
-      }
+    if (!japanese || !name || !info) {
+      return
+    }
 
-      const infoItems = Array.from(info.children)
+    const infoItems = Array.from(info.children)
 
-      const splitJap = SplitText.create(japanese, {
-        type: 'chars',
-        aria: 'none',
-      })
+    const splitJap = SplitText.create(japanese, {
+      type: 'chars',
+      aria: 'none',
+    })
 
-      const splitName = SplitText.create(name, {
-        type: 'chars',
-        aria: 'none',
-      })
+    const splitName = SplitText.create(name, {
+      type: 'chars',
+      aria: 'none',
+    })
 
-      gsap.set(infoItems, {
-        opacity: 0,
-        y: 20,
-      })
+    gsap.set(infoItems, {
+      opacity: 0,
+      y: 20,
+    })
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          toggleActions: 'play none none reverse',
-          trigger: '#footer',
-          start: 'top 5%',
-          end: 'bottom bottom',
-          // scrub: true,
-        },
-      })
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        toggleActions: 'play none none reverse',
+        trigger: '#footer',
+        start: 'top 5%',
+        end: 'bottom bottom',
+        // scrub: true,
+      },
+    })
 
-      tl.from(overlay, {
-        opacity: 0,
-        stagger: {
-          amount: 1,
-          from: 'center',
-        },
-      })
+    tl.from(overlay, {
+      opacity: 0,
+      stagger: {
+        amount: 1,
+        from: 'center',
+      },
+    })
 
-      tl.from(splitJap.chars, {
-        opacity: 0,
-        y: 16,
-        stagger: {
-          amount: 0.2,
-          from: 'center',
-        },
-        duration: 0.2,
-      })
+    tl.from(splitJap.chars, {
+      opacity: 0,
+      y: 16,
+      stagger: {
+        amount: 0.2,
+        from: 'center',
+      },
+      duration: 0.2,
+    })
 
-      tl.from(splitName.chars, {
-        opacity: 0,
-        y: 16,
-        stagger: {
-          amount: 0.4,
-          from: 'start',
-        },
-        duration: 0.5,
-        delay: 0.5,
-        ease: 'steps(1)',
-      })
+    tl.from(splitName.chars, {
+      opacity: 0,
+      y: 16,
+      stagger: {
+        amount: 0.4,
+        from: 'start',
+      },
+      duration: 0.5,
+      delay: 0.5,
+      ease: 'steps(1)',
+    })
 
-      tl.to(infoItems, {
-        opacity: 1,
-        stagger: 0.2,
-        y: 0,
-        duration: 0.2,
-      })
+    tl.to(infoItems, {
+      opacity: 1,
+      stagger: 0.2,
+      y: 0,
+      duration: 0.2,
+    })
 
-      return () => {
-        splitJap.revert()
-        splitName.revert()
-      }
-    },
-    []
-  )
+    return () => {
+      splitJap.revert()
+      splitName.revert()
+    }
+  }, [])
 
   return (
     <section
@@ -143,7 +140,8 @@ export function Footer() {
         <img
           src={bg}
           className="h-full w-full object-cover"
-          alt="background image"
+          alt=""
+          loading="lazy"
           decoding="async"
         />
       </div>
@@ -201,6 +199,7 @@ export function Footer() {
           ref={iconRef}
           type="button"
           aria-label="Open alternative aesthetic"
+          aria-expanded={expanded}
           onClick={() => setExpanded(true)}
           className="absolute inset-0 flex cursor-pointer items-center justify-center text-white"
         >
@@ -215,6 +214,7 @@ export function Footer() {
             <a
               href="https://saifayman23.github.io/portfolio/"
               target="_blank"
+              rel="noopener noreferrer"
               className="underline decoration-white underline-offset-4"
             >
               this

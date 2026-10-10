@@ -95,12 +95,7 @@ export function About() {
             position
           )
 
-        const fadeUp = (
-          target: Element,
-          fromY: number,
-          vars: gsap.TweenVars,
-          position?: string
-        ) =>
+        const fadeUp = (target: Element, fromY: number, vars: gsap.TweenVars, position?: string) =>
           tl.fromTo(
             target,
             { opacity: 0, y: fromY },
@@ -179,6 +174,7 @@ export function About() {
               <CyberImage
                 src={about1Img}
                 alt="Saif Eldin"
+                loading="lazy"
                 strokeWidth={0}
                 fill="transparent"
                 stroke="transparent"
@@ -193,7 +189,7 @@ export function About() {
               <CyberImage
                 src={about2Img}
                 alt="Saif Eldin"
-                strokeWidth={0}
+                loading="lazy"
                 fill="transparent"
                 stroke="transparent"
                 frameClassName="w-36 h-28 md:w-50 md:h-40"

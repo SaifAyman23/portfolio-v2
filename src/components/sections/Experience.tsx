@@ -177,6 +177,21 @@ export function Experience() {
           { opacity: 0, y: 24 }
         )
 
+        /*
+         * The desktop timeline parks these wrappers off-screen with xPercent.
+         * Clear that when entering below lg so a breakpoint switch can never
+         * leave content shifted out of view on small screens.
+         */
+        gsap.set(
+          contents
+            .flatMap((content) => [
+              content.querySelector<HTMLElement>('[data-slot="experience-description"]'),
+              content.querySelector<HTMLElement>('[data-slot="experience-image"]'),
+            ])
+            .filter((element): element is HTMLElement => element !== null),
+          { xPercent: 0 }
+        )
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,

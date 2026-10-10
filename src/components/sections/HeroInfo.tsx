@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { email, github, linkedin, resume } from '@/constants/info'
 
-
 const links = [
   { label: 'Email', href: `mailto:${email}` },
   { label: 'GitHub', href: github },
@@ -22,7 +21,6 @@ export function HeroInfo({
   fill?: string
   dataSlot?: string
 }) {
-
   return (
     <div className={className} data-slot={dataSlot}>
       {links.map((link) => {

@@ -580,6 +580,7 @@ export function Tools() {
                   key={skill.title}
                   data-slot="skill-btn"
                   type="button"
+                  aria-pressed={activeSkill.title === skill.title}
                   className={cn(
                     'flex cursor-pointer items-center gap-3 font-motivate text-sm lg:text-lg',
                     activeSkill.title === skill.title && 'text-accent'

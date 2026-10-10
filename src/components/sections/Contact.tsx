@@ -162,7 +162,7 @@ export function Contact() {
         </div>
         <h1
           className="max-w-7xl text-start max-sm:text-5xl sm:max-lg:text-7xl lg:m-10 xl:text-9xl"
-          style={{ WebkitTextStroke: '2px white' }}
+          style={{ WebkitTextStroke: '2px var(--foreground)' }}
         >
           Let’s Work Together
         </h1>

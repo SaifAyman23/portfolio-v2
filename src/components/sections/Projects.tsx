@@ -71,7 +71,11 @@ const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project 
 
         <div className="flex max-w-xl flex-wrap justify-center gap-1.5 lg:gap-3">
           {project.stack.map((skill) => (
-            <Tag key={skill} text={skill} className="text-white max-sm:text-[16px] sm:max-lg:text-xs" />
+            <Tag
+              key={skill}
+              text={skill}
+              className="text-white max-sm:text-[16px] sm:max-lg:text-xs"
+            />
           ))}
         </div>
       </div>
@@ -413,7 +417,7 @@ export function Projects() {
               />
               <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0">
                 {projects.map((project) => (
-                  <img key={project.title} src={project.image} alt="" />
+                  <img key={project.title} src={project.image} alt="" decoding="async" />
                 ))}
               </div>
             </div>
@@ -423,7 +427,7 @@ export function Projects() {
         {/* Japanese text: tucked behind the image on small screens, own column on lg+ */}
         <div
           data-slot="projects-japanese"
-          className="pointer-events-none absolute top-15 -right-2 z-0 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
+          className="pointer-events-none absolute top-15 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
         >
           <JapaneseText
             text="最強"
