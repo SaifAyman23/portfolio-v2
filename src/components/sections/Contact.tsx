@@ -177,8 +177,8 @@ export function Contact() {
           <CyberFrame
             key={i}
             className="size-1/12 hover:scale-75 max-lg:aspect-square max-lg:h-auto"
-            chamferX={isDesktop ? 40 : 10}
-            chamferY={isDesktop ? 30 : 8}
+            chamferX={isDesktop ? 40 : 14}
+            chamferY={isDesktop ? 30 : 12}
             strokeWidth={0}
             stroke="transparent"
             fill={fill}
