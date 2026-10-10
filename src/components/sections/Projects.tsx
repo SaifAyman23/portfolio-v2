@@ -152,7 +152,8 @@ export function Projects() {
         end: '+=400%',
         scrub: true,
         pin: true,
-        pinReparent: true,
+        // pinReparent removed: it moved the whole section into <body> while pinned,
+        // which is what made the "Projects" title disappear during the pin.
         anticipatePin: 2,
       },
     })
@@ -390,7 +391,8 @@ export function Projects() {
         lg and up: original 9-column layout.
       */}
       <div className="relative grid w-full grid-cols-1 items-center gap-5 lg:grid-cols-9">
-        <div className="relative lg:col-span-6">
+        {/* max-lg:z-10 lifts the image column (title + image) above the Japanese text on small screens */}
+        <div className="relative max-lg:z-10 lg:col-span-6">
           <h1
             className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[150px]"
             style={{
@@ -425,7 +427,7 @@ export function Projects() {
         >
           <JapaneseText
             text="最強"
-            className="text-[80px] var(--accent) sm:font-bold sm:text-[170px] lg:text-[250px]"
+            className="text-[80px] sm:font-bold sm:text-[170px] lg:text-[250px]"
             color="var(--accent)"
             border
           />

@@ -409,8 +409,9 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="lg:col-span-4">
-          <div id="hero-japanese" className="text-center">
+        {/* Below lg: full-width flex row so the vertical text is truly centered (max-lg only, lg+ untouched) */}
+        <div className="max-lg:flex max-lg:w-full max-lg:justify-center lg:col-span-4">
+          <div id="hero-japanese" className="text-center max-lg:flex max-lg:justify-center">
             <JapaneseText
               text="ケン"
               border

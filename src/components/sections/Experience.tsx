@@ -1,14 +1,17 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SplitText } from 'gsap/SplitText'
+import { useRef } from 'react'
 
 import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
 import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { splitFull, splitWords } from '@/lib/motion'
+import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
 
 const experiences = [
   {
@@ -34,72 +37,46 @@ const experiences = [
 const DESKTOP_QUERY = '(min-width: 1024px)'
 const MOBILE_QUERY = '(max-width: 1023px)'
 
+const OUTLINE_STYLE = { WebkitTextStroke: '3px #FFFFFF95' } as const
+const COVER_IMAGE_STYLE = { filter: 'brightness(0.30) blur(10px)' } as const
+
 export function Experience() {
+  const sectionRef = useRef<HTMLElement>(null)
+
   useGSAP(
     () => {
+      const section = sectionRef.current
+
+      if (!section) return
+
+      const q = gsap.utils.selector(section)
       const mm = gsap.matchMedia()
 
       /*
        * ─────────────────────────────────────────────
-       * DESKTOP (lg and up): original pinned timeline
+       * DESKTOP (lg and up): pinned timeline
        * ─────────────────────────────────────────────
        */
       mm.add(DESKTOP_QUERY, () => {
-        const solidTitle = document.querySelector<HTMLElement>(
-          '[data-slot="experience-solid-title"]'
-        )
+        const outlineTitle = q<HTMLElement>('[data-slot="experience-outline-title"]')[0]
+        const covers = q<HTMLElement>('[data-slot="experience-cover"]')
+        const contents = q<HTMLElement>('[data-slot="experience-content"]')
+        const descriptions = q<HTMLElement>('[data-slot="experience-description"]')
+        const images = q<HTMLElement>('[data-slot="experience-image"]')
 
-        const outlineTitle = document.querySelector<HTMLElement>(
-          '[data-slot="experience-outline-title"]'
-        )
+        if (!outlineTitle || !covers.length) return
 
-        const covers = gsap.utils.toArray<HTMLElement>('[data-slot="experience-cover"]')
-
-        const contents = gsap.utils.toArray<HTMLElement>('[data-slot="experience-content"]')
-
-        const descriptions = gsap.utils.toArray<HTMLElement>(
-          '[data-slot="experience-description"]'
-        )
-
-        const images = gsap.utils.toArray<HTMLElement>('[data-slot="experience-image"]')
-
-        if (!solidTitle || !outlineTitle) return
-
-        /*
-         * INITIAL STATES
-         */
-
-        gsap.set(outlineTitle, {
-          opacity: 0,
-        })
-
-        gsap.set(covers, {
-          xPercent: 100,
-        })
-
-        gsap.set(descriptions, {
-          xPercent: 150,
-        })
-
-        gsap.set(images, {
-          xPercent: -150,
-        })
-
-        gsap.set(covers.slice(1), {
-          visibility: 'hidden',
-        })
-
-        gsap.set(contents.slice(1), {
-          visibility: 'hidden',
-        })
-
-        /*
-         * MAIN TIMELINE
-         */
+        // INITIAL STATES
+        gsap.set(outlineTitle, { opacity: 0 })
+        gsap.set(covers, { xPercent: 100 })
+        gsap.set(descriptions, { xPercent: 150 })
+        gsap.set(images, { xPercent: -150 })
+        gsap.set(covers.slice(1), { visibility: 'hidden' })
+        gsap.set(contents.slice(1), { visibility: 'hidden' })
 
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: '#experience',
+            trigger: section,
             start: 'top top',
             end: '+=400%',
             scrub: true,
@@ -108,208 +85,162 @@ export function Experience() {
           },
         })
 
-        // 1. TITLE
-        tl.to({}, { duration: 1.5 })
+        // Empty tween used as a pause. Also keeps the trailing "reading time"
+        // inside the timeline length, which sets the scroll distance.
+        const hold = (duration: number) => tl.to({}, { duration })
 
-        // Small pause.
-        tl.to({}, { duration: 0.3 })
+        const coverIn = (i: number) =>
+          tl.to(covers[i], { xPercent: 0, duration: 1.2, ease: 'power2.inOut' })
+
+        const contentIn = (i: number, descriptionDuration: number) => {
+          tl.to(descriptions[i], {
+            xPercent: 0,
+            duration: descriptionDuration,
+            ease: 'power2.out',
+          })
+
+          tl.to(images[i], { xPercent: 0, duration: 1.8, ease: 'power2.out' }, '<0.2')
+
+          hold(0.9) // reading time
+        }
+
+        const contentOut = (i: number) => {
+          tl.to(descriptions[i], { xPercent: -150, duration: 1.6, ease: 'power2.inOut' })
+          tl.to(images[i], { xPercent: 150, duration: 1.8, ease: 'power2.inOut' }, '<0.15')
+          tl.set(contents[i], { visibility: 'hidden' }, '>')
+        }
+
+        // 1. TITLE + small pause
+        hold(1.8)
 
         // 2. OUTLINE TITLE
-        tl.to(outlineTitle, {
-          opacity: 1,
-          duration: 0.3,
-          ease: 'none',
-        })
+        tl.to(outlineTitle, { opacity: 1, duration: 0.3, ease: 'none' })
 
-        // 3. FIRST COVER
-        tl.to(covers[0], {
-          xPercent: 0,
-          duration: 1.2,
-          ease: 'power2.inOut',
-        })
-
-        // Let the cover settle.
-        tl.to({}, { duration: 0.35 })
+        // 3. FIRST COVER, then let it settle
+        coverIn(0)
+        hold(0.35)
 
         // 4. FIRST EXPERIENCE
-        tl.to(descriptions[0], {
-          xPercent: 0,
-          duration: 1.5,
-          ease: 'power2.out',
-        })
-
-        tl.to(
-          images[0],
-          {
-            xPercent: 0,
-            duration: 1.8,
-            ease: 'power2.out',
-          },
-          '<0.2'
-        )
-
-        // Reading time.
-        tl.to({}, { duration: 0.9 })
+        contentIn(0, 1.5)
 
         // 5. EXPERIENCE SWITCHING
-        experiences.forEach((_, i) => {
-          if (i >= experiences.length - 1) return
+        for (let i = 0; i < covers.length - 1; i++) {
+          // Current content leaves (cover does NOT move yet).
+          contentOut(i)
+          hold(0.3)
 
-          const nextCover = covers[i + 1]
-
-          // Current content smoothly leaves (cover does NOT move yet).
-          tl.to(descriptions[i], {
-            xPercent: -150,
-            duration: 1.6,
-            ease: 'power2.inOut',
-          })
-
-          tl.to(
-            images[i],
-            {
-              xPercent: 150,
-              duration: 1.8,
-              ease: 'power2.inOut',
-            },
-            '<0.15'
-          )
-
-          tl.set(contents[i], { visibility: 'hidden' }, '>')
-
-          // Small separation between the content swipe and the cover.
-          tl.to({}, { duration: 0.3 })
-
-          // NOW the next cover enters.
-          tl.set(nextCover, { visibility: 'visible' })
-
-          tl.to(nextCover, {
-            xPercent: 0,
-            duration: 1.2,
-            ease: 'power2.inOut',
-          })
-
+          // Next cover enters.
+          tl.set(covers[i + 1], { visibility: 'visible' })
+          coverIn(i + 1)
           tl.set(covers[i], { visibility: 'hidden' }, '>')
+          hold(0.25)
 
-          // Let the cover establish itself.
-          tl.to({}, { duration: 0.25 })
-
-          // Next content enters smoothly.
+          // Next content enters.
           tl.set(contents[i + 1], { visibility: 'visible' })
-
-          tl.to(descriptions[i + 1], {
-            xPercent: 0,
-            duration: 1.6,
-            ease: 'power2.out',
-          })
-
-          tl.to(
-            images[i + 1],
-            {
-              xPercent: 0,
-              duration: 1.8,
-              ease: 'power2.out',
-            },
-            '<0.2'
-          )
-
-          // Reading time.
-          tl.to({}, { duration: 0.9 })
-        })
-
-        return () => {
-          tl.scrollTrigger?.kill()
-          tl.kill()
+          contentIn(i + 1, 1.6)
         }
       })
 
       /*
        * ─────────────────────────────────────────────
        * MOBILE / TABLET (below lg): no cover, no pin.
-       * Same feel as the About section: the title types in
-       * character by character, each paragraph types in word
-       * by word, and each image fades up. Everything is
-       * scrubbed by scroll while the section moves up the screen.
+       * Title and paragraphs type in character by character, images fade up,
+       * all scrubbed by scroll while the section moves up the screen.
        * ─────────────────────────────────────────────
        */
       mm.add(MOBILE_QUERY, () => {
-        const splitTitle = splitFull('.experience-title')
+        const title = q<HTMLElement>('.experience-title')[0]
+        const contents = q<HTMLElement>('[data-slot="experience-content"]')
 
-        const contents = gsap.utils.toArray<HTMLElement>('[data-slot="experience-content"]')
+        if (!title) return
+
+        const titleSplit = splitFull(title)
 
         const pairs = contents.map((content) => ({
           text: content.querySelector<HTMLElement>('[data-slot="experience-description"] p'),
           image: content.querySelector<HTMLElement>('[data-slot="experience-image"]'),
         }))
 
-        const splitTexts = pairs.map((pair) => (pair.text ? splitWords(pair.text) : null))
+        const textSplits = pairs.map((pair) => (pair.text ? splitWords(pair.text) : null))
+
+        /*
+         * Hidden states are applied explicitly (not via from()'s one-time
+         * immediate render), so a refresh can never make not-yet-played
+         * characters visible again.
+         */
+        gsap.set([titleSplit.chars, ...textSplits.map((split) => split?.chars ?? [])].flat(), {
+          opacity: 0,
+        })
+
+        gsap.set(
+          pairs.flatMap((pair) => (pair.image ? [pair.image] : [])),
+          { opacity: 0, y: 24 }
+        )
 
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: '#experience',
+            trigger: section,
             start: 'top 80%',
             end: 'top 5%',
             scrub: true,
-            invalidateOnRefresh: true,
           },
         })
 
+        // steps(1) makes opacity jump at the end of each tween, so a y offset
+        // on characters would never be visible; opacity alone is enough.
+        const typeIn = (
+          chars: Element[],
+          vars: { duration: number; stagger: number },
+          position?: string
+        ) =>
+          tl.fromTo(
+            chars,
+            { opacity: 0 },
+            { opacity: 1, ease: 'steps(1)', immediateRender: false, ...vars },
+            position
+          )
+
         // 1. TITLE
-        tl.from(splitTitle.chars, {
-          opacity: 0,
-          y: 24,
-          duration: 0.5,
-          stagger: 0.5,
-          ease: 'steps(1)',
-        })
+        typeIn(titleSplit.chars, { duration: 0.5, stagger: 0.5 })
 
         // 2. EACH PAIR: text types in, image fades up
         pairs.forEach((pair, i) => {
-          const split = splitTexts[i]
+          const split = textSplits[i]
 
           if (split) {
-            tl.from(
-              split.chars,
-              {
-                opacity: 0,
-                y: 16,
-                duration: 2,
-                stagger: 0.02,
-                ease: 'steps(1)',
-              },
-              i === 0 ? '>0.2' : '>-0.3'
-            )
+            typeIn(split.chars, { duration: 2, stagger: 0.02 }, i === 0 ? '>0.2' : '>-0.3')
           }
 
           if (pair.image) {
             tl.fromTo(
               pair.image,
               { opacity: 0, y: 24 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'none',
-              },
+              { opacity: 1, y: 0, duration: 1, ease: 'none', immediateRender: false },
               '<0.3'
             )
           }
         })
 
+        // The context kills the timeline/ScrollTrigger; only the splits need manual revert.
         return () => {
-          tl.scrollTrigger?.kill()
-          tl.kill()
-          splitTitle.revert()
-          splitTexts.forEach((split) => split?.revert())
+          titleSplit.revert()
+          textSplits.forEach((split) => split?.revert())
         }
       })
 
-      return () => mm.revert()
+      const stopRefresh = refreshWhenAssetsSettle()
+
+      return () => {
+        stopRefresh()
+        mm.revert()
+      }
     },
-    []
+    { scope: sectionRef, dependencies: [] }
   )
 
   return (
     <section
+      ref={sectionRef}
       id="experience"
       data-section="experience"
       className="relative min-h-screen bg-black max-sm:overflow-hidden"
@@ -334,20 +265,17 @@ export function Experience() {
                 loading={i === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 className="h-full w-full object-cover"
-                style={{
-                  filter: 'brightness(0.30) blur(10px)',
-                }}
+                style={COVER_IMAGE_STYLE}
               />
             </div>
           ))}
 
-          {/* Outline title */}
+          {/* Outline title (decorative duplicate of the solid title) */}
           <h1
             data-slot="experience-outline-title"
+            aria-hidden="true"
             className="absolute inset-0 flex items-center justify-center text-transparent xl:text-[200px]"
-            style={{
-              WebkitTextStroke: '3px #FFFFFF95',
-            }}
+            style={OUTLINE_STYLE}
           >
             Experience
           </h1>

@@ -158,7 +158,7 @@ export function Footer() {
         <JapaneseText
           id="footer-japanese"
           text={'サイフ'}
-          className="text-[length:min(60vw,22svh)] font-bold text-blue-800 max-lg:leading-none max-lg:[writing-mode:vertical-rl] lg:text-[590px]"
+          className="text-[length:min(60vw,22svh)] font-bold text-blue-700 max-lg:leading-none max-lg:[writing-mode:vertical-rl] lg:text-[590px]"
         />
       </div>
 

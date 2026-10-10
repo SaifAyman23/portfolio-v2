@@ -2,193 +2,166 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
+import { useRef } from 'react'
 
 import about1Img from '@/assets/img/about/1.webp'
 import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { splitFull, splitWords } from '@/lib/motion'
+import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
 
-gsap.registerPlugin(ScrollTrigger, SplitText)
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
+
+const DESKTOP_QUERY = '(min-width: 1024px)'
+const MOBILE_QUERY = '(max-width: 1023px)'
+
+/** lg and up: pinned, scroll-scrubbed. */
+const DESKTOP_TRIGGER: ScrollTrigger.Vars = {
+  start: 'top top',
+  end: '+=1700',
+  scrub: true,
+  pin: true,
+  pinSpacing: true,
+  anticipatePin: 1,
+  invalidateOnRefresh: true,
+}
+
+/**
+ * Small screens: NO pin. The same animation is scrubbed while the section
+ * scrolls up the screen, finishing as it reaches the top.
+ */
+const MOBILE_TRIGGER: ScrollTrigger.Vars = {
+  start: 'top 80%',
+  end: 'top 5%',
+  scrub: true,
+}
+
+const OUTLINE_STYLE = { WebkitTextStroke: '3px var(--accent)' } as const
 
 export function About() {
+  const sectionRef = useRef<HTMLElement>(null)
+
   useGSAP(
     () => {
-      const section = document.querySelector('#about')
+      const section = sectionRef.current
 
       if (!section) return
 
-      const splitTitle = splitFull('.about-title')
-
-      const splitRows1 = splitWords('.row-text-1')
-
-      const splitRows2 = splitWords('.row-text-2')
-
+      const q = gsap.utils.selector(section)
       const mm = gsap.matchMedia()
 
-      mm.add(
-        {
-          isDesktop: '(min-width: 1024px)',
-          isMobile: '(max-width: 1023px)',
-        },
-        (context) => {
-          const { isDesktop } = context.conditions as { isDesktop: boolean }
+      mm.add({ isDesktop: DESKTOP_QUERY, isMobile: MOBILE_QUERY }, (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean }
 
-          gsap.set('.row-img-1', {
-            opacity: 0,
-            y: 24,
-          })
+        const title = q<HTMLElement>('.about-title')[0]
+        const japanese = q<HTMLElement>('#about-japanese-text')[0]
+        const row1Text = q<HTMLElement>('.row-text-1')[0]
+        const row2Text = q<HTMLElement>('.row-text-2')[0]
+        const img1 = q<HTMLElement>('.row-img-1')[0]
+        const img2 = q<HTMLElement>('.row-img-2')[0]
 
-          const tl = gsap.timeline({
-            scrollTrigger: isDesktop
-              ? {
-                  // lg and up: pinned, scroll-scrubbed (original behaviour)
-                  trigger: section,
-                  start: 'top top',
-                  end: '+=1700',
-                  scrub: true,
-                  pin: true,
-                  pinReparent: true,
-                  pinSpacing: true,
-                  anticipatePin: 1,
-                  invalidateOnRefresh: true,
-                }
-              : {
-                  // small screens: NO pin. The same animation is scrubbed while the
-                  // section scrolls up the screen, finishing as it reaches the top.
-                  trigger: section,
-                  start: 'top 80%',
-                  end: 'top 5%',
-                  scrub: true,
-                  invalidateOnRefresh: true,
-                },
-          })
+        if (!title || !japanese || !row1Text || !row2Text || !img1 || !img2) return
 
-          // 1. ABOUT TITLE
+        const titleSplit = splitFull(title)
+        const row1Split = splitWords(row1Text)
+        const row2Split = splitWords(row2Text)
 
-          tl.from(splitTitle.chars, {
-            opacity: 0,
-            y: 24,
-            duration: 2,
-            stagger: 2,
-            ease: 'steps(1)',
-          })
+        /*
+         * Hidden states are applied explicitly (not via from()'s one-time
+         * immediate render), so a refresh/invalidate can never make
+         * not-yet-played characters visible again.
+         */
+        gsap.set([titleSplit.chars, row1Split.chars, row2Split.chars], { opacity: 0 })
+        gsap.set(japanese, { opacity: 0, y: 100 })
+        gsap.set([img1, img2], { opacity: 0, y: 24 })
 
-          // 1.5. JAPANESE TEXT
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            ...(isDesktop ? DESKTOP_TRIGGER : MOBILE_TRIGGER),
+          },
+        })
 
-          tl.from('#about-japanese-text', {
-            opacity: 0,
-            y: 100,
-            duration: 2,
-          })
-
-          // 2. FIRST ROW
-
-          tl.from(
-            splitRows1.chars,
-            {
-              opacity: 0,
-              y: 16,
-              duration: 2,
-              stagger: 0.02,
-              ease: 'steps(1)',
-            },
-            '<0.3'
+        /*
+         * Characters pop in with steps(1): opacity jumps at the end of each
+         * tween, so a y offset would never be visible. Animating opacity only
+         * avoids creating a transform layer for every character.
+         */
+        const typeIn = (chars: Element[], stagger: number, position?: string) =>
+          tl.fromTo(
+            chars,
+            { opacity: 0 },
+            { opacity: 1, duration: 2, stagger, ease: 'steps(1)', immediateRender: false },
+            position
           )
 
-          tl.to(
-            '.row-img-1',
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'none',
-            },
-            '<0.3'
+        const fadeUp = (
+          target: Element,
+          fromY: number,
+          vars: gsap.TweenVars,
+          position?: string
+        ) =>
+          tl.fromTo(
+            target,
+            { opacity: 0, y: fromY },
+            { opacity: 1, y: 0, immediateRender: false, ...vars },
+            position
           )
 
-          // 3. SECOND ROW
+        // 1. ABOUT TITLE
+        typeIn(titleSplit.chars, 2)
 
-          tl.from(
-            splitRows2.chars,
-            {
-              opacity: 0,
-              y: 16,
-              duration: 2,
-              stagger: 0.02,
-              ease: 'steps(1)',
-            },
-            '<0.3'
-          )
+        // 1.5. JAPANESE TEXT
+        fadeUp(japanese, 100, { duration: 2 })
 
-          tl.to(
-            '.row-img-1',
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'none',
-            },
-            '<0.3'
-          )
+        // 2. FIRST ROW
+        typeIn(row1Split.chars, 0.02, '<0.3')
+        fadeUp(img1, 24, { duration: 1, ease: 'none' }, '<0.3')
 
-          return () => {
-            tl.scrollTrigger?.kill()
-            tl.kill()
-          }
+        // 3. SECOND ROW
+        typeIn(row2Split.chars, 0.02, '<0.3')
+        fadeUp(img2, 24, { duration: 1, ease: 'none' }, '<0.3')
+
+        // The context kills the timeline/ScrollTrigger; only the splits need manual revert.
+        return () => {
+          titleSplit.revert()
+          row1Split.revert()
+          row2Split.revert()
         }
-      )
-
-      /*
-       * Re-measure trigger positions once layout settles (fonts / images / load),
-       * so the start/end are never stale.
-       */
-      const refresh = () => ScrollTrigger.refresh()
-
-      const raf = requestAnimationFrame(refresh)
-
-      document.fonts?.ready.then(refresh)
-
-      window.addEventListener('load', refresh, { once: true })
-
-      const images = Array.from(document.querySelectorAll<HTMLImageElement>('img'))
-
-      images.forEach((img) => {
-        if (!img.complete) img.addEventListener('load', refresh, { once: true })
       })
 
+      const stopRefresh = refreshWhenAssetsSettle()
+
       return () => {
-        cancelAnimationFrame(raf)
-        window.removeEventListener('load', refresh)
-        images.forEach((img) => img.removeEventListener('load', refresh))
+        stopRefresh()
         mm.revert()
-        splitTitle.revert()
-        splitRows1.revert()
-        splitRows2.revert()
       }
     },
-    []
+    { scope: sectionRef, dependencies: [] }
   )
 
   return (
     <section
+      ref={sectionRef}
       id="about"
       data-section="about"
       className="relative grid min-h-svh grid-cols-1 items-center justify-center gap-3 overflow-x-clip bg-black px-5 py-8 sm:px-6 lg:min-h-screen lg:grid-cols-6 lg:py-0"
     >
       {/* Japanese text:
           - mobile / tablet: absolutely positioned behind the content, hugging the far left
-          - lg and up: its own left column (original layout) */}
+          - lg and up: its own left column */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden lg:pointer-events-auto lg:relative lg:col-span-2 lg:flex lg:flex-1 lg:overflow-visible">
         <h1
           id="about-japanese-text"
+          aria-hidden="true"
           className="font-inter absolute top-1/2 left-0 z-5 -translate-x-1/3 -translate-y-1/2 rotate-90 text-[200px] font-bold break-keep whitespace-nowrap text-transparent sm:text-[260px] lg:static lg:translate-x-0 lg:translate-y-0 lg:text-[330px]"
-          style={{ WebkitTextStroke: `3px var(--accent)` }}
+          style={OUTLINE_STYLE}
         >
           進化
         </h1>
 
-        {/* Fade shadow: small screens only (hidden on lg and up) */}
-        <div className="absolute inset-0 z-10 bg-linear-to-r from-black via-black/70 to-transparent lg:hidden" />
+        {/* Fade shadow: small screens only */}
+        <div className="absolute inset-0 z-10 bg-linear-to-r from-black via-black/30 to-transparent lg:hidden" />
       </div>
 
       <div className="relative z-10 flex flex-col gap-6 lg:col-span-4 lg:mb-20 lg:gap-10">
@@ -205,7 +178,7 @@ export function About() {
             <div className="row-img-1 w-36 shrink-0 md:w-50">
               <CyberImage
                 src={about1Img}
-                alt={'Saif Eldin'}
+                alt="Saif Eldin"
                 strokeWidth={0}
                 fill="transparent"
                 stroke="transparent"
@@ -213,14 +186,15 @@ export function About() {
               />
             </div>
           </div>
+
           <div className="flex w-full flex-col items-start gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
-            {/* On mobile the text comes first, then the image; on md+ the image sits on the left */}
-            <div className="row-img-1 order-2 w-36 shrink-0 md:order-1 md:w-50">
+            {/* Mobile: text first, then image. md+: image on the left. */}
+            <div className="row-img-2 order-2 w-36 shrink-0 md:order-1 md:w-50">
               <CyberImage
                 src={about2Img}
-                alt={'Saif Eldin'}
-                fill="transparent"
+                alt="Saif Eldin"
                 strokeWidth={0}
+                fill="transparent"
                 stroke="transparent"
                 frameClassName="w-36 h-28 md:w-50 md:h-40"
               />
