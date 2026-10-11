@@ -54,13 +54,14 @@ export function About() {
         const { isDesktop } = context.conditions as { isDesktop: boolean }
 
         const title = q<HTMLElement>('.about-title')[0]
-        const japanese = q<HTMLElement>('#about-japanese-text')[0]
+        // Two copies exist (desktop column + mobile overlay); animate both.
+        const japanese = q<HTMLElement>('.about-japanese')
         const row1Text = q<HTMLElement>('.row-text-1')[0]
         const row2Text = q<HTMLElement>('.row-text-2')[0]
         const img1 = q<HTMLElement>('.row-img-1')[0]
         const img2 = q<HTMLElement>('.row-img-2')[0]
 
-        if (!title || !japanese || !row1Text || !row2Text || !img1 || !img2) return
+        if (!title || japanese.length === 0 || !row1Text || !row2Text || !img1 || !img2) return
 
         const titleSplit = splitFull(title)
         const row1Split = splitWords(row1Text)
@@ -95,7 +96,12 @@ export function About() {
             position
           )
 
-        const fadeUp = (target: Element, fromY: number, vars: gsap.TweenVars, position?: string) =>
+        const fadeUp = (
+          target: gsap.TweenTarget,
+          fromY: number,
+          vars: gsap.TweenVars,
+          position?: string
+        ) =>
           tl.fromTo(
             target,
             { opacity: 0, y: fromY },
@@ -142,35 +148,47 @@ export function About() {
       data-section="about"
       className="relative grid min-h-svh grid-cols-1 items-center justify-center gap-3 overflow-x-clip bg-black px-5 py-8 sm:px-6 lg:min-h-screen lg:grid-cols-6 lg:py-0"
     >
-      {/* Japanese text:
-          - mobile / tablet: absolutely positioned behind the content, hugging the far left
-          - lg and up: its own left column */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden lg:pointer-events-auto lg:relative lg:col-span-2 lg:flex lg:flex-1 lg:overflow-visible">
+      {/* Desktop: Japanese text in its own left column (unchanged) */}
+      <div className="hidden lg:col-span-2 lg:flex lg:flex-1">
         <h1
-          id="about-japanese-text"
           aria-hidden="true"
-          className="font-inter absolute top-1/2 left-0 z-5 -translate-x-1/3 -translate-y-1/2 rotate-90 text-[200px] font-bold break-keep whitespace-nowrap text-transparent sm:text-[260px] lg:static lg:translate-x-0 lg:translate-y-0 lg:text-[330px]"
+          className="about-japanese font-inter rotate-90 text-[330px] font-bold break-keep whitespace-nowrap text-transparent"
           style={OUTLINE_STYLE}
         >
           進化
         </h1>
-
-        {/* Fade shadow: small screens only */}
-        <div className="absolute inset-0 z-10 bg-linear-to-r from-black via-black/30 to-transparent lg:hidden" />
       </div>
 
       <div className="relative z-10 flex flex-col gap-6 lg:col-span-4 lg:mb-20 lg:gap-10">
-        <h1 className="about-title text-start text-5xl text-white sm:text-7xl md:text-8xl xl:text-9xl">
-          About
-        </h1>
+        <div className="relative">
+          {/* Mobile / tablet: absolute, no rotation, start-aligned, behind the title */}
+          <div
+            aria-hidden="true"
+            className="about-japanese pointer-events-none absolute start-0 bottom-[calc(100%-1rem)] z-0 lg:hidden"
+          >
+            <div
+              className="font-inter text-[120px] leading-none font-bold whitespace-nowrap text-transparent sm:text-[180px]"
+              style={OUTLINE_STYLE}
+            >
+              進化
+            </div>
+
+            {/* Shadow: covers the whole text box, darkest at the bottom near the title */}
+            <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
+          </div>
+
+          <h1 className="about-title relative z-10 text-start text-7xl text-white sm:text-7xl md:text-8xl xl:text-9xl">
+            About
+          </h1>
+        </div>
 
         <div className="about-rows flex flex-col gap-6 lg:gap-10">
-          <div className="flex w-full flex-col items-start gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
+          <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
             <p className="row-text-1 max-w-2xl text-sm text-white sm:text-lg xl:text-2xl">
               I’m Saif, based in Alexandria. I build end to end, from idea to live product. Keeping
               my work organized, clean, and focused.
             </p>
-            <div className="row-img-1 w-36 shrink-0 md:w-50">
+            <div className="row-img-1 w-full shrink-0 md:w-50">
               <CyberImage
                 src={about1Img}
                 alt="Saif Eldin"
@@ -178,21 +196,21 @@ export function About() {
                 strokeWidth={0}
                 fill="transparent"
                 stroke="transparent"
-                frameClassName="w-36 h-28 md:w-50 md:h-40"
+                frameClassName="w-full h-28 md:w-50 md:h-40"
               />
             </div>
           </div>
 
-          <div className="flex w-full flex-col items-start gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
+          <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
             {/* Mobile: text first, then image. md+: image on the left. */}
-            <div className="row-img-2 order-2 w-36 shrink-0 md:order-1 md:w-50">
+            <div className="row-img-2 order-2 w-full shrink-0 md:order-1 md:w-50">
               <CyberImage
                 src={about2Img}
                 alt="Saif Eldin"
                 loading="lazy"
                 fill="transparent"
                 stroke="transparent"
-                frameClassName="w-36 h-28 md:w-50 md:h-40"
+                frameClassName="w-full h-28 md:w-50 md:h-40"
               />
             </div>
             <p className="row-text-2 order-1 max-w-2xl text-sm text-white sm:text-lg md:order-2 xl:text-2xl">

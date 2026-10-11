@@ -396,7 +396,7 @@ export function Projects() {
       */}
       <div className="relative grid w-full grid-cols-1 items-center gap-5 lg:grid-cols-9">
         {/* max-lg:z-10 lifts the image column (title + image) above the Japanese text on small screens */}
-        <div className="relative max-lg:z-10 lg:col-span-6">
+        <div className="relative lg:col-span-6">
           <h1
             className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[150px]"
             style={{
@@ -427,11 +427,11 @@ export function Projects() {
         {/* Japanese text: tucked behind the image on small screens, own column on lg+ */}
         <div
           data-slot="projects-japanese"
-          className="pointer-events-none absolute top-15 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
+          className="pointer-events-none absolute top-5 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
         >
           <JapaneseText
             text="最強"
-            className="text-[80px] sm:font-bold sm:text-[170px] lg:text-[250px]"
+            className="text-[70px] sm:font-bold sm:text-[170px] lg:text-[250px]"
             color="var(--accent)"
             border
           />
