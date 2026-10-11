@@ -413,6 +413,26 @@ Single-page apps get one `<title>` unless you handle it per route. This template
 
 Add it to `SITEMAP_PATHS` in `vite.config.ts` (it regenerates on every build).
 
+### Deploying main to production
+
+The live site is served from the sibling `SaifAyman23/portfolio` repo (`gh-pages` branch), NOT from this repo:
+
+| URL                                                  | Source                                                                             | Touch?          |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------- | --------------- |
+| `.../portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/` | `main` branch here → `v2/82aef.../` over there                                     | Yes, this task  |
+| `.../portfolio/v2/` (bare URL)                       | Mobile/iframe shell from `feat/mobile-game-screen`, lives at `v2/` root over there | NEVER from here |
+
+`npm run deploy` alone is NOT a production deploy — it only pushes `dist/` to this repo's own `gh-pages` branch (staging mirror). The full procedure:
+
+1. Verify: `npm run typecheck`, `npm run lint`, `npm run test`, `npm run build` (produces a fresh `dist/`)
+2. Commit and push `main` to `origin/main`
+3. Sparse-clone only the live slot into temp: `git clone --depth 1 --filter=blob:none --sparse --branch gh-pages https://github.com/SaifAyman23/portfolio.git`, then `git sparse-checkout set v2/82aef4670d91c655bab1e9f5f3e3f536`
+4. Copy `dist/*` over `v2/82aef4670d91c655bab1e9f5f3e3f536/` (overwrite only — never delete; old hashed assets stay, matching the `--add` no-prune policy)
+5. `git add` ONLY `v2/82aef4670d91c655bab1e9f5f3e3f536/`, confirm `git status` shows nothing outside it, then commit and push `gh-pages`
+6. Verify: fetch the hash URL and confirm the served bundle hash matches `dist/index.html`; confirm the bare URL bundle is unchanged. Allow ~10 min for the Pages HTML edge-cache on first check.
+
+Rules: never copy into the `v2/` root, never prune/delete inside the slot, never push this repo's `gh-pages` branch to the `portfolio` repo. Delete the temp clone when done.
+
 ---
 
 # Part H — Continuous Integration
