@@ -146,7 +146,7 @@ export function About() {
       ref={sectionRef}
       id="about"
       data-section="about"
-      className="relative grid min-h-svh grid-cols-1 items-center justify-center gap-3 overflow-x-clip bg-black px-5 py-8 sm:px-6 lg:min-h-screen lg:grid-cols-6 lg:py-0"
+      className="relative grid min-h-svh grid-cols-1 items-end justify-center gap-3 overflow-x-clip bg-black px-5 pt-32 pb-8 sm:px-6 sm:pt-44 lg:min-h-screen lg:grid-cols-6 lg:items-center lg:py-0"
     >
       {/* Desktop: Japanese text in its own left column (unchanged) */}
       <div className="hidden lg:col-span-2 lg:flex lg:flex-1">
