@@ -567,7 +567,7 @@ export function Tools() {
       */}
       <div className="flex h-full w-full flex-col items-center justify-between gap-4 lg:grid lg:grid-cols-12 lg:gap-10">
         {/* `contents` on small screens lets the panel and radar join the column and be re-ordered */}
-        <div className="contents lg:relative lg:col-span-3 lg:flex lg:flex-col lg:items-center lg:justify-between lg:py-10">
+        <div className="contents sm:gap-10 lg:relative lg:col-span-3 lg:flex lg:flex-col lg:items-center lg:justify-between lg:py-10">
           <CyberFrame
             data-slot="skills-panel"
             className="relative order-1 w-3/5 sm:w-2/5 lg:order-none lg:w-3/6"

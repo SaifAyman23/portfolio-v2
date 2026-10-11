@@ -50,7 +50,7 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   projects: {
     enter: { position: [20, 4, -16], rotation: [0.7, 3.8, 0] },
     stay: { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
-    leave: { position: [-26, 5, -20], rotation: [-0.7, 4, -0.3] },
+    leave: { position: [-30, 5, -20], rotation: [-0.7, 4, -0.3] },
   },
   tools: {
     enter: { position: [0, 150, -14], rotation: [1.2, 4.724, 0] },
