@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL } from '@/lib/seo'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '@/lib/seo'
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   const selector = `meta[${attr}="${key}"]`
@@ -25,7 +25,7 @@ function upsertCanonical(href: string) {
 
 export function SeoUpdater() {
   useEffect(() => {
-    const url = `${SITE_URL}/`
+    const url = window.location.origin + window.location.pathname
 
     document.title = DEFAULT_TITLE
     upsertMeta('name', 'description', DEFAULT_DESCRIPTION)
