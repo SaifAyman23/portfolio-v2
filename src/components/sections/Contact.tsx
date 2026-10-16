@@ -5,7 +5,9 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { CyberFrame } from '../ui/cyber-frame'
 
+import { useNearView } from '@/hooks/useNearView'
 import { splitFull, splitWords } from '@/lib/motion'
+import { queueScrollRefresh } from '@/lib/scroll-refresh'
 
 gsap.registerPlugin(Observer)
 
@@ -31,6 +33,7 @@ function useIsDesktop() {
 
 export function Contact() {
   const isDesktop = useIsDesktop()
+  const setupReady = useNearView('contact', { rootMargin: '1200px', initial: false, once: true })
 
   const fills = useMemo(() => {
     const total = 100
@@ -62,6 +65,7 @@ export function Contact() {
 
   useGSAP(
     () => {
+      if (!setupReady) return
       const p = document.querySelector<HTMLElement>('#contact p')
       const frames = gsap.utils.toArray<HTMLElement>('#contact .size-1\\/12')
       const h1 = document.querySelector<HTMLElement>('#contact h1')
@@ -138,13 +142,15 @@ export function Contact() {
         })
       )
 
+      queueScrollRefresh()
+
       return () => {
         splitP.revert()
         splitH1.revert()
         observers.forEach((o) => o.kill())
       }
     },
-    { dependencies: [isDesktop] }
+    { dependencies: [isDesktop, setupReady] }
   )
 
   return (

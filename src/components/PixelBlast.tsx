@@ -378,7 +378,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
   noiseAmount = 0,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const visibilityRef = useRef({ visible: true })
+  const visibilityRef = useRef({ visible: true, inView: true })
   const speedRef = useRef(speed)
 
   const threeRef = useRef<{
@@ -414,6 +414,27 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
     liquidEffect?: Effect
   } | null>(null)
   const prevConfigRef = useRef<ReinitConfig | null>(null)
+
+  useEffect(() => {
+    if (!autoPauseOffscreen) return
+    const container = containerRef.current
+    if (!container) return
+    const sync = (inView: boolean) => {
+      visibilityRef.current.inView = inView
+      visibilityRef.current.visible = inView && !document.hidden
+    }
+    const io = new IntersectionObserver(([entry]) => sync(entry?.isIntersecting ?? true), {
+      threshold: 0,
+    })
+    io.observe(container)
+    const onVisibilityChange = () => sync(visibilityRef.current.inView)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => {
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    }
+  }, [autoPauseOffscreen])
+
   useEffect(() => {
     const container = containerRef.current
     if (!container) return

@@ -8,6 +8,7 @@ import exp1Img from '@/assets/img/experience/1.webp'
 import exp2Img from '@/assets/img/experience/2.webp'
 import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
+import { useNearView } from '@/hooks/useNearView'
 import { splitFull, splitWords } from '@/lib/motion'
 import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
 
@@ -42,9 +43,15 @@ const COVER_IMAGE_STYLE = { filter: 'brightness(0.30) blur(10px)' } as const
 
 export function Experience() {
   const sectionRef = useRef<HTMLElement>(null)
+  const setupReady = useNearView('experience', {
+    rootMargin: '1200px',
+    initial: false,
+    once: true,
+  })
 
   useGSAP(
     () => {
+      if (!setupReady) return
       const section = sectionRef.current
 
       if (!section) return
@@ -68,7 +75,7 @@ export function Experience() {
 
         // INITIAL STATES
         gsap.set(outlineTitle, { opacity: 0 })
-        gsap.set(covers, { xPercent: 100 })
+        gsap.set(covers, { xPercent: 110 })
         gsap.set(descriptions, { xPercent: 150 })
         gsap.set(images, { xPercent: -150 })
         gsap.set(covers.slice(1), { visibility: 'hidden' })
@@ -250,7 +257,7 @@ export function Experience() {
         mm.revert()
       }
     },
-    { scope: sectionRef, dependencies: [] }
+    { scope: sectionRef, dependencies: [setupReady] }
   )
 
   return (

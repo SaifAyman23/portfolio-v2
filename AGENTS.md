@@ -239,7 +239,7 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
    - Convert raster posters/photos to **WebP** (`ffmpeg -i in.png -c:v libwebp -quality 82 out.webp` — typically 10–16x smaller). AVIF is even better where supported.
    - Never ship a multi-MB PNG on the critical path. A 1.4 MB PNG ≈ 7s LCP on throttled 4G; a 92 KB WebP ≈ 0.5s.
 2. Mark the LCP image `fetchPriority="high"` and give it explicit `width` + `height`.
-3. **Load fonts non-render-blocking**: async `media="print" onload="this.media='all'"` + `<noscript>` fallback. Use `font-display: swap`.
+3. **Load fonts non-render-blocking**: prefer self-hosted variable fonts + `<link rel="preload">` over font CDNs (no DNS/TLS/stylesheet chain). Fallback pattern: async `media="print" onload="this.media='all'"` + `<noscript>`. Use `font-display: swap`.
 4. **Minify + split JavaScript**: Vite minifies by default; add `manualChunks` for stable vendor splits (react, query, radix, motion, i18n). Lazy-load every route.
 5. **Keep heavy SDKs out of the main bundle**: load them via dynamic `import()` only when needed (e.g., post-auth), never as a static import in the critical path.
 6. Serve a **loading skeleton** (inline in `index.html`) and fade it out once React mounts — avoids a blank screen flash and improves perceived FCP.
@@ -259,6 +259,8 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
 3. Pause background polling when not needed: `refetchIntervalInBackground: false`, `staleTime`.
 4. Animations should be CSS transforms/opacity (GPU-friendly), not layout properties.
 5. React Compiler + `useMemo`/`useCallback` for expensive derived values; avoid `setState` in `useEffect` (triggers re-render loops).
+6. Register animation plugins (GSAP etc.) once in the app entry — never only in lazy chunks (first trigger creation races the chunk load). Re-registration in chunks is harmless (idempotent).
+7. Stagger idle-deferred work and fast-scroll section mounts — N callbacks landing in one idle gap (or one scroll burst) sum into a single long task.
 
 ## 8. Lighthouse Diagnostic Vocabulary
 
