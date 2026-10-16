@@ -21,13 +21,26 @@ function dismissSkeleton(): void {
     window.setTimeout(() => skeleton.remove(), 350)
   }
   let done = false
+  let loaded = document.readyState === 'complete'
+  let introStarted = false
   const finish = () => {
-    if (done) return
+    if (done || !loaded || !introStarted) return
     done = true
     requestAnimationFrame(() => requestAnimationFrame(remove))
   }
-  window.addEventListener('hero-intro-start', finish, { once: true })
-  window.setTimeout(finish, 6000)
+  window.addEventListener('hero-intro-start', () => {
+    introStarted = true
+    finish()
+  })
+  window.addEventListener('load', () => {
+    loaded = true
+    finish()
+  })
+  window.setTimeout(() => {
+    loaded = true
+    introStarted = true
+    finish()
+  }, 6000)
 }
 
 dismissSkeleton()

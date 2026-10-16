@@ -7,7 +7,6 @@ import { useRef } from 'react'
 import about1Img from '@/assets/img/about/1.webp'
 import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
-import { useNearView } from '@/hooks/useNearView'
 import { splitFull, splitWords } from '@/lib/motion'
 import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
 
@@ -41,11 +40,9 @@ const OUTLINE_STYLE = { WebkitTextStroke: '3px var(--accent)' } as const
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null)
-  const setupReady = useNearView('about', { rootMargin: '1200px', initial: false, once: true })
 
   useGSAP(
     () => {
-      if (!setupReady) return
       const section = sectionRef.current
 
       if (!section) return
@@ -141,7 +138,7 @@ export function About() {
         mm.revert()
       }
     },
-    { scope: sectionRef, dependencies: [setupReady] }
+    { scope: sectionRef, dependencies: [] }
   )
 
   return (

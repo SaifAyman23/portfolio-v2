@@ -260,7 +260,7 @@ This is the playbook that earns green Lighthouse scores: **FCP 0.5s, CLS 0.001, 
 4. Animations should be CSS transforms/opacity (GPU-friendly), not layout properties.
 5. React Compiler + `useMemo`/`useCallback` for expensive derived values; avoid `setState` in `useEffect` (triggers re-render loops).
 6. Register animation plugins (GSAP etc.) once in the app entry — never only in lazy chunks (first trigger creation races the chunk load). Re-registration in chunks is harmless (idempotent).
-7. Stagger idle-deferred work and fast-scroll section mounts — N callbacks landing in one idle gap (or one scroll burst) sum into a single long task.
+7. Stagger idle-deferred work — N callbacks landing in one idle gap sum into a single long task. Section animation setup runs eagerly at mount by choice (gating it behind viewport proximity caused visible setup pops); keep the first commit lean instead of deferring it.
 
 ## 8. Lighthouse Diagnostic Vocabulary
 

@@ -11,8 +11,6 @@ import streamoreImg from '@/assets/img/projects/Streamore.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
-import { useNearView } from '@/hooks/useNearView'
-import { queueScrollRefresh } from '@/lib/scroll-refresh'
 
 const projects = [
   {
@@ -87,10 +85,8 @@ const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project 
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const setupReady = useNearView('projects', { rootMargin: '1200px', initial: false, once: true })
 
   useGSAP(() => {
-    if (!setupReady) return
     const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
 
     if (panels.length === 0) return
@@ -381,14 +377,12 @@ export function Projects() {
       )
     })
 
-    queueScrollRefresh()
-
     return () => {
       tl.scrollTrigger?.kill()
       tl.kill()
       splits.forEach((split) => split.revert())
     }
-  }, [setupReady])
+  }, [])
 
   return (
     <section

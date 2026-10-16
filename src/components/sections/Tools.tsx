@@ -25,7 +25,6 @@ import {
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { useNearView } from '@/hooks/useNearView'
-import { queueScrollRefresh } from '@/lib/scroll-refresh'
 import { cn } from '@/lib/utils'
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
@@ -446,7 +445,6 @@ export function Tools() {
   const [activeSkillSet, setActiveSkillSet] = useState(skillSets[0])
   const [activeSkill, setActiveSkill] = useState(skillSets[0].skills[0])
   const near = useNearView('tools')
-  const setupReady = useNearView('tools', { rootMargin: '1200px', initial: false, once: true })
   const loops = useRef<gsap.core.Tween[]>([])
 
   useEffect(() => {
@@ -458,7 +456,6 @@ export function Tools() {
 
   useGSAP(
     () => {
-      if (!setupReady) return
       loops.current = []
       gsap.from(
         '[data-slot="radar"], [data-slot="tick-ring"], [data-slot="ruler-bar"], [data-slot="cool-meter"]',
@@ -507,14 +504,12 @@ export function Tools() {
         },
       })
 
-      queueScrollRefresh()
-
       return () => {
         tl.scrollTrigger?.kill()
         tl.kill()
       }
     },
-    { scope: rootRef, dependencies: [setupReady] }
+    { scope: rootRef }
   )
 
   useGSAP(
