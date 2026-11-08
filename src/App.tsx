@@ -12,6 +12,10 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Observer)
 
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+})
+
 const Home = lazy(() => import('@/pages/Home'))
 const JetScene = lazy(() =>
   import('./components/jet/JetScene').then((module) => ({ default: module.JetScene }))

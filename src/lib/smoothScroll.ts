@@ -8,6 +8,10 @@ export function getLenis(): Lenis | undefined {
 }
 
 export function initSmoothScroll() {
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  })
+
   const lenis = new Lenis({
     lerp: 0.08,
     smoothWheel: true,

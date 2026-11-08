@@ -7,7 +7,11 @@ import App from './App.tsx'
 
 import { initSmoothScroll } from '@/lib/smoothScroll'
 
-if (window.innerWidth >= 768) initSmoothScroll()
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+})
+
+initSmoothScroll()
 
 if (document.fonts?.ready) {
   document.fonts.ready.then(() => ScrollTrigger.refresh()).catch(() => {})

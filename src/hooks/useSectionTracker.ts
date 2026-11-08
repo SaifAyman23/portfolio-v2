@@ -176,13 +176,17 @@ export function useSectionTracker(
         ST.refresh()
       }
 
-      const refresh = (): void => {
-        ST.refresh()
+      let lastWidth = window.innerWidth
+      const onResize = (): void => {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth
+          ST.refresh()
+        }
       }
 
       createTriggers()
 
-      window.addEventListener('resize', refresh)
+      window.addEventListener('resize', onResize)
       window.addEventListener('load', createTriggers)
 
       observer = new MutationObserver(() => {
@@ -206,7 +210,7 @@ export function useSectionTracker(
         triggers.forEach((t) => t.kill())
         observer?.disconnect()
         observer = null
-        window.removeEventListener('resize', refresh)
+        window.removeEventListener('resize', onResize)
         window.removeEventListener('load', createTriggers)
       }
     }

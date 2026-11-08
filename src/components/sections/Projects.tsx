@@ -8,9 +8,11 @@ import careerlyImg from '@/assets/img/projects/Careerly.webp'
 import goImg from '@/assets/img/projects/Go.webp'
 import powerZoneImg from '@/assets/img/projects/Power Zone.webp'
 import streamoreImg from '@/assets/img/projects/Streamore.webp'
-import { CyberImage } from '@/components/ui/cyber-image'
+import { CyberFrame } from '@/components/ui/cyber-frame'
+import { cyberFrameClip } from '@/components/ui/cyber-frame-path'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
+import { cn } from '@/lib/utils'
 
 const projects = [
   {
@@ -117,6 +119,7 @@ export function Projects() {
       gsap.set(image, {
         opacity: 0,
         scale: 0.96,
+        force3D: true,
       })
     }
 
@@ -192,6 +195,7 @@ export function Projects() {
           scale: 1,
           duration: 2,
           ease: 'power2.out',
+          force3D: true,
         },
         '<1'
       )
@@ -407,19 +411,40 @@ export function Projects() {
           </h1>
 
           <div className="relative flex justify-center pt-16 sm:pt-20 lg:justify-end lg:pe-20 lg:pt-0">
-            <div data-slot="project-image">
-              <CyberImage
-                src={projects[activeIndex].image}
-                alt={projects[activeIndex].title}
-                strokeWidth={0}
+            <div data-slot="project-image" className="will-change-[transform,opacity]">
+              <CyberFrame
+                className="h-[32svh] w-[88vw] max-w-xl lg:h-100 lg:w-2xl lg:max-w-none"
+                contentClassName="p-0"
                 stroke="transparent"
-                frameClassName="h-[32svh] w-[88vw] max-w-xl lg:h-100 lg:w-2xl lg:max-w-none"
-              />
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0">
-                {projects.map((project) => (
-                  <img key={project.title} src={project.image} alt="" decoding="async" />
-                ))}
-              </div>
+                strokeWidth={0}
+                chamferX={54}
+                chamferY={54}
+              >
+                <div
+                  data-slot="cyber-image-viewport"
+                  className="relative h-full w-full overflow-hidden"
+                  style={{
+                    clipPath: cyberFrameClip(54, 54),
+                  }}
+                >
+                  {projects.map((project, idx) => (
+                    <img
+                      key={project.title}
+                      src={project.image}
+                      alt={project.title}
+                      loading="eager"
+                      decoding="async"
+                      draggable={false}
+                      className={cn(
+                        'absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out',
+                        idx === activeIndex
+                          ? 'opacity-100 z-10'
+                          : 'opacity-0 z-0 pointer-events-none'
+                      )}
+                    />
+                  ))}
+                </div>
+              </CyberFrame>
             </div>
           </div>
         </div>

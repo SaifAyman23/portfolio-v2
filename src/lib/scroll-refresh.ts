@@ -3,6 +3,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+})
+
 let queued: gsap.core.Tween | null = null
 
 /**
