@@ -558,7 +558,7 @@ export function Tools() {
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="relative z-900 flex h-svh flex-col items-center justify-center gap-8 bg-transparent px-5 py-6 lg:h-screen lg:px-6 lg:py-10"
+      className="relative z-900 flex h-svh flex-col items-center justify-center gap-8 bg-transparent px-5 py-6 lg:h-svh lg:px-6 lg:py-10"
     >
       {/*
         Small screens: one vertical column → skills panel, big circle, radar (spread out).

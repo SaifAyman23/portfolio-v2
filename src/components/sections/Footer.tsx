@@ -134,7 +134,7 @@ export function Footer() {
     <section
       id="footer"
       data-section="footer"
-      className="relative flex h-svh flex-col items-center justify-center gap-3 overflow-hidden lg:h-screen"
+      className="relative flex h-svh flex-col items-center justify-center gap-3 overflow-hidden lg:h-svh"
     >
       <div className="absolute inset-0 z-10">
         <img

@@ -258,7 +258,7 @@ export function Experience() {
       ref={sectionRef}
       id="experience"
       data-section="experience"
-      className="relative min-h-screen bg-black max-sm:overflow-hidden"
+      className="relative min-h-svh bg-black max-sm:overflow-hidden"
     >
       {/* Background / cover (desktop only) */}
       <div className="absolute inset-0 z-0 hidden items-center justify-center lg:flex">
@@ -298,7 +298,7 @@ export function Experience() {
       </div>
 
       {/* Experience content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-8 px-5 py-16 sm:px-6 lg:gap-50 lg:px-4 lg:py-0">
+      <div className="relative z-10 flex min-h-svh flex-col items-center justify-center gap-8 px-5 py-16 sm:px-6 lg:gap-50 lg:px-4 lg:py-0">
         {/* Mobile / tablet title, same style as the About title */}
         <h1 className="experience-title relative -top-5 self-start text-start text-5xl text-white sm:text-6xl md:text-7xl lg:hidden">
           Experience
@@ -310,7 +310,7 @@ export function Experience() {
             data-slot="experience-content"
             className={`flex w-full items-center justify-between gap-4 sm:gap-8 ${
               i % 2 === 1 ? 'flex-row-reverse' : ''
-            } lg:absolute lg:inset-0 lg:min-h-screen lg:flex-col lg:justify-center lg:gap-70 lg:px-4`}
+            } lg:absolute lg:inset-0 lg:min-h-svh lg:flex-col lg:justify-center lg:gap-70 lg:px-4`}
           >
             <div
               data-slot="experience-description"

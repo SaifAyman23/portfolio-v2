@@ -345,7 +345,7 @@ export function Projects() {
     <section
       id="projects"
       data-section="projects"
-      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 z-900 lg:min-h-screen lg:justify-center lg:gap-10 lg:py-0"
+      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 z-900 lg:min-h-svh lg:justify-center lg:gap-10 lg:py-0"
     >
       {/*
         Mobile / tablet: single column  →  image, then description, then tags.

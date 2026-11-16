@@ -151,7 +151,7 @@ export function Contact() {
     <section
       id="contact"
       data-section="contact"
-      className="relative z-70 flex min-h-screen grid-cols-2 items-center justify-center gap-3 px-6 max-lg:flex-col max-lg:items-stretch max-lg:justify-start max-lg:gap-6 max-lg:py-10 lg:grid"
+      className="relative z-70 flex min-h-svh grid-cols-2 items-center justify-center gap-3 px-6 max-lg:flex-col max-lg:items-stretch max-lg:justify-start max-lg:gap-6 max-lg:py-10 lg:grid"
     >
       <div className="start-0 bottom-0 z-20 flex flex-col flex-1 justify-between gap-6 lg:h-full lg:gap-0">
         <div className="h-auto w-full bg-white p-5 sm:p-8 lg:h-2/3 lg:w-4/6 lg:p-10">

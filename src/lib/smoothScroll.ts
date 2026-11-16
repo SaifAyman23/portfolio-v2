@@ -8,9 +8,27 @@ export function getLenis(): Lenis | undefined {
 }
 
 export function initSmoothScroll() {
-  ScrollTrigger.config({
-    ignoreMobileResize: true,
-  })
+  // Phone URL-bar resizes must not trigger refreshes that shift pins
+  ScrollTrigger.config({ ignoreMobileResize: true })
+
+  if (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    return () => {}
+  }
+
+  // On touch-only mobile devices, native hardware-accelerated momentum scrolling
+  // is standard and 120Hz. Lenis wheel emulation is unnecessary and conflicts
+  // with native touch momentum + mobile URL-bar collapsing/expanding.
+  const isTouchOnly =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(pointer: coarse)').matches &&
+    !window.matchMedia('(pointer: fine)').matches
+
+  if (isTouchOnly) {
+    return () => {}
+  }
 
   const lenis = new Lenis({
     lerp: 0.08,
