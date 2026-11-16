@@ -14,11 +14,8 @@ import { cn } from '@/lib/utils'
 
 const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project }) {
   return (
-    <div
-      data-slot="project-panel"
-      className="grid h-full w-full grid-cols-1 gap-5 [grid-area:1/1] lg:grid-cols-9"
-    >
-      <div className="relative flex flex-col items-center justify-evenly gap-6 text-center lg:col-span-6 lg:justify-center lg:gap-10">
+    <div data-slot="project-panel" className="grid h-full w-full grid-cols-1 gap-5 [grid-area:1/1]">
+      <div className="relative flex flex-col items-center justify-end gap-6 text-center lg:col-span-6 lg:justify-center lg:gap-10">
         <p className="max-w-3xl text-xl leading-snug sm:text-3xl lg:text-3xl lg:leading-normal">
           <span className="font-bold">{project.title} — </span>
           {project.description}
@@ -42,6 +39,7 @@ export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
   const { open, hasOpened, rootRef, handlers } = useHoverReveal()
   const activeProject = projects[activeIndex]
+  const galleryEnabled = activeProject.galleryEnabled
 
   useGSAP(() => {
     const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
@@ -347,7 +345,7 @@ export function Projects() {
     <section
       id="projects"
       data-section="projects"
-      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 lg:min-h-screen lg:justify-center lg:gap-10 lg:py-0"
+      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 z-900 lg:min-h-screen lg:justify-center lg:gap-10 lg:py-0"
     >
       {/*
         Mobile / tablet: single column  →  image, then description, then tags.
@@ -355,7 +353,7 @@ export function Projects() {
       */}
       <div className="relative grid w-full grid-cols-1 items-center gap-5 lg:grid-cols-9">
         {/* max-lg:z-10 lifts the image column (title + image) above the Japanese text on small screens */}
-        <div className="relative lg:col-span-6">
+        <div className="relative flex flex-col items-end justify-between gap-5 lg:col-span-6">
           <h1
             className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[150px]"
             style={{
@@ -369,10 +367,10 @@ export function Projects() {
             <div data-slot="project-image" className="will-change-[transform,opacity]">
               <CyberFrame
                 ref={rootRef}
-                role="group"
-                tabIndex={0}
-                aria-label={`${activeProject.title} screenshots`}
-                {...handlers}
+                role={galleryEnabled ? 'group' : undefined}
+                tabIndex={galleryEnabled ? 0 : undefined}
+                aria-label={galleryEnabled ? `${activeProject.title} screenshots` : undefined}
+                {...(galleryEnabled ? handlers : {})}
                 className="h-[32svh] w-[88vw] max-w-xl overflow-hidden lg:h-100 lg:w-2xl lg:max-w-none"
                 contentClassName="p-0"
                 stroke="transparent"
@@ -404,37 +402,47 @@ export function Projects() {
                     />
                   ))}
                 </div>
-                <ProjectGallery
-                  key={activeProject.slug}
-                  title={activeProject.title}
-                  images={activeProject.gallery}
-                  open={open}
-                  mounted={hasOpened}
-                />
+                {galleryEnabled && (
+                  <ProjectGallery
+                    key={activeProject.slug}
+                    title={activeProject.title}
+                    images={activeProject.gallery}
+                    open={open}
+                    mounted={hasOpened}
+                  />
+                )}
               </CyberFrame>
             </div>
+          </div>
+
+          {/* On small screens this block takes all remaining height so description and tags spread out */}
+          <div className="grid w-full flex-1">
+            {projects.map((project) => (
+              <ProjectPanel key={project.title} project={project} />
+            ))}
           </div>
         </div>
 
         {/* Japanese text: tucked behind the image on small screens, own column on lg+ */}
         <div
           data-slot="projects-japanese"
-          className="pointer-events-none absolute top-5 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:z-auto lg:col-span-3"
+          className="pointer-events-none absolute top-5 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:col-span-3"
         >
+          <h1
+            className="font-bold text-transparent hidden lg:block text-[320px] [writing-mode:vertical-rl]"
+            style={{
+              WebkitTextStroke: '6px var(--accent)',
+            }}
+          >
+            最強
+          </h1>
           <JapaneseText
             text="最強"
-            className="text-[70px] sm:font-bold sm:text-[170px] lg:text-[250px]"
+            className="text-[70px] sm:font-bold sm:text-[170px] lg:hidden"
             color="var(--accent)"
             border
           />
         </div>
-      </div>
-
-      {/* On small screens this block takes all remaining height so description and tags spread out */}
-      <div className="grid w-full flex-1 lg:flex-none">
-        {projects.map((project) => (
-          <ProjectPanel key={project.title} project={project} />
-        ))}
       </div>
     </section>
   )

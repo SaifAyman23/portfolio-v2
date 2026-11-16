@@ -152,7 +152,7 @@ export function Footer() {
         sized by whichever is smaller, the width or a third of the height.
         lg and up: original horizontal 590px text.
       */}
-      <div className="z-20 flex h-full w-full items-center justify-center bg-red-900 mix-blend-multiply">
+      <div className="z-60 flex h-full w-full items-center justify-center bg-red-900 mix-blend-multiply">
         <JapaneseText
           id="footer-japanese"
           text={'サイフ'}
@@ -161,7 +161,7 @@ export function Footer() {
       </div>
 
       <div
-        className="blurred-overlay absolute inset-0 z-20 backdrop-blur-xl"
+        className="blurred-overlay absolute inset-0 z-60 backdrop-blur-xl"
         style={{
           maskImage:
             'radial-gradient(ellipse 60% 45% at center, transparent 15%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.6) 65%, black 100%)',
@@ -171,7 +171,7 @@ export function Footer() {
       />
 
       {/* Name: two lines (Saif / Eldin) on small screens, one line on lg+ */}
-      <div className="absolute z-20 flex h-full w-full items-center justify-center px-4 lg:px-0">
+      <div className="absolute z-60 flex h-full w-full items-center justify-center px-4 lg:px-0">
         <h1 className="name font-ticking text-center text-white max-lg:text-[30vw] max-lg:leading-[0.9] lg:text-[300px]">
           Saif <br className="lg:hidden" />
           Eldin
@@ -186,7 +186,7 @@ export function Footer() {
 
       <CyberFrame
         ref={btnRef}
-        className="absolute right-4 bottom-6 z-50 overflow-hidden sm:right-10"
+        className="absolute right-4 bottom-6 z-60 overflow-hidden sm:right-10"
         style={{ width: 56, height: 56 }}
         fill="black"
         stroke="transparent"

@@ -17,7 +17,8 @@ const collator = new Intl.Collator(undefined, { numeric: true })
 /**
  * Screenshots for `slug`, read from src/assets/img/projects/gallery/<slug>/
  * (1.webp … 4.webp). Missing slots fall back to the project's cover so the
- * hover grid always renders four tiles.
+ * hover grid always renders four tiles. Projects with `galleryEnabled: false`
+ * skip the hover gallery entirely.
  */
 export function getProjectGallery(slug: string, cover: string): string[] {
   const urls = Object.entries(galleryModules)
@@ -34,6 +35,7 @@ type ProjectEntry = {
   title: string
   period: string
   image: string
+  galleryEnabled?: boolean
   description: string
   stack: string[]
 }
@@ -45,7 +47,7 @@ const entries: ProjectEntry[] = [
     period: 'July 2025 – Present',
     image: goImg,
     description:
-      'Multi-store delivery platform with customer workflows, order management, authentication with role-based access, and real-time notifications — architected for future merchant integration.',
+      'Multi-store delivery platform with customer ordering flows, RBAC access control, real-time notifications, and merchant-ready integration architecture.',
     stack: ['Django', 'Django REST Framework', 'React', 'Redis', 'RBAC'],
   },
   {
@@ -54,7 +56,7 @@ const entries: ProjectEntry[] = [
     period: 'December 2025 – June 2026',
     image: careerlyImg,
     description:
-      'AI-powered career platform aggregating jobs from 4 sources, with CV analysis, AI-assisted resume tailoring, application tracking, and personalized recommendations.',
+      'AI-powered career platform aggregating jobs from 4 sources with CV analysis, resume tailoring, application tracking, and personalized recommendations.',
     stack: ['Django', 'React', 'TypeScript', 'TanStack Query', 'AI'],
   },
   {
@@ -63,7 +65,7 @@ const entries: ProjectEntry[] = [
     period: 'December 2025 – April 2026',
     image: binSadanImg,
     description:
-      'Smart ERP for enterprise workflows — REST APIs, database architecture, role-based access, and workflow automation, mapped closely with client operations.',
+      'Smart ERP for enterprise workflows: REST APIs, database architecture, RBAC access, workflow automation, mapped well end to end with client operations.',
     stack: ['Django', 'React', 'PostgreSQL', 'RBAC'],
   },
   {
@@ -71,8 +73,9 @@ const entries: ProjectEntry[] = [
     title: 'Streamore',
     period: 'April 2025 – July 2026',
     image: streamoreImg,
+    galleryEnabled: false,
     description:
-      'Live streaming platform on LiveKit and RTMP, broadcasting to 5 platforms at once with layouts, overlays, and WebSocket private chat.',
+      'Live streaming platform on LiveKit and RTMP broadcasting to 5 platforms simultaneously, with multiple layouts, overlays, private WebSocket chat rooms.',
     stack: ['LiveKit', 'RTMP', 'React', 'WebSockets'],
   },
   {
@@ -80,15 +83,17 @@ const entries: ProjectEntry[] = [
     title: 'Power Zone Dashboard',
     period: 'September 2024',
     image: powerZoneImg,
+    galleryEnabled: false,
     description:
-      'Fitness dashboard for workouts, nutrition, and progress tracking — coach views, role-based access, optimized APIs, and WebSocket realtime.',
+      'Fitness dashboard for workouts, nutrition, and progress tracking, with coach views, RBAC permissions, optimized APIs, and real-time WebSocket updates.',
     stack: ['React', 'Django', 'WebSockets'],
   },
 ]
 
 export const projects = entries.map((entry) => ({
   ...entry,
-  gallery: getProjectGallery(entry.slug, entry.image),
+  galleryEnabled: entry.galleryEnabled ?? true,
+  gallery: entry.galleryEnabled === false ? [] : getProjectGallery(entry.slug, entry.image),
 }))
 
 export type Project = (typeof projects)[number]

@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 export type ScrollBarProps = {
   appearDelayMs?: number
   className?: string
+  hidden?: boolean
 }
 
 const MIN_THUMB = 28
@@ -28,7 +29,7 @@ function scrollTo(top: number, options?: { immediate?: boolean }) {
   window.scrollTo({ top, behavior: options?.immediate ? 'auto' : 'smooth' })
 }
 
-export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
+export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: ScrollBarProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const thumbRef = useRef<HTMLDivElement>(null)
   const drag = useRef<{ startY: number; startTop: number } | null>(null)
@@ -114,6 +115,7 @@ export function ScrollBar({ appearDelayMs = 4000, className }: ScrollBarProps) {
       className={cn(
         'fixed top-24 right-3 bottom-6 z-50 hidden w-3 backdrop-blur-md xl:block',
         !scrollable && 'invisible',
+        hidden && 'xl:hidden',
         className
       )}
     >

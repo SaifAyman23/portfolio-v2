@@ -1,5 +1,5 @@
 import { useGSAP } from '@gsap/react'
-import { PerspectiveCamera } from '@react-three/drei'
+import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { Suspense, useEffect, useRef, useState, type RefObject } from 'react'
@@ -47,10 +47,15 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
     stay: { position: [0.5, 0.6, -10.5], rotation: [0.5, 0, 0.1] },
     leave: { position: [30, 6, -25.5], rotation: [0.8, 0.4, 0] },
   },
+  // projects: {
+  //   enter: { position: [20, 4, -16], rotation: [0.7, 3.8, 0] },
+  //   stay: { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
+  //   leave: { position: [-30, 5, -20], rotation: [-0.7, 4, -0.3] },
+  // },
   projects: {
-    enter: { position: [20, 4, -16], rotation: [0.7, 3.8, 0] },
-    stay: { position: [4, 0.5, -4], rotation: [0.7, 3.8, 0] },
-    leave: { position: [-30, 5, -20], rotation: [-0.7, 4, -0.3] },
+    enter: { position: [30, 6, -25.5], rotation: [0.8, 0.4, 0] },
+    stay: { position: [30, 6, -25.5], rotation: [0.8, 0.4, 0] },
+    leave: { position: [0, 150, -14], rotation: [1.2, 4.724, 0] },
   },
   tools: {
     enter: { position: [0, 150, -14], rotation: [1.2, 4.724, 0] },
@@ -59,8 +64,8 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   },
   contact: {
     enter: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
-    stay: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
-    leave: { position: [0, -100, -14], rotation: [1.2, 4.724, 0] },
+    stay: { position: [-100, -50, -14], rotation: [1.2, 4.724, 0] },
+    leave: { position: [-20, 1.5, -8], rotation: [1.5, 6.3, -0.1] },
   },
   // contact: {
   //   enter: { position: [100, 20, -6], rotation: [0.3, 3.7, 0] },
@@ -68,8 +73,8 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   //   leave: { position: [4, -0.5, -6], rotation: [0.3, 3.7, 0] },
   // },
   footer: {
-    enter: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
-    stay: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
+    enter: { position: [-100, 1.5, -8], rotation: [1.5, 6.3, -0.1] },
+    stay: { position: [1, 1.5, -7], rotation: [1.5, 6.3, -0.1] },
     leave: { position: [-16, -3.5, -6], rotation: [0.3, 3.7, 0] },
   },
 }
@@ -121,6 +126,8 @@ function JetController({
   progressRef: RefObject<Record<SectionId, number>>
 }) {
   const jetRef = useRef<THREE.Group | null>(null)
+  const footerKeyRef = useRef<THREE.DirectionalLight | null>(null)
+  const footerRimRef = useRef<THREE.DirectionalLight | null>(null)
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const introDone = useRef(false)
 
@@ -160,6 +167,30 @@ function JetController({
       introRef.current?.kill()
     }
   }, [])
+
+  useEffect(() => {
+    const on = active === 'footer'
+    const key = footerKeyRef.current
+    const rim = footerRimRef.current
+
+    if (key) {
+      gsap.to(key, {
+        intensity: on ? 2.3 : 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    }
+
+    if (rim) {
+      gsap.to(rim, {
+        intensity: on ? 1.5 : 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    }
+  }, [active])
 
   /*
    * If the user scrolls before the intro finishes, stop racing it
@@ -202,11 +233,15 @@ function JetController({
   })
 
   return (
-    <group ref={jetRef} position={INTRO_START.position} rotation={INTRO_START.rotation}>
-      <Suspense fallback={null}>
-        <Jet />
-      </Suspense>
-    </group>
+    <>
+      <directionalLight ref={footerKeyRef} position={[-6, 5, 7]} intensity={0} color="#cdd6e4" />
+      <directionalLight ref={footerRimRef} position={[6, -3, 5]} intensity={0} color="#ff3a2d" />
+      <group ref={jetRef} position={INTRO_START.position} rotation={INTRO_START.rotation}>
+        <Suspense fallback={null}>
+          <Jet footer={active === 'footer'} />
+        </Suspense>
+      </group>
+    </>
   )
 }
 
@@ -230,11 +265,42 @@ export function JetScene({
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
-      <Canvas dpr={[1, 1.5]} gl={{ antialias: true }} frameloop={visible ? 'always' : 'never'}>
+      <Canvas
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        frameloop={visible ? 'always' : 'never'}
+      >
         <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />
         <directionalLight position={[0, 0.8, 7]} intensity={4.8} />
         <hemisphereLight args={['#ffffff', '#8B0606', 0.7]} />
         <ambientLight intensity={0.25} />
+        {active === 'footer' && (
+          <Environment resolution={256} frames={1} background={false}>
+            <Lightformer form="circle" intensity={6} position={[3, 1.5, 6]} scale={[1.4, 1.4, 1]} />
+            <Lightformer form="rect" intensity={3.8} position={[0, 7, 5]} scale={[9, 3, 1]} />
+            <Lightformer
+              form="rect"
+              intensity={2.1}
+              color="#ffffff"
+              position={[-7, -2, 6]}
+              scale={[5, 2, 1]}
+            />
+            <Lightformer
+              form="ring"
+              intensity={1.6}
+              color="#c6d2e0"
+              position={[6, 3, -6]}
+              scale={[4, 4, 1]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={1.15}
+              color="#e23a2c"
+              position={[7, -1, 2]}
+              scale={[2.5, 5, 1]}
+            />
+          </Environment>
+        )}
         <JetController active={active} progressRef={progressRef} />
       </Canvas>
     </div>

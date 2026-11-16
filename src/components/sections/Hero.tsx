@@ -16,6 +16,12 @@ gsap.registerPlugin(ScrollTrigger, SplitText)
 
 export function Hero() {
   const [glOK] = useState(isWebGLAvailable)
+  const [saveData] = useState(
+    () =>
+      typeof navigator !== 'undefined' &&
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData ===
+        true
+  )
 
   useGSAP(() => {
     const hero = document.querySelector('#hero')
@@ -345,7 +351,7 @@ export function Hero() {
         className={`flex flex-wrap justify-center xl:flex-nowrap xl:justify-start xl:absolute text-foreground -start-50 xl:rotate-90 xl:gap-2 z-60`}
       />
 
-      {glOK && (
+      {glOK && !saveData && (
         <div className="absolute z-0 h-full w-full opacity-30">
           <PixelBlast
             variant="circle"

@@ -69,6 +69,7 @@ export default defineConfig(({ mode }) => {
       target: 'es2020',
       cssCodeSplit: true,
       chunkSizeWarningLimit: 550,
+      manifest: true,
       rollupOptions: {
         output: {
           manualChunks: {

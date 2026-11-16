@@ -1,5 +1,5 @@
-export const SCAN_CELL_SIZE = 16
-export const SCAN_CELL_GAP = 2
+export const SCAN_CELL_SIZE = 32
+export const SCAN_CELL_GAP = 4
 export const SCAN_FILL_MS = 560
 export const SCAN_DRAIN_MS = 600
 

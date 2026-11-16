@@ -11,7 +11,7 @@ export default function Home(props: HomeProps) {
   return (
     <div className="bg-background">
       <TopBar active={props.active} direction={props.direction} />
-      <ScrollBar appearDelayMs={4800} />
+      <ScrollBar appearDelayMs={4800} hidden={props.active === 'footer'} />
       <Hero />
       <About />
       <Experience />
