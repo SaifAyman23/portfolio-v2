@@ -3,61 +3,14 @@ import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 import { memo, useState } from 'react'
 
-import binSadanImg from '@/assets/img/projects/Bin Sadan.webp'
-import careerlyImg from '@/assets/img/projects/Careerly.webp'
-import goImg from '@/assets/img/projects/Go.webp'
-import powerZoneImg from '@/assets/img/projects/Power Zone.webp'
-import streamoreImg from '@/assets/img/projects/Streamore.webp'
+import { ProjectGallery } from '@/components/projects'
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { cyberFrameClip } from '@/components/ui/cyber-frame-path'
 import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
+import { projects, type Project } from '@/constants/projects'
+import { useHoverReveal } from '@/hooks'
 import { cn } from '@/lib/utils'
-
-const projects = [
-  {
-    title: 'GO Delivery Platform',
-    period: 'July 2025 – Present',
-    image: goImg,
-    description:
-      'Multi-store delivery platform with customer workflows, order management, authentication with role-based access, and real-time notifications — architected for future merchant integration.',
-    stack: ['Django', 'Django REST Framework', 'React', 'Redis', 'RBAC'],
-  },
-  {
-    title: 'Careerly',
-    period: 'December 2025 – June 2026',
-    image: careerlyImg,
-    description:
-      'AI-powered career platform aggregating jobs from 4 sources, with CV analysis, AI-assisted resume tailoring, application tracking, and personalized recommendations.',
-    stack: ['Django', 'React', 'TypeScript', 'TanStack Query', 'AI'],
-  },
-  {
-    title: 'Bin Saedan Smart ERP',
-    period: 'December 2025 – April 2026',
-    image: binSadanImg,
-    description:
-      'Smart ERP for enterprise workflows — REST APIs, database architecture, role-based access, and workflow automation, mapped closely with client operations.',
-    stack: ['Django', 'React', 'PostgreSQL', 'RBAC'],
-  },
-  {
-    title: 'Streamore',
-    period: 'April 2025 – July 2026',
-    image: streamoreImg,
-    description:
-      'Live streaming platform on LiveKit and RTMP, broadcasting to 5 platforms at once with layouts, overlays, and WebSocket private chat.',
-    stack: ['LiveKit', 'RTMP', 'React', 'WebSockets'],
-  },
-  {
-    title: 'Power Zone Dashboard',
-    period: 'September 2024',
-    image: powerZoneImg,
-    description:
-      'Fitness dashboard for workouts, nutrition, and progress tracking — coach views, role-based access, optimized APIs, and WebSocket realtime.',
-    stack: ['React', 'Django', 'WebSockets'],
-  },
-]
-
-type Project = (typeof projects)[number]
 
 const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project }) {
   return (
@@ -87,6 +40,8 @@ const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project 
 
 export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const { open, hasOpened, rootRef, handlers } = useHoverReveal()
+  const activeProject = projects[activeIndex]
 
   useGSAP(() => {
     const panels = gsap.utils.toArray<HTMLElement>('[data-slot="project-panel"]')
@@ -413,7 +368,12 @@ export function Projects() {
           <div className="relative flex justify-center pt-16 sm:pt-20 lg:justify-end lg:pe-20 lg:pt-0">
             <div data-slot="project-image" className="will-change-[transform,opacity]">
               <CyberFrame
-                className="h-[32svh] w-[88vw] max-w-xl lg:h-100 lg:w-2xl lg:max-w-none"
+                ref={rootRef}
+                role="group"
+                tabIndex={0}
+                aria-label={`${activeProject.title} screenshots`}
+                {...handlers}
+                className="h-[32svh] w-[88vw] max-w-xl overflow-hidden lg:h-100 lg:w-2xl lg:max-w-none"
                 contentClassName="p-0"
                 stroke="transparent"
                 strokeWidth={0}
@@ -444,6 +404,13 @@ export function Projects() {
                     />
                   ))}
                 </div>
+                <ProjectGallery
+                  key={activeProject.slug}
+                  title={activeProject.title}
+                  images={activeProject.gallery}
+                  open={open}
+                  mounted={hasOpened}
+                />
               </CyberFrame>
             </div>
           </div>
