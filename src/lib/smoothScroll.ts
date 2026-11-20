@@ -18,12 +18,21 @@ export function getLenis(): Lenis | undefined {
 }
 
 export function initSmoothScroll() {
+  const isMobileScreen =
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(max-width: 1023px)').matches ||
+      window.matchMedia('(pointer: coarse)').matches)
+
   // Phone URL-bar resizes must not trigger refreshes that shift pins
   ScrollTrigger.config({ ignoreMobileResize: true })
 
   // Every ScrollTrigger in the app is driven by <main>, not the window.
+  // On mobile screens, disable pin anticipation to avoid scroll-position jumps/jank.
   const scroller = getScroller()
-  if (scroller) ScrollTrigger.defaults({ scroller })
+  ScrollTrigger.defaults({
+    ...(scroller ? { scroller } : {}),
+    ...(isMobileScreen ? { anticipatePin: 0 } : {}),
+  })
 
   if (
     typeof window !== 'undefined' &&
