@@ -489,17 +489,11 @@ export function Tools() {
 
       // CSS-sticky pin (see lib/sticky-pin.ts) — no JS transform, so no flicker.
       const toolsSection = rootRef.current
-      const isMobileScreen = window.matchMedia('(max-width: 1023px)').matches
-      const pin =
-        !isMobileScreen && toolsSection ? createStickyPin(toolsSection, (h) => h * 2.5) : null
+      const pin = toolsSection ? createStickyPin(toolsSection, (h) => h * 2.5) : null
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          ...(pin?.vars ?? {
-            trigger: toolsSection ?? rootRef.current,
-            start: 'top top',
-            end: isMobileScreen ? 'bottom top' : '+=250%',
-          }),
+          ...(pin?.vars ?? { trigger: rootRef.current, start: 'top top', end: '+=250%' }),
           scrub: true,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
