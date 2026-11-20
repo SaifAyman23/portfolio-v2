@@ -9,7 +9,7 @@ import { CyberFrame } from '../ui/cyber-frame'
 
 import PixelBlast from '@/components/PixelBlast'
 import { JapaneseText } from '@/components/ui/japanese-text'
-import { getLenis } from '@/lib/smoothScroll'
+import { getLenis, getScroller } from '@/lib/smoothScroll'
 import { isWebGLAvailable } from '@/lib/webgl'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
@@ -126,12 +126,14 @@ export function Hero() {
 
     const lenis = getLenis()
 
-    document.documentElement.style.overflow = 'hidden'
+    const scroller = getScroller()
+    // Lock the framed <main> (the real scroller) during the intro.
+    if (scroller) scroller.style.overflow = 'hidden'
     lenis?.stop()
     ScrollTrigger.getAll().forEach((trigger) => trigger.disable(false))
 
     const restoreScroll = () => {
-      document.documentElement.style.overflow = ''
+      if (scroller) scroller.style.overflow = ''
       lenis?.start()
       ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
       ScrollTrigger.refresh()
@@ -162,7 +164,7 @@ export function Hero() {
       revertSplits()
     }
 
-    window.addEventListener('scroll', skip, { passive: true, once: true })
+    ;(scroller ?? window).addEventListener('scroll', skip, { passive: true, once: true })
 
     const ready = Promise.race([
       (async () => {
@@ -306,8 +308,8 @@ export function Hero() {
 
     return () => {
       alive = false
-      window.removeEventListener('scroll', skip)
-      document.documentElement.style.overflow = ''
+      ;(scroller ?? window).removeEventListener('scroll', skip)
+      if (scroller) scroller.style.overflow = ''
       lenis?.start()
       ScrollTrigger.getAll().forEach((trigger) => trigger.enable(false))
       ScrollTrigger.refresh()
@@ -320,7 +322,7 @@ export function Hero() {
     <section
       id="hero"
       data-section="hero"
-      className="relative flex min-h-[100svh] flex-col items-center gap-3 overflow-hidden px-6 max-sm:pt-15 sm:justify-center sm:px-10 xl:px-6"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center gap-3 overflow-hidden px-6 py-10 sm:px-10 xl:px-6"
     >
       {/* White screen */}
       <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-70 bg-white" />
@@ -330,14 +332,14 @@ export function Hero() {
         id="hero-intro"
         className="pointer-events-none absolute inset-0 z-80 gap-10 flex flex-col items-center justify-center"
       >
-        <span className="text-[clamp(1.5rem,8vw,1.875rem)] sm:text-[5vw] font-cyberform font-bold leading-none text-black">
+        <span className="text-[clamp(1.5rem,8vw,1.875rem)] sm:text-[5vw] xl:text-[4.5rem] font-cyberform font-bold leading-none text-black">
           Engines Online
         </span>
         <div id="hero-loader" className="mx-auto flex xl:gap-2">
           {Array.from({ length: 10 }).map((_, i) => (
             <CyberFrame
               key={i}
-              className="w-[6vw] sm:h-[4vh] sm:w-[4vw]"
+              className="w-[6vw] sm:h-[4vh] sm:w-[4vw] xl:h-8 xl:w-[3.6rem]"
               fill="var(--accent)"
               strokeWidth={0}
             />
@@ -401,15 +403,15 @@ export function Hero() {
           - below lg: one centered column, first blurb, then the Japanese text, then the second blurb
           - from lg: a three-part row, with the Japanese text between the blurbs
           - from xl: the original 8-column grid and its wide side padding */}
-      <div className="grid w-full grid-cols-1 justify-items-center gap-y-4 sm:gap-y-6 lg:h-[50vh] lg:grid-cols-8 lg:justify-items-stretch lg:gap-3 lg:px-10 xl:px-60">
+      <div className="grid w-full grid-cols-1 justify-items-center gap-y-4 sm:gap-y-6 lg:h-[50vh] xl:h-[25rem] lg:grid-cols-8 lg:justify-items-stretch lg:gap-3 lg:px-10 xl:px-60">
         <div className="text-start lg:col-span-2" data-slot="hero-blurb">
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             ASAKURA // 2087
           </p>
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             NETWORK ONLINE
           </p>
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             SIGNAL STABLE
           </p>
         </div>
@@ -421,7 +423,7 @@ export function Hero() {
               text="ケン"
               border
               color="black"
-              className="text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] font-bold text-foreground [writing-mode:vertical-rl]"
+              className="text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] xl:text-[11.5rem] font-bold text-foreground [writing-mode:vertical-rl]"
             />
           </div>
         </div>
@@ -430,13 +432,13 @@ export function Hero() {
           data-slot="hero-blurb"
           className="flex h-full flex-col justify-start text-start lg:col-span-2 lg:justify-end"
         >
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             SYSTEMS IN MOTION
           </p>
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             CODE / DATA / INTERFACE
           </p>
-          <p className="text-pretty text-sm sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
+          <p className="text-pretty text-base sm:text-base lg:text-lg xl:text-2xl leading-relaxed">
             ROUTE: ACTIVE
           </p>
         </div>

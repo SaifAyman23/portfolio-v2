@@ -141,7 +141,7 @@ export function Footer() {
           src={bg}
           className="h-full w-full object-cover"
           alt=""
-          loading="lazy"
+          loading="eager"
           decoding="async"
         />
       </div>
@@ -156,7 +156,7 @@ export function Footer() {
         <JapaneseText
           id="footer-japanese"
           text={'サイフ'}
-          className="text-[length:min(60vw,22svh)] font-bold text-blue-700 max-lg:leading-none max-lg:[writing-mode:vertical-rl] lg:text-[590px]"
+          className="text-[length:min(52vw,19svh)] font-bold text-blue-700 max-lg:leading-none max-lg:[writing-mode:vertical-rl] lg:text-[32rem]"
         />
       </div>
 
@@ -170,9 +170,15 @@ export function Footer() {
         }}
       />
 
-      {/* Name: two lines (Saif / Eldin) on small screens, one line on lg+ */}
-      <div className="absolute z-60 flex h-full w-full items-center justify-center px-4 lg:px-0">
-        <h1 className="name font-ticking text-center text-white max-lg:text-[30vw] max-lg:leading-[0.9] lg:text-[300px]">
+      {/*
+        Name: two lines (Saif / Eldin) on small screens, one line on lg+.
+        Font size comes from the width of this box (container query units) instead of
+        fixed vw/px values, so it always fits and never overflows or clips.
+        Widest line in Ticking: "Eldin" ≈ 2.6em (stacked), "Saif Eldin" ≈ 5.1em (one line);
+        30cqw / 15.5cqw ≈ 80% of the width.
+      */}
+      <div className="absolute inset-0 z-60 flex items-center justify-center px-4 [container-type:inline-size] sm:px-8 lg:px-12">
+        <h1 className="name font-ticking text-center text-white max-lg:text-[30cqw] max-lg:leading-[0.9] lg:text-[15.5cqw] lg:leading-none lg:whitespace-nowrap">
           Saif <br className="lg:hidden" />
           Eldin
         </h1>

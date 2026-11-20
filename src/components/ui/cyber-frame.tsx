@@ -11,8 +11,11 @@ export type CyberFrameProps = React.ComponentProps<'div'> & {
   chamferY?: number
 }
 
+// Chamfers follow --ui-scale (set on <html>) so the cut corners grow with the frame.
 function frameClip(chamferX: number, chamferY: number) {
-  return `polygon(${chamferX}px 0, 100% 0, 100% calc(100% - ${chamferY}px), calc(100% - ${chamferX}px) 100%, 0 100%, 0 ${chamferY}px)`
+  const x = `calc(${chamferX}px * var(--ui-scale, 1))`
+  const y = `calc(${chamferY}px * var(--ui-scale, 1))`
+  return `polygon(${x} 0, 100% 0, 100% calc(100% - ${y}), calc(100% - ${x}) 100%, 0 100%, 0 ${y})`
 }
 
 export function CyberFrame({

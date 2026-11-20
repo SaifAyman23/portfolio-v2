@@ -206,12 +206,14 @@
   }
 
   /* ── Body ── */
+  /* The window never scrolls: <main id="main-content"> is the framed scroller.
+     Black is what shows around it. */
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground;
     font-size: 1rem;
     line-height: 1.6;
     font-weight: 400;
-    overflow-x: hidden;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -462,6 +464,43 @@
 
 *::-webkit-scrollbar {
   display: none;
+}
+
+/* ============================================================
+   FRAMED SCROLLER
+   <main> is 32px (16px gap each side, in px so it ignores the UI scale) smaller than the window, so full-height
+   sections are sized to the frame instead of the raw window height.
+   ============================================================ */
+#main-content .min-h-svh,
+#main-content .min-h-\[100svh\] {
+  min-height: var(--frame-h, calc(100svh - 32px));
+}
+
+#main-content .h-svh {
+  height: var(--frame-h, calc(100svh - 32px));
+}
+
+@media (min-width: 1024px) {
+  #main-content .lg\:min-h-svh {
+    min-height: var(--frame-h, calc(100svh - 32px));
+  }
+
+  #main-content .lg\:h-svh {
+    height: var(--frame-h, calc(100svh - 32px));
+  }
+}
+
+/* The scroller is focused programmatically (keyboard scrolling) and by touch/click —
+   never draw the focus ring on it. Declared unlayered so it beats the global
+   :focus-visible ring below. */
+#main-content:focus,
+#main-content:focus-visible {
+  outline: none !important;
+}
+
+/* The overlay layer is click-through, except the custom scroll bar. */
+#overlay-root [data-slot='scroll-bar'] {
+  pointer-events: auto;
 }
 
 /* ============================================================

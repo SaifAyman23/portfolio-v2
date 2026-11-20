@@ -10,6 +10,7 @@ import { JapaneseText } from '@/components/ui/japanese-text'
 import { Tag } from '@/components/ui/tag'
 import { projects, type Project } from '@/constants/projects'
 import { useHoverReveal } from '@/hooks'
+import { createStickyPin } from '@/lib/sticky-pin'
 import { cn } from '@/lib/utils'
 
 const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project }) {
@@ -26,7 +27,7 @@ const ProjectPanel = memo(function ProjectPanel({ project }: { project: Project 
             <Tag
               key={skill}
               text={skill}
-              className="text-white max-sm:text-[16px] sm:max-lg:text-xs"
+              className="text-white max-sm:text-[1rem] sm:max-lg:text-xs"
             />
           ))}
         </div>
@@ -70,7 +71,7 @@ export function Projects() {
 
     if (image) {
       gsap.set(image, {
-        opacity: 0,
+        opacity: 1,
         scale: 0.96,
         force3D: true,
       })
@@ -84,18 +85,20 @@ export function Projects() {
     }
 
     panels.forEach((panel, i) => {
+      const isFirst = i === 0
+
       gsap.set(panel, {
-        autoAlpha: 0,
-        y: 24,
+        autoAlpha: isFirst ? 1 : 0,
+        y: isFirst ? 0 : 24,
       })
 
       gsap.set(splits[i].words, {
-        opacity: 0,
+        opacity: isFirst ? 1 : 0,
       })
 
       gsap.set(panel.querySelectorAll('.tag'), {
-        autoAlpha: 0,
-        y: 10,
+        autoAlpha: isFirst ? 1 : 0,
+        y: isFirst ? 0 : 10,
       })
     })
 
@@ -105,16 +108,15 @@ export function Projects() {
      * ─────────────────────────────
      */
 
+    // CSS-sticky pin (see lib/sticky-pin.ts) — no JS transform, so no flicker.
+    const projectsSection = document.getElementById('projects')
+    const pin = projectsSection ? createStickyPin(projectsSection, (h) => h * 4) : null
+
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#projects',
-        start: 'top top',
-        end: '+=400%',
+        ...(pin?.vars ?? { trigger: '#projects', start: 'top top', end: '+=400%' }),
         scrub: true,
-        pin: true,
-        // pinReparent removed: it moved the whole section into <body> while pinned,
-        // which is what made the "Projects" title disappear during the pin.
-        anticipatePin: 2,
+        invalidateOnRefresh: true,
       },
     })
 
@@ -144,7 +146,6 @@ export function Projects() {
       tl.to(
         image,
         {
-          opacity: 1,
           scale: 1,
           duration: 2,
           ease: 'power2.out',
@@ -338,6 +339,7 @@ export function Projects() {
       tl.scrollTrigger?.kill()
       tl.kill()
       splits.forEach((split) => split.revert())
+      pin?.revert()
     }
   }, [])
 
@@ -345,7 +347,7 @@ export function Projects() {
     <section
       id="projects"
       data-section="projects"
-      className="relative flex min-h-svh flex-col items-center gap-4 overflow-x-clip px-5 py-8 sm:px-6 z-900 lg:min-h-svh lg:justify-center lg:gap-10 lg:py-0"
+      className="relative flex min-h-svh flex-col items-center justify-center gap-4 overflow-x-clip px-5 py-10 sm:px-6 z-900 lg:min-h-svh lg:justify-center lg:gap-10 lg:py-0"
     >
       {/*
         Mobile / tablet: single column  →  image, then description, then tags.
@@ -355,7 +357,7 @@ export function Projects() {
         {/* max-lg:z-10 lifts the image column (title + image) above the Japanese text on small screens */}
         <div className="relative flex flex-col items-end justify-between gap-5 lg:col-span-6">
           <h1
-            className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[150px]"
+            className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[9.375rem]"
             style={{
               WebkitTextStroke: '3px var(--foreground)',
             }}
@@ -363,15 +365,18 @@ export function Projects() {
             Projects
           </h1>
 
-          <div className="relative flex justify-center pt-16 sm:pt-20 lg:justify-end lg:pe-20 lg:pt-0">
-            <div data-slot="project-image" className="will-change-[transform,opacity]">
+          <div className="relative flex w-full justify-center pt-16 sm:pt-20 lg:justify-end lg:pe-20 lg:pt-0">
+            <div
+              data-slot="project-image"
+              className="w-full max-w-xl will-change-[transform,opacity] lg:w-auto lg:max-w-none"
+            >
               <CyberFrame
                 ref={rootRef}
                 role={galleryEnabled ? 'group' : undefined}
                 tabIndex={galleryEnabled ? 0 : undefined}
                 aria-label={galleryEnabled ? `${activeProject.title} screenshots` : undefined}
                 {...(galleryEnabled ? handlers : {})}
-                className="h-[32svh] w-[88vw] max-w-xl overflow-hidden lg:h-100 lg:w-2xl lg:max-w-none"
+                className="h-[32svh] w-full overflow-hidden lg:h-100 lg:w-2xl"
                 contentClassName="p-0"
                 stroke="transparent"
                 strokeWidth={0}
@@ -429,7 +434,7 @@ export function Projects() {
           className="pointer-events-none absolute top-5 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:col-span-3"
         >
           <h1
-            className="font-bold text-transparent hidden lg:block text-[320px] [writing-mode:vertical-rl]"
+            className="font-bold text-transparent hidden lg:block text-[20rem] [writing-mode:vertical-rl]"
             style={{
               WebkitTextStroke: '6px var(--accent)',
             }}
@@ -438,7 +443,7 @@ export function Projects() {
           </h1>
           <JapaneseText
             text="最強"
-            className="text-[70px] sm:font-bold sm:text-[170px] lg:hidden"
+            className="text-[4.375rem] sm:font-bold sm:text-[10.625rem] lg:hidden"
             color="var(--accent)"
             border
           />

@@ -16,10 +16,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="format-detection" content="telephone=no" />
 
-    <link
-      rel="canonical"
-      href="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/"
-    />
+    <link rel="canonical" href="https://saifayman23.github.io/portfolio/v2/" />
     <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32x32.png" />
     <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -36,14 +33,8 @@
       property="og:description"
       content="Full-stack engineer building production-grade products end to end. Django APIs, real-time systems, and React interfaces."
     />
-    <meta
-      property="og:url"
-      content="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/"
-    />
-    <meta
-      property="og:image"
-      content="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/og.png"
-    />
+    <meta property="og:url" content="https://saifayman23.github.io/portfolio/v2/" />
+    <meta property="og:image" content="https://saifayman23.github.io/portfolio/v2/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Saif Eldin Ayman — portfolio" />
@@ -56,10 +47,7 @@
       name="twitter:description"
       content="Full-stack engineer building production-grade products end to end. Django APIs, real-time systems, and React interfaces."
     />
-    <meta
-      name="twitter:image"
-      content="https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/og.png"
-    />
+    <meta name="twitter:image" content="https://saifayman23.github.io/portfolio/v2/og.png" />
     <meta name="twitter:image:alt" content="Saif Eldin Ayman — portfolio" />
 
     <!-- Fonts are self-hosted (src/assets/fonts) — zero third parties -->
@@ -70,7 +58,7 @@
         "@type": "Person",
         "name": "Saif Eldin Ayman",
         "jobTitle": "Full-Stack Engineer",
-        "url": "https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/",
+        "url": "https://saifayman23.github.io/portfolio/v2/",
         "sameAs": [
           "https://github.com/SaifAyman23",
           "https://www.linkedin.com/in/saif-eldin-ayman-a2330b294"
@@ -92,7 +80,7 @@
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Saif Eldin Ayman",
-        "url": "https://saifayman23.github.io/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/",
+        "url": "https://saifayman23.github.io/portfolio/v2/",
         "description": "Full-stack engineer building production-grade products end to end. Django APIs, real-time systems, and React interfaces.",
         "inLanguage": "en"
       }
@@ -165,7 +153,27 @@
         }
       } catch (e) {}
     </script>
-    <div id="root"></div>
+    <!--
+      Page frame: the window itself never scrolls. <main> is the (rounded, inset)
+      scroll container that wraps the whole app; #overlay-root sits exactly over it
+      and hosts the fixed chrome (top bar, scroll bar, jet) so it stays inside the frame.
+    -->
+    <div
+      id="app-frame"
+      class="fixed inset-0 flex items-center justify-center overflow-hidden bg-black"
+    >
+      <main
+        id="main-content"
+        tabindex="-1"
+        class="h-[var(--frame-h,calc(100dvh-32px))] w-[var(--frame-w,calc(100vw-32px))] shrink-0 overflow-x-hidden overflow-y-auto overscroll-contain rounded-2xl bg-background outline-none"
+      >
+        <div id="root"></div>
+      </main>
+      <div
+        id="overlay-root"
+        class="pointer-events-none fixed inset-0 z-50 m-auto h-[var(--frame-h,calc(100dvh-32px))] w-[var(--frame-w,calc(100vw-32px))] overflow-hidden rounded-2xl [contain:layout_paint]"
+      ></div>
+    </div>
     <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
   </body>
 </html>

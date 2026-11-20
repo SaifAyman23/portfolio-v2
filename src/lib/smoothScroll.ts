@@ -2,6 +2,16 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
+export const SCROLLER_ID = 'main-content'
+
+/**
+ * The element that scrolls. The window never scrolls — the site lives inside
+ * the framed <main id="main-content"> declared in index.html.
+ */
+export function getScroller(): HTMLElement | null {
+  return typeof document === 'undefined' ? null : document.getElementById(SCROLLER_ID)
+}
+
 /** The active Lenis instance, if smooth scroll is running. */
 export function getLenis(): Lenis | undefined {
   return (window as unknown as { __lenis?: Lenis }).__lenis
@@ -10,6 +20,10 @@ export function getLenis(): Lenis | undefined {
 export function initSmoothScroll() {
   // Phone URL-bar resizes must not trigger refreshes that shift pins
   ScrollTrigger.config({ ignoreMobileResize: true })
+
+  // Every ScrollTrigger in the app is driven by <main>, not the window.
+  const scroller = getScroller()
+  if (scroller) ScrollTrigger.defaults({ scroller })
 
   if (
     typeof window !== 'undefined' &&
@@ -31,6 +45,10 @@ export function initSmoothScroll() {
   }
 
   const lenis = new Lenis({
+    ...(scroller ? { wrapper: scroller, content: scroller.firstElementChild as HTMLElement } : {}),
+    // Listen on the window so wheel input over the black margin / custom
+    // scroll bar still scrolls <main>.
+    eventsTarget: window,
     lerp: 0.08,
     smoothWheel: true,
     wheelMultiplier: 1,

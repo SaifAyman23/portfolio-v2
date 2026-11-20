@@ -7,6 +7,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { useMediaQuery, useSectionTracker } from './hooks'
 import MainLayout from './MainLayout'
 
+import { Overlay } from '@/components/Overlay'
 import { SeoUpdater } from '@/components/SeoUpdater'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Observer)
@@ -39,7 +40,11 @@ function App() {
     <>
       <SeoUpdater />
       <Suspense fallback={null}>
-        {isXl && idle && <JetScene active={active} progressRef={progressRef} />}
+        {isXl && idle && (
+          <Overlay>
+            <JetScene active={active} progressRef={progressRef} />
+          </Overlay>
+        )}
         <MainLayout>
           <Home active={active} direction={direction} />
         </MainLayout>

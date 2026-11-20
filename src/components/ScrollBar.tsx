@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { useEffect, useRef, useState } from 'react'
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
-import { getLenis } from '@/lib/smoothScroll'
+import { getLenis, getScroller } from '@/lib/smoothScroll'
 import { cn } from '@/lib/utils'
 
 export type ScrollBarProps = {
@@ -26,7 +26,7 @@ function scrollTo(top: number, options?: { immediate?: boolean }) {
     lenis.scrollTo(top, { immediate: options?.immediate ?? false })
     return
   }
-  window.scrollTo({ top, behavior: options?.immediate ? 'auto' : 'smooth' })
+  getScroller()?.scrollTo({ top, behavior: options?.immediate ? 'auto' : 'smooth' })
 }
 
 export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: ScrollBarProps) {
@@ -51,19 +51,20 @@ export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: S
   useEffect(() => {
     const track = trackRef.current
     const thumb = thumbRef.current
-    if (!track || !thumb) return
+    const scroller = getScroller()
+    if (!track || !thumb || !scroller) return
 
     let raf = 0
     const update = () => {
-      const content = document.documentElement.scrollHeight
-      const viewport = window.innerHeight
+      const content = scroller.scrollHeight
+      const viewport = scroller.clientHeight
       const maxTop = content - viewport
       const next = maxTop > 0
       setScrollable((prev) => (prev === next ? prev : next))
       if (!next) return
       const trackHeight = track.clientHeight
       const thumbHeight = Math.max((viewport / content) * trackHeight, MIN_THUMB)
-      const ratio = window.scrollY / maxTop
+      const ratio = scroller.scrollTop / maxTop
       thumb.style.height = `${thumbHeight}px`
       thumb.style.transform = `translateY(${(trackHeight - thumbHeight) * ratio}px)`
     }
@@ -76,12 +77,12 @@ export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: S
     }
 
     update()
-    window.addEventListener('scroll', schedule, { passive: true })
+    scroller.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
     window.addEventListener('load', update)
     return () => {
       if (raf) cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', schedule)
+      scroller.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
       window.removeEventListener('load', update)
     }
@@ -96,7 +97,9 @@ export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: S
       Math.max((clientY - rect.top - thumbHeight / 2) / (rect.height - thumbHeight), 0),
       1
     )
-    scrollTo(ratio * (document.documentElement.scrollHeight - window.innerHeight))
+    const scroller = getScroller()
+    if (!scroller) return
+    scrollTo(ratio * (scroller.scrollHeight - scroller.clientHeight))
   }
 
   return (
@@ -125,13 +128,15 @@ export function ScrollBar({ appearDelayMs = 4000, className, hidden = false }: S
         onPointerDown={(e) => {
           e.stopPropagation()
           ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-          drag.current = { startY: e.clientY, startTop: window.scrollY }
+          drag.current = { startY: e.clientY, startTop: getScroller()?.scrollTop ?? 0 }
         }}
         onPointerMove={(e) => {
           if (!drag.current || !trackRef.current) return
           const trackHeight = trackRef.current.clientHeight
           const thumbHeight = thumbRef.current?.clientHeight ?? MIN_THUMB
-          const maxTop = document.documentElement.scrollHeight - window.innerHeight
+          const scroller = getScroller()
+          if (!scroller) return
+          const maxTop = scroller.scrollHeight - scroller.clientHeight
           const deltaRatio = (e.clientY - drag.current.startY) / (trackHeight - thumbHeight)
           // immediate: true — a scrollbar drag needs to track the pointer 1:1;
           // Lenis's default eased scrollTo would lag noticeably behind the cursor.

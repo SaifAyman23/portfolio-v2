@@ -1,5 +1,7 @@
 import { useEffect, useState, type RefObject } from 'react'
 
+import { getScroller } from '@/lib/smoothScroll'
+
 export type NearViewOptions = {
   rootMargin?: string
   threshold?: number | number[]
@@ -21,12 +23,16 @@ export function useNearView(
   useEffect(() => {
     const el = typeof target === 'string' ? document.getElementById(target) : target.current
     if (!el || typeof IntersectionObserver === 'undefined') return
+    // Observe against the scroller: ancestors' overflow clips would otherwise
+    // swallow the rootMargin when the root is the window.
+    const scroller = getScroller()
+    const root = scroller?.contains(el) ? scroller : null
     const io = new IntersectionObserver(
       ([entry]) => {
         const next = entry?.isIntersecting ?? true
         setNear((prev) => (prev === next ? prev : next))
       },
-      { rootMargin, threshold }
+      { root, rootMargin, threshold }
     )
     io.observe(el)
     return () => io.disconnect()

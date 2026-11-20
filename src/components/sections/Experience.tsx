@@ -10,6 +10,7 @@ import exp3Img from '@/assets/img/experience/3.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { splitFull, splitWords } from '@/lib/motion'
 import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
+import { createStickyPin } from '@/lib/sticky-pin'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
 
@@ -74,14 +75,14 @@ export function Experience() {
         gsap.set(covers.slice(1), { visibility: 'hidden' })
         gsap.set(contents.slice(1), { visibility: 'hidden' })
 
+        // CSS-sticky pin (see lib/sticky-pin.ts) — no JS transform, so no flicker.
+        const pin = createStickyPin(section, (h) => h * 4)
+
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '+=400%',
+            ...pin.vars,
             scrub: true,
-            pin: true,
-            anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         })
 
@@ -139,6 +140,8 @@ export function Experience() {
           tl.set(contents[i + 1], { visibility: 'visible' })
           contentIn(i + 1, 1.6)
         }
+
+        return () => pin.revert()
       })
 
       /*
@@ -266,7 +269,7 @@ export function Experience() {
           {/* Solid title */}
           <h1
             data-slot="experience-solid-title"
-            className="absolute inset-0 flex items-center justify-center text-white xl:text-[200px]"
+            className="absolute inset-0 flex items-center justify-center text-white xl:text-[12.5rem]"
           >
             Experience
           </h1>
@@ -289,7 +292,7 @@ export function Experience() {
           <h1
             data-slot="experience-outline-title"
             aria-hidden="true"
-            className="absolute inset-0 flex items-center justify-center text-transparent xl:text-[200px]"
+            className="absolute inset-0 flex items-center justify-center text-transparent xl:text-[12.5rem]"
             style={OUTLINE_STYLE}
           >
             Experience
@@ -316,7 +319,7 @@ export function Experience() {
               data-slot="experience-description"
               className="w-3/5 max-w-300 text-start lg:w-auto"
             >
-              <p className="text-sm font-normal text-white sm:text-lg md:text-2xl lg:text-4xl">
+              <p className="text-[0.9375rem] font-normal text-white sm:text-lg md:text-2xl lg:text-4xl">
                 {experience.description}
               </p>
             </div>

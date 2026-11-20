@@ -25,5 +25,7 @@ export function buildCyberFramePath(
 export const CYBER_FRAME_PATH = buildCyberFramePath()
 
 export function cyberFrameClip(chamferX = 18, chamferY = 18) {
-  return `polygon(${chamferX}px 0, 100% 0, 100% calc(100% - ${chamferY}px), calc(100% - ${chamferX}px) 100%, 0 100%, 0 ${chamferY}px)`
+  const x = `calc(${chamferX}px * var(--ui-scale, 1))`
+  const y = `calc(${chamferY}px * var(--ui-scale, 1))`
+  return `polygon(${x} 0, 100% 0, 100% calc(100% - ${y}), calc(100% - ${x}) 100%, 0 100%, 0 ${y})`
 }

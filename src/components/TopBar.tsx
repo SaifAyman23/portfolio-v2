@@ -46,7 +46,7 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
       <div
         data-slot="top-bar-bars"
         aria-hidden="true"
-        className="flex w-full max-w-4xl items-start transition-all justify-center gap-[3px] px-6"
+        className="flex w-full max-w-4xl items-start transition-all justify-center gap-[0.1875rem] px-6"
       >
         {bars.map((bar, i) => {
           const redMix = Math.pow(bar.opacity, 8) * 100
@@ -54,9 +54,9 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
             <span
               key={i}
               data-slot={i === center ? 'top-bar-bar-active' : 'top-bar-bar'}
-              className="w-[2px] shrink-0 rounded-full transition-[background-color] duration-500"
+              className="w-[0.125rem] shrink-0 rounded-full transition-[background-color] duration-500"
               style={{
-                height: bar.height,
+                height: `${bar.height / 16}rem`,
                 filter: `blur(${bar.blur.toFixed(2)}px)`,
                 opacity: bar.opacity.toFixed(3),
                 backgroundColor: `color-mix(in srgb, var(--accent) ${redMix.toFixed(1)}%, ${baseColor} ${(100 - redMix).toFixed(1)}%)`,

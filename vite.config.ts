@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
   const siteUrl = env.VITE_SITE_URL || DEFAULT_SITE_URL
 
   return {
-    base: '/portfolio/v2/82aef4670d91c655bab1e9f5f3e3f536/',
+    base: '/portfolio/v2/',
     plugins: [
       react({
         babel: {

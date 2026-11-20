@@ -25,6 +25,7 @@ import {
 
 import { CyberFrame } from '@/components/ui/cyber-frame'
 import { useNearView } from '@/hooks/useNearView'
+import { createStickyPin } from '@/lib/sticky-pin'
 import { cn } from '@/lib/utils'
 
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
@@ -56,7 +57,7 @@ function useIsDesktop() {
 }
 
 export type RadarProps = {
-  size?: number
+  size?: number | string
   rings?: Array<{ r: number; color: string }>
   sweepSpan?: number
   sweepFrom?: string
@@ -254,7 +255,7 @@ export function RulerBar({
 }
 
 export type CoolMeterProps = {
-  height?: number
+  height?: number | string
   segments?: number
   active?: number
   gap?: number
@@ -370,7 +371,9 @@ function LiveCoolMeter({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
     return () => tween.kill()
   }, [])
 
-  return <CoolMeter active={coolActive} bottomLabel="Cool-Ometer" topLabel="Too Cool" />
+  return (
+    <CoolMeter active={coolActive} bottomLabel="Cool-Ometer" topLabel="Too Cool" height="22rem" />
+  )
 }
 
 function LiveKts({ loops }: { loops: RefObject<gsap.core.Tween[]> }) {
@@ -403,35 +406,35 @@ export function Tools() {
       backend: {
         title: 'Backend',
         skills: [
-          { title: 'Python', icon: <SiPython className="size-35 drop-shadow-2xl" /> },
-          { title: 'Django', icon: <SiDjango className="size-35" /> },
-          { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-35" /> },
-          { title: 'MySQL', icon: <SiMysql className="size-35" /> },
-          { title: 'Redis', icon: <SiRedis className="size-35" /> },
-          { title: 'Celery', icon: <SiCelery className="size-35" /> },
-          { title: 'Firebase', icon: <SiFirebase className="size-35" /> },
+          { title: 'Python', icon: <SiPython className="size-30 drop-shadow-2xl" /> },
+          { title: 'Django', icon: <SiDjango className="size-30" /> },
+          { title: 'PostgreSQL', icon: <BiLogoPostgresql className="size-30" /> },
+          { title: 'MySQL', icon: <SiMysql className="size-30" /> },
+          { title: 'Redis', icon: <SiRedis className="size-30" /> },
+          { title: 'Celery', icon: <SiCelery className="size-30" /> },
+          { title: 'Firebase', icon: <SiFirebase className="size-30" /> },
         ],
       },
       frontend: {
         title: 'Frontend',
         skills: [
-          { title: 'React', icon: <SiReact className="size-35" /> },
-          { title: 'TypeScript', icon: <SiTypescript className="size-35" /> },
-          { title: 'JavaScript', icon: <SiJavascript className="size-35" /> },
-          { title: 'Tailwind', icon: <SiTailwindcss className="size-35" /> },
-          { title: 'TanStack Query', icon: <SiTanstack className="size-35" /> },
-          { title: 'GSAP', icon: <SiGsap className="size-35" /> },
+          { title: 'React', icon: <SiReact className="size-30" /> },
+          { title: 'TypeScript', icon: <SiTypescript className="size-30" /> },
+          { title: 'JavaScript', icon: <SiJavascript className="size-30" /> },
+          { title: 'Tailwind', icon: <SiTailwindcss className="size-30" /> },
+          { title: 'TanStack Query', icon: <SiTanstack className="size-30" /> },
+          { title: 'GSAP', icon: <SiGsap className="size-30" /> },
         ],
       },
       tools: {
         title: 'Tools',
         skills: [
-          { title: 'Git', icon: <SiGit className="size-35" /> },
-          { title: 'GitHub', icon: <SiGithub className="size-35" /> },
-          { title: 'Docker', icon: <SiDocker className="size-35" /> },
-          { title: 'Vercel', icon: <SiVercel className="size-35" /> },
-          { title: 'Figma', icon: <SiFigma className="size-35" /> },
-          { title: 'Postman', icon: <SiPostman className="size-35" /> },
+          { title: 'Git', icon: <SiGit className="size-30" /> },
+          { title: 'GitHub', icon: <SiGithub className="size-30" /> },
+          { title: 'Docker', icon: <SiDocker className="size-30" /> },
+          { title: 'Vercel', icon: <SiVercel className="size-30" /> },
+          { title: 'Figma', icon: <SiFigma className="size-30" /> },
+          { title: 'Postman', icon: <SiPostman className="size-30" /> },
         ],
       },
     }),
@@ -484,14 +487,15 @@ export function Tools() {
       })
       loops.current.push(sweep, ticks)
 
+      // CSS-sticky pin (see lib/sticky-pin.ts) — no JS transform, so no flicker.
+      const toolsSection = rootRef.current
+      const pin = toolsSection ? createStickyPin(toolsSection, (h) => h * 2.5) : null
+
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: rootRef.current,
-          start: 'top top',
-          end: '+=250%',
+          ...(pin?.vars ?? { trigger: rootRef.current, start: 'top top', end: '+=250%' }),
           scrub: true,
-          pin: true,
-          anticipatePin: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const progress = self.progress
             const nextIndex = Math.min(
@@ -507,6 +511,7 @@ export function Tools() {
       return () => {
         tl.scrollTrigger?.kill()
         tl.kill()
+        pin?.revert()
       }
     },
     { scope: rootRef }
@@ -558,7 +563,7 @@ export function Tools() {
       ref={rootRef}
       id="tools"
       data-section="tools"
-      className="relative z-900 flex h-svh flex-col items-center justify-center gap-8 bg-transparent px-5 py-6 lg:h-svh lg:px-6 lg:py-10"
+      className="relative z-900 flex h-svh flex-col items-center justify-center gap-8 bg-transparent px-5 py-10 lg:h-svh lg:px-6 lg:py-10"
     >
       {/*
         Small screens: one vertical column → skills panel, big circle, radar (spread out).
@@ -597,7 +602,7 @@ export function Tools() {
           </CyberFrame>
           <Radar
             className="order-3 lg:order-none"
-            size={isDesktop ? 320 : 200}
+            size={isDesktop ? '17rem' : 200}
             showIcon={isDesktop}
             children={isDesktop ? activeSkill.icon : undefined}
           />
@@ -606,7 +611,7 @@ export function Tools() {
         {/* Big circle: fills all the space left between the panel and the radar on small screens */}
         <div className="order-2 flex min-h-0 w-full flex-1 flex-col items-center justify-center lg:order-none lg:col-span-6 lg:flex-none">
           <div className="relative flex min-h-0 w-full flex-1 items-center justify-center max-lg:[container-type:size] lg:mb-5 lg:h-5/6 lg:flex-none lg:items-end">
-            <div className="relative size-[min(100cqw,100cqh)] lg:size-[670px]">
+            <div className="relative size-[min(100cqw,100cqh)] lg:size-[min(35rem,calc(var(--frame-h,calc(100svh-32px))*0.72))]">
               <TickRing size="100%" />
               {/* Small screens: the active skill icon sits in the middle of the big circle
                   (the radar below stays empty). Uses the same data-slot so it keeps the

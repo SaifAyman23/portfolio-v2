@@ -8,9 +8,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         Skip to content
       </a> */}
       {/* <Navbar /> */}
-      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+      <div id="page-content" className="flex-1">
         {children}
-      </main>
+      </div>
     </div>
   )
 }

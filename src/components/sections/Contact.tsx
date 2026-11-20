@@ -151,17 +151,17 @@ export function Contact() {
     <section
       id="contact"
       data-section="contact"
-      className="relative z-70 flex min-h-svh grid-cols-2 items-center justify-center gap-3 px-6 max-lg:flex-col max-lg:items-stretch max-lg:justify-start max-lg:gap-6 max-lg:py-10 lg:grid"
+      className="relative z-70 flex min-h-svh grid-cols-2 items-center justify-center gap-3 px-6 max-lg:flex-col max-lg:items-stretch max-lg:justify-center max-lg:gap-6 max-lg:py-10 lg:grid"
     >
       <div className="start-0 bottom-0 z-20 flex flex-col flex-1 justify-between gap-6 lg:h-full lg:gap-0">
-        <div className="h-auto w-full bg-white p-5 sm:p-8 lg:h-2/3 lg:w-4/6 lg:p-10">
-          <p className="max-w-4xl text-start text-xl sm:text-xl lg:text-base xl:text-5xl">
+        <div className="h-auto w-full bg-white p-4 sm:p-6 lg:h-2/3 lg:w-4/6 lg:p-8">
+          <p className="max-w-4xl text-start text-[1.0625rem] sm:text-xl lg:text-2xl xl:text-4xl">
             You bring the vision, I’ll own the build. From architecture to launch, turning your
             project into a live service that holds, scales, and ships.
           </p>
         </div>
         <h1
-          className="max-w-7xl text-start max-sm:text-5xl sm:max-lg:text-7xl lg:m-10 xl:text-9xl"
+          className="max-w-7xl text-start max-sm:text-5xl sm:max-lg:text-6xl lg:m-10 lg:text-7xl xl:text-8xl"
           style={{ WebkitTextStroke: '2px var(--foreground)' }}
         >
           Let’s Work Together

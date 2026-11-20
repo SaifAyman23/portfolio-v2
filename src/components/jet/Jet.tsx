@@ -1,4 +1,5 @@
 import { useGLTF } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { forwardRef, useEffect, useRef } from 'react'
 import * as THREE from 'three'
@@ -33,6 +34,24 @@ export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'> & { foo
   function Jet({ footer = false, ...props }, ref) {
     const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/jet.glb`)
     const originalsRef = useRef<Map<THREE.MeshStandardMaterial, OriginalMaterial> | null>(null)
+    const maxAnisotropy = useThree((s) => s.gl.capabilities.getMaxAnisotropy())
+
+    // Sharp textures at grazing angles (no smeared/blurry surfaces while the jet banks).
+    useEffect(() => {
+      scene.traverse((child) => {
+        const mesh = child as THREE.Mesh
+        if (!mesh.isMesh) return
+        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+        for (const m of mats as THREE.MeshStandardMaterial[]) {
+          for (const tex of [m.map, m.normalMap, m.roughnessMap, m.metalnessMap, m.emissiveMap]) {
+            if (tex && tex.anisotropy !== maxAnisotropy) {
+              tex.anisotropy = maxAnisotropy
+              tex.needsUpdate = true
+            }
+          }
+        }
+      })
+    }, [scene, maxAnisotropy])
 
     useEffect(() => {
       scene.scale.setScalar(1)

@@ -1,13 +1,20 @@
 import { useGSAP } from '@gsap/react'
 import { Environment, Lightformer, PerspectiveCamera } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { Suspense, useEffect, useRef, useState, type RefObject } from 'react'
-import * as THREE from 'three'
+import {
+  DirectionalLight,
+  Group,
+  MathUtils,
+  type PerspectiveCamera as PerspectiveCameraType,
+} from 'three'
 
 import { Jet } from './Jet'
 
 import type { SectionId } from '@/config/sections'
+import { getScroller } from '@/lib/smoothScroll'
+import { FRAME_GAP, getUiScale, REF_H } from '@/lib/ui-scale'
 import { isWebGLAvailable } from '@/lib/webgl'
 
 type Pose = {
@@ -79,6 +86,37 @@ const SECTION_POSES: Record<SectionId, SectionPoses> = {
   },
 }
 
+const BASE_FOV = 38
+/** Canvas height (= <main> height) at the reference window size, where the scale is 1. */
+const REF_CANVAS_H = REF_H - FRAME_GAP * 2
+
+/**
+ * Keeps the jet the same size relative to the page text. The rest of the page
+ * scales by `ui-scale`, so the camera's vertical field of view is widened/narrowed
+ * to make the jet's on-screen size follow that same scale instead of the raw
+ * canvas height. At the reference size this is exactly BASE_FOV.
+ */
+function ScaledCamera() {
+  const camera = useThree((s) => s.camera)
+  const height = useThree((s) => s.size.height)
+
+  useFrame(() => {
+    if (!('fov' in camera)) return
+    const persp = camera as PerspectiveCameraType
+    const tanBase = Math.tan(MathUtils.degToRad(BASE_FOV / 2))
+    const fov = MathUtils.radToDeg(
+      2 * Math.atan((tanBase * height) / (getUiScale() * REF_CANVAS_H))
+    )
+    if (Math.abs(persp.fov - fov) > 0.001) {
+      // eslint-disable-next-line react-hooks/immutability -- r3f camera is mutated intentionally
+      persp.fov = fov
+      persp.updateProjectionMatrix()
+    }
+  })
+
+  return null
+}
+
 /** Hero's one-off, time-based arrival — far off-screen start point. */
 const INTRO_START: Pose = { position: [-30, -30, 0], rotation: [0.5, 0, -1.5] }
 
@@ -102,7 +140,7 @@ function smoothstep(t: number) {
 
 function blend(a: Pose, b: Pose, t: number): Pose {
   const lerp3 = (from: Pose['position'], to: Pose['position']) =>
-    from.map((v, i) => THREE.MathUtils.lerp(v, to[i], t)) as Pose['position']
+    from.map((v, i) => MathUtils.lerp(v, to[i], t)) as Pose['position']
 
   return { position: lerp3(a.position, b.position), rotation: lerp3(a.rotation, b.rotation) }
 }
@@ -125,9 +163,9 @@ function JetController({
   active: SectionId
   progressRef: RefObject<Record<SectionId, number>>
 }) {
-  const jetRef = useRef<THREE.Group | null>(null)
-  const footerKeyRef = useRef<THREE.DirectionalLight | null>(null)
-  const footerRimRef = useRef<THREE.DirectionalLight | null>(null)
+  const jetRef = useRef<Group | null>(null)
+  const footerKeyRef = useRef<DirectionalLight | null>(null)
+  const footerRimRef = useRef<DirectionalLight | null>(null)
   const introRef = useRef<gsap.core.Timeline | null>(null)
   const introDone = useRef(false)
 
@@ -204,8 +242,9 @@ function JetController({
       introDone.current = true
     }
 
-    window.addEventListener('scroll', skipIntro, { passive: true, once: true })
-    return () => window.removeEventListener('scroll', skipIntro)
+    const scroller = getScroller() ?? window
+    scroller.addEventListener('scroll', skipIntro, { passive: true, once: true })
+    return () => scroller.removeEventListener('scroll', skipIntro)
   }, [])
 
   useFrame((_, delta) => {
@@ -223,13 +262,13 @@ function JetController({
       return
     }
 
-    jet.position.x = THREE.MathUtils.damp(jet.position.x, target.position[0], SMOOTHING, delta)
-    jet.position.y = THREE.MathUtils.damp(jet.position.y, target.position[1], SMOOTHING, delta)
-    jet.position.z = THREE.MathUtils.damp(jet.position.z, target.position[2], SMOOTHING, delta)
+    jet.position.x = MathUtils.damp(jet.position.x, target.position[0], SMOOTHING, delta)
+    jet.position.y = MathUtils.damp(jet.position.y, target.position[1], SMOOTHING, delta)
+    jet.position.z = MathUtils.damp(jet.position.z, target.position[2], SMOOTHING, delta)
 
-    jet.rotation.x = THREE.MathUtils.damp(jet.rotation.x, target.rotation[0], SMOOTHING, delta)
-    jet.rotation.y = THREE.MathUtils.damp(jet.rotation.y, target.rotation[1], SMOOTHING, delta)
-    jet.rotation.z = THREE.MathUtils.damp(jet.rotation.z, target.rotation[2], SMOOTHING, delta)
+    jet.rotation.x = MathUtils.damp(jet.rotation.x, target.rotation[0], SMOOTHING, delta)
+    jet.rotation.y = MathUtils.damp(jet.rotation.y, target.rotation[1], SMOOTHING, delta)
+    jet.rotation.z = MathUtils.damp(jet.rotation.z, target.rotation[2], SMOOTHING, delta)
   })
 
   return (
@@ -266,11 +305,13 @@ export function JetScene({
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50">
       <Canvas
-        dpr={[1, 1.5]}
+        // Always render at least 1.5x (supersampled on 1x screens) and up to 2x for crisp edges.
+        dpr={[1.5, 2]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         frameloop={visible ? 'always' : 'never'}
       >
-        <PerspectiveCamera makeDefault fov={38} position={[0, 1.2, 6]} />
+        <PerspectiveCamera makeDefault fov={BASE_FOV} position={[0, 1.2, 6]} />
+        <ScaledCamera />
         <directionalLight position={[0, 0.8, 7]} intensity={4.8} />
         <hemisphereLight args={['#ffffff', '#8B0606', 0.7]} />
         <ambientLight intensity={0.25} />

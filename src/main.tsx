@@ -5,16 +5,25 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-import { initSmoothScroll } from '@/lib/smoothScroll'
+import { getScroller, initSmoothScroll } from '@/lib/smoothScroll'
+import { initUiScale } from '@/lib/ui-scale'
 
 ScrollTrigger.config({
   ignoreMobileResize: true,
 })
 
+// Must run before anything renders: sets the root font size every rem unit follows.
+initUiScale()
+
 initSmoothScroll()
 
+// Focus the scroller so keyboard scrolling (space / arrows / PgDn) works right away.
+getScroller()?.focus({ preventScroll: true })
+
 if (document.fonts?.ready) {
-  document.fonts.ready.then(() => ScrollTrigger.refresh()).catch(() => {})
+  document.fonts.ready
+    .then(() => requestAnimationFrame(() => ScrollTrigger.refresh()))
+    .catch(() => {})
 }
 
 function dismissSkeleton(): void {

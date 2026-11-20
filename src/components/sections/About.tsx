@@ -9,6 +9,7 @@ import about2Img from '@/assets/img/about/2.webp'
 import { CyberImage } from '@/components/ui/cyber-image'
 import { splitFull, splitWords } from '@/lib/motion'
 import { refreshWhenAssetsSettle } from '@/lib/scroll-refresh'
+import { createStickyPin } from '@/lib/sticky-pin'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
 
@@ -17,14 +18,12 @@ const MOBILE_QUERY = '(max-width: 1023px)'
 
 /** lg and up: pinned, scroll-scrubbed. */
 const DESKTOP_TRIGGER: ScrollTrigger.Vars = {
-  start: 'top top',
-  end: '+=1700',
   scrub: true,
-  pin: true,
-  pinSpacing: true,
-  anticipatePin: 1,
   invalidateOnRefresh: true,
 }
+
+/** Scroll distance (px) the desktop section is held in place. */
+const DESKTOP_HOLD = 1700
 
 /**
  * Small screens: NO pin. The same animation is scrubbed while the section
@@ -76,11 +75,13 @@ export function About() {
         gsap.set(japanese, { opacity: 0, y: 100 })
         gsap.set([img1, img2], { opacity: 0, y: 24 })
 
+        // Desktop: CSS-sticky pin (see lib/sticky-pin.ts) — no JS transform, so no flicker.
+        const pin = isDesktop ? createStickyPin(section, () => DESKTOP_HOLD) : null
+
         const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            ...(isDesktop ? DESKTOP_TRIGGER : MOBILE_TRIGGER),
-          },
+          scrollTrigger: pin
+            ? { ...pin.vars, ...DESKTOP_TRIGGER }
+            : { trigger: section, ...MOBILE_TRIGGER },
         })
 
         /*
@@ -128,6 +129,7 @@ export function About() {
           titleSplit.revert()
           row1Split.revert()
           row2Split.revert()
+          pin?.revert()
         }
       })
 
@@ -146,20 +148,20 @@ export function About() {
       ref={sectionRef}
       id="about"
       data-section="about"
-      className="relative grid min-h-svh grid-cols-1 items-end justify-center gap-3 overflow-x-clip bg-black px-5 pt-32 pb-8 sm:px-6 sm:pt-44 lg:min-h-svh lg:grid-cols-6 lg:items-center lg:py-0"
+      className="relative grid min-h-svh grid-cols-1 items-center justify-center gap-3 overflow-x-clip bg-black px-5 py-10 sm:px-6 sm:pt-44 lg:min-h-svh lg:grid-cols-6 lg:items-center lg:py-0"
     >
       {/* Desktop: Japanese text in its own left column (unchanged) */}
       <div className="hidden lg:col-span-2 lg:flex lg:flex-1">
         <h1
           aria-hidden="true"
-          className="about-japanese font-inter rotate-90 text-[330px] font-bold break-keep whitespace-nowrap text-transparent"
+          className="about-japanese font-inter rotate-90 text-[20.625rem] font-bold break-keep whitespace-nowrap text-transparent"
           style={OUTLINE_STYLE}
         >
           進化
         </h1>
       </div>
 
-      <div className="relative z-10 flex flex-col gap-6 lg:col-span-4 lg:mb-20 lg:gap-10">
+      <div className="relative z-10 flex flex-col gap-4 lg:col-span-4 lg:mb-20 lg:gap-8">
         <div className="relative">
           {/* Mobile / tablet: absolute, no rotation, start-aligned, behind the title */}
           <div
@@ -167,7 +169,7 @@ export function About() {
             className="about-japanese pointer-events-none absolute start-0 bottom-[calc(100%-1rem)] z-0 lg:hidden"
           >
             <div
-              className="font-inter text-[120px] leading-none font-bold whitespace-nowrap text-transparent sm:text-[180px]"
+              className="font-inter text-[7.5rem] leading-none font-bold whitespace-nowrap text-transparent sm:text-[11.25rem]"
               style={OUTLINE_STYLE}
             >
               進化
@@ -182,13 +184,13 @@ export function About() {
           </h1>
         </div>
 
-        <div className="about-rows flex flex-col gap-6 lg:gap-10">
+        <div className="about-rows flex flex-col gap-4 lg:gap-8">
           <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
-            <p className="row-text-1 max-w-2xl text-sm text-white sm:text-lg xl:text-2xl">
+            <p className="row-text-1 max-w-2xl text-base text-white sm:text-lg xl:text-2xl">
               I’m Saif, based in Alexandria. I build end to end, from idea to live product. Keeping
               my work organized, clean, and focused.
             </p>
-            <div className="row-img-1 w-full shrink-0 md:w-50">
+            <div className="row-img-1 w-full shrink-0 my-4 md:w-50">
               <CyberImage
                 src={about1Img}
                 alt="Saif Eldin"
@@ -203,7 +205,7 @@ export function About() {
 
           <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
             {/* Mobile: text first, then image. md+: image on the left. */}
-            <div className="row-img-2 order-2 w-full shrink-0 md:order-1 md:w-50">
+            <div className="row-img-2 order-2 w-full shrink-0 my-4 md:order-1 md:w-50">
               <CyberImage
                 src={about2Img}
                 alt="Saif Eldin"
@@ -213,7 +215,7 @@ export function About() {
                 frameClassName="w-full h-28 md:w-50 md:h-40"
               />
             </div>
-            <p className="row-text-2 order-1 max-w-2xl text-sm text-white sm:text-lg md:order-2 xl:text-2xl">
+            <p className="row-text-2 order-1 max-w-2xl text-base text-white sm:text-lg md:order-2 xl:text-2xl">
               I approach my projects with steady planning. design and architecture first, code
               after. When the structure is right, development stays calm and the product holds.
             </p>
