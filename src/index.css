@@ -498,6 +498,11 @@
   outline: none !important;
 }
 
+#main-content {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
 /* The overlay layer is click-through, except the custom scroll bar. */
 #overlay-root [data-slot='scroll-bar'] {
   pointer-events: auto;

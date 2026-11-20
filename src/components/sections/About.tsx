@@ -166,7 +166,7 @@ export function About() {
           {/* Mobile / tablet: absolute, no rotation, start-aligned, behind the title */}
           <div
             aria-hidden="true"
-            className="about-japanese pointer-events-none absolute start-0 bottom-[calc(100%-1rem)] z-0 lg:hidden"
+            className="about-japanese pointer-events-none absolute start-0 bottom-[calc(100%-2.5rem)] z-0 lg:hidden"
           >
             <div
               className="font-inter text-[7.5rem] leading-none font-bold whitespace-nowrap text-transparent sm:text-[11.25rem]"

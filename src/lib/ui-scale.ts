@@ -59,19 +59,38 @@ export function computeUiScale(width = window.innerWidth, height = window.innerH
 }
 
 let current = 1
+let lastWidth = 0
+let lastHeight = 0
 
 export function getUiScale(): number {
   return current
 }
 
-function apply(): void {
-  current = computeUiScale()
+function apply(force = false): void {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const isCoarsePointer =
+    typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches
+
+  // On touch devices the collapsing/expanding URL bar fires resize with height-only
+  // changes while scrolling. Recomputing font-size/frame vars on every step causes
+  // layout thrash and can make scrolling feel stuck or sluggish, so skip those.
+  if (!force && isCoarsePointer && width === lastWidth && height !== lastHeight) {
+    return
+  }
+
+  if (!force && width === lastWidth && height === lastHeight) return
+
+  lastWidth = width
+  lastHeight = height
+
+  current = computeUiScale(width, height)
   const root = document.documentElement
   root.style.setProperty('--ui-scale', String(current))
 
   // Only set when capped; otherwise the CSS fallback (100dvh/100vw - 32px) is used,
   // which keeps tracking mobile URL-bar changes natively.
-  const frame = computeFrame()
+  const frame = computeFrame(width, height)
   if (frame.capped) {
     root.style.setProperty('--frame-w', `${frame.w}px`)
     root.style.setProperty('--frame-h', `${frame.h}px`)
@@ -84,11 +103,13 @@ function apply(): void {
 
 /** Applies the scale now and keeps it in sync with the window. Returns cleanup. */
 export function initUiScale(): () => void {
-  apply()
-  window.addEventListener('resize', apply)
-  window.addEventListener('orientationchange', apply)
+  apply(true)
+  const onResize = () => apply()
+  const onOrientationChange = () => apply(true)
+  window.addEventListener('resize', onResize)
+  window.addEventListener('orientationchange', onOrientationChange)
   return () => {
-    window.removeEventListener('resize', apply)
-    window.removeEventListener('orientationchange', apply)
+    window.removeEventListener('resize', onResize)
+    window.removeEventListener('orientationchange', onOrientationChange)
   }
 }
