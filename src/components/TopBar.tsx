@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 const BAR_COUNT = 61
 const MIN_HEIGHT = 6
 const MAX_HEIGHT = 34
-const MAX_BLUR = 3
 
 export type TopBarProps = {
   active: SectionId
@@ -24,7 +23,6 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
         const curved = Math.pow(1 - distance, 2)
         return {
           height: MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT) * curved,
-          blur: distance * MAX_BLUR,
           opacity: curved,
         }
       }),
@@ -39,7 +37,7 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
     <header
       data-slot="top-bar"
       className={cn(
-        'pointer-events-none fixed inset-x-0 top-0 z-50 flex max-md:hidden flex-col items-center pt-3',
+        'pointer-events-none fixed inset-x-0 top-0 z-[10000] flex max-md:hidden flex-col items-center pt-3',
         className
       )}
     >
@@ -54,10 +52,9 @@ export function TopBar({ active, direction = 1, className }: TopBarProps) {
             <span
               key={i}
               data-slot={i === center ? 'top-bar-bar-active' : 'top-bar-bar'}
-              className="w-[0.125rem] shrink-0 rounded-full transition-[background-color] duration-500"
+              className="w-[0.125rem] shrink-0 rounded-full transition-[background-color,opacity] duration-500"
               style={{
                 height: `${bar.height / 16}rem`,
-                filter: `blur(${bar.blur.toFixed(2)}px)`,
                 opacity: bar.opacity.toFixed(3),
                 backgroundColor: `color-mix(in srgb, var(--accent) ${redMix.toFixed(1)}%, ${baseColor} ${(100 - redMix).toFixed(1)}%)`,
               }}
