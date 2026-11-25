@@ -27,24 +27,23 @@ export function JapaneseText({
 }: JapaneseTextProps) {
   const showBorder = layer === 'outline' || (layer === 'both' && border)
 
+  const filterClass = showBorder
+    ? layer === 'outline'
+      ? 'outer-stroke-3'
+      : 'outer-stroke-fill-3'
+    : undefined
+
   return (
     <span
       id={id}
-      className={cn('relative inline-block', className)}
-      style={{ fontFamily: JAPANESE_FONT }}
+      aria-hidden={layer === 'outline' || undefined}
+      className={cn('relative inline-block', filterClass, className)}
+      style={{
+        fontFamily: JAPANESE_FONT,
+        color,
+      }}
     >
-      <span className="relative z-0" style={{ color: layer === 'outline' ? 'transparent' : color }}>
-        {text}
-      </span>
-      {showBorder && (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-[9999]"
-          style={{ color: 'transparent', WebkitTextStroke: `3px ${color}` }}
-        >
-          {text}
-        </span>
-      )}
+      {text}
     </span>
   )
 }

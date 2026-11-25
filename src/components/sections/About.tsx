@@ -35,8 +35,6 @@ const MOBILE_TRIGGER: ScrollTrigger.Vars = {
   scrub: true,
 }
 
-const OUTLINE_STYLE = { WebkitTextStroke: '3px var(--accent)' } as const
-
 export function About() {
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -154,8 +152,7 @@ export function About() {
       <div className="hidden lg:col-span-2 lg:flex lg:flex-1">
         <h1
           aria-hidden="true"
-          className="about-japanese font-inter rotate-90 text-[20.625rem] font-bold break-keep whitespace-nowrap text-transparent"
-          style={OUTLINE_STYLE}
+          className="about-japanese font-inter rotate-90 text-[14rem] xl:text-[20.625rem] font-bold break-keep whitespace-nowrap text-accent outer-stroke-3"
         >
           進化
         </h1>
@@ -169,8 +166,7 @@ export function About() {
             className="about-japanese pointer-events-none absolute start-0 bottom-[calc(100%-2.5rem)] z-0 lg:hidden"
           >
             <div
-              className="font-inter text-[7.5rem] leading-none font-bold whitespace-nowrap text-transparent sm:text-[11.25rem]"
-              style={OUTLINE_STYLE}
+              className="font-inter text-[7.5rem] leading-none font-bold whitespace-nowrap text-accent sm:text-[11.25rem] outer-stroke-3"
             >
               進化
             </div>
@@ -179,18 +175,18 @@ export function About() {
             <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
           </div>
 
-          <h1 className="about-title relative z-10 text-start text-7xl text-white sm:text-7xl md:text-8xl xl:text-9xl">
+          <h1 className="about-title relative z-10 text-start text-7xl text-white sm:text-7xl lg:text-8xl xl:text-9xl">
             About
           </h1>
         </div>
 
         <div className="about-rows flex flex-col gap-4 lg:gap-8">
-          <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
+          <div className="flex w-full flex-col items-end gap-4 lg:flex-row lg:items-center lg:gap-12 xl:gap-20">
             <p className="row-text-1 max-w-2xl text-base text-white sm:text-lg xl:text-2xl">
               I’m Saif, based in Alexandria. I build end to end, from idea to live product. Keeping
               my work organized, clean, and focused.
             </p>
-            <div className="row-img-1 w-full shrink-0 my-4 md:w-50">
+            <div className="row-img-1 w-full shrink-0 my-4 lg:w-50">
               <CyberImage
                 src={about1Img}
                 alt="Saif Eldin"
@@ -198,24 +194,24 @@ export function About() {
                 strokeWidth={0}
                 fill="transparent"
                 stroke="transparent"
-                frameClassName="w-full h-28 md:w-50 md:h-40"
+                frameClassName="w-full h-28 lg:w-50 lg:h-40"
               />
             </div>
           </div>
 
-          <div className="flex w-full flex-col items-end gap-4 md:flex-row md:items-center md:gap-12 xl:gap-20">
+          <div className="flex w-full flex-col items-end gap-4 lg:flex-row lg:items-center lg:gap-12 xl:gap-20">
             {/* Mobile: text first, then image. md+: image on the left. */}
-            <div className="row-img-2 order-2 w-full shrink-0 my-4 md:order-1 md:w-50">
+            <div className="row-img-2 order-2 w-full shrink-0 my-4 lg:order-1 lg:w-50">
               <CyberImage
                 src={about2Img}
                 alt="Saif Eldin"
                 loading="lazy"
                 fill="transparent"
                 stroke="transparent"
-                frameClassName="w-full h-28 md:w-50 md:h-40"
+                frameClassName="w-full h-28 lg:w-50 lg:h-40"
               />
             </div>
-            <p className="row-text-2 order-1 max-w-2xl text-base text-white sm:text-lg md:order-2 xl:text-2xl">
+            <p className="row-text-2 order-1 max-w-2xl text-base text-white sm:text-lg lg:order-2 xl:text-2xl">
               I approach my projects with steady planning. design and architecture first, code
               after. When the structure is right, development stays calm and the product holds.
             </p>

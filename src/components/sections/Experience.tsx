@@ -38,7 +38,6 @@ const experiences = [
 const DESKTOP_QUERY = '(min-width: 1024px)'
 const MOBILE_QUERY = '(max-width: 1023px)'
 
-const OUTLINE_STYLE = { WebkitTextStroke: '3px #FFFFFF95' } as const
 const COVER_IMAGE_STYLE = { filter: 'brightness(0.30) blur(10px)' } as const
 
 export function Experience() {
@@ -292,8 +291,7 @@ export function Experience() {
           <h1
             data-slot="experience-outline-title"
             aria-hidden="true"
-            className="absolute inset-0 flex items-center justify-center text-transparent xl:text-[12.5rem]"
-            style={OUTLINE_STYLE}
+            className="absolute inset-0 flex items-center justify-center text-[#FFFFFF95] xl:text-[12.5rem] outer-stroke-3"
           >
             Experience
           </h1>
@@ -303,7 +301,7 @@ export function Experience() {
       {/* Experience content */}
       <div className="relative z-10 flex min-h-svh flex-col items-center justify-center gap-8 px-5 py-16 sm:px-6 lg:gap-50 lg:px-4 lg:py-0">
         {/* Mobile / tablet title, same style as the About title */}
-        <h1 className="experience-title relative -top-5 self-start text-start text-5xl text-white sm:text-6xl md:text-7xl lg:hidden">
+        <h1 className="experience-title relative -top-5 self-start text-start text-5xl text-white sm:text-6xl lg:hidden">
           Experience
         </h1>
 
@@ -319,7 +317,7 @@ export function Experience() {
               data-slot="experience-description"
               className="w-3/5 max-w-300 text-start lg:w-auto"
             >
-              <p className="text-[0.9375rem] font-normal text-white sm:text-lg md:text-2xl lg:text-4xl">
+              <p className="text-[0.9375rem] font-normal text-white sm:text-lg lg:text-4xl">
                 {experience.description}
               </p>
             </div>
@@ -334,7 +332,7 @@ export function Experience() {
                 loading={i === 0 ? 'eager' : 'lazy'}
                 strokeWidth={0}
                 fill="transparent"
-                frameClassName="w-28 h-20 sm:w-44 sm:h-28 md:w-60 md:h-40 lg:w-80 lg:h-50"
+                frameClassName="w-28 h-20 sm:w-44 sm:h-28 lg:w-80 lg:h-50"
               />
             </div>
           </div>

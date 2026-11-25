@@ -23,24 +23,24 @@ const JetScene = lazy(() =>
 
 function App() {
   const { active, direction, progressRef } = useSectionTracker()
-  const isXl = useMediaQuery('(min-width: 1280px)')
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [idle, setIdle] = useState(false)
 
   useEffect(() => {
-    if (!isXl) return
+    if (!isDesktop) return
     if (typeof window.requestIdleCallback === 'function') {
       const id = window.requestIdleCallback(() => setIdle(true), { timeout: 3000 })
       return () => window.cancelIdleCallback(id)
     }
     const t = window.setTimeout(() => setIdle(true), 2000)
     return () => window.clearTimeout(t)
-  }, [isXl])
+  }, [isDesktop])
 
   return (
     <>
       <SeoUpdater />
       <Suspense fallback={null}>
-        {isXl && idle && (
+        {isDesktop && idle && (
           <Overlay>
             <JetScene active={active} progressRef={progressRef} />
           </Overlay>

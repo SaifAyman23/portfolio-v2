@@ -28,7 +28,7 @@ export function HeroInfo({
         return (
           <Button
             key={link.label}
-            className="px-5 py-2 sm:px-8 text-sm md:text-lg"
+            className="px-5 py-2 sm:px-8 text-sm lg:text-lg"
             stroke={stroke}
             strokeWidth={strokeWidth}
             fill={fill}

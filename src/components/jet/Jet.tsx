@@ -56,7 +56,23 @@ export const Jet = forwardRef<THREE.Group, React.ComponentProps<'group'> & { foo
     useEffect(() => {
       scene.scale.setScalar(1)
 
-      const box = new THREE.Box3().setFromObject(scene)
+      // Measure in the model's own space. Box3.setFromObject works in world space, so the
+      // jet group's current rotation/position (it is flying around) changed the measured
+      // size and, with it, the scale the model was normalised to.
+      scene.updateWorldMatrix(true, true)
+      const toLocal = new THREE.Matrix4().copy(scene.matrixWorld).invert()
+      const box = new THREE.Box3()
+      const meshBox = new THREE.Box3()
+      scene.traverse((child) => {
+        const mesh = child as THREE.Mesh
+        if (!mesh.isMesh) return
+        mesh.geometry.computeBoundingBox()
+        if (!mesh.geometry.boundingBox) return
+        meshBox
+          .copy(mesh.geometry.boundingBox)
+          .applyMatrix4(new THREE.Matrix4().multiplyMatrices(toLocal, mesh.matrixWorld))
+        box.union(meshBox)
+      })
       const size = new THREE.Vector3()
 
       box.getSize(size)

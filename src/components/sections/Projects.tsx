@@ -357,10 +357,7 @@ export function Projects() {
         {/* max-lg:z-10 lifts the image column (title + image) above the Japanese text on small screens */}
         <div className="relative flex flex-col items-end justify-between gap-5 lg:col-span-6">
           <h1
-            className="absolute start-0 top-0 sm:-rotate-30 text-transparent max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[9.375rem]"
-            style={{
-              WebkitTextStroke: '3px var(--foreground)',
-            }}
+            className="absolute start-0 top-0 sm:-rotate-30 text-foreground max-sm:text-6xl sm:max-lg:start-6 sm:max-lg:text-8xl lg:start-20 lg:top-20 xl:text-[9.375rem] outer-stroke-3"
           >
             Projects
           </h1>
@@ -434,10 +431,7 @@ export function Projects() {
           className="pointer-events-none absolute top-5 -right-2 text-center sm:-top-6 lg:pointer-events-auto lg:relative lg:top-auto lg:right-auto lg:col-span-3"
         >
           <h1
-            className="font-bold text-transparent hidden lg:block text-[20rem] [writing-mode:vertical-rl]"
-            style={{
-              WebkitTextStroke: '6px var(--accent)',
-            }}
+            className="font-bold text-accent hidden lg:block text-[14rem] xl:text-[20rem] [writing-mode:vertical-rl] outer-stroke-3"
           >
             最強
           </h1>

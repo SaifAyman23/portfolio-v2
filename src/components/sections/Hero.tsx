@@ -322,7 +322,7 @@ export function Hero() {
     <section
       id="hero"
       data-section="hero"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center gap-3 overflow-hidden px-6 py-10 sm:px-10 xl:px-6"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center gap-3 overflow-hidden px-6 py-10 sm:px-10 lg:pt-24 xl:px-6 xl:pt-10"
     >
       {/* White screen */}
       <div id="hero-overlay" className="pointer-events-none absolute inset-0 z-70 bg-white" />
@@ -419,12 +419,21 @@ export function Hero() {
         {/* Below lg: full-width flex row so the vertical text is truly centered (max-lg only, lg+ untouched) */}
         <div className="max-lg:flex max-lg:w-full max-lg:justify-center lg:col-span-4">
           <div id="hero-japanese" className="text-center max-lg:flex max-lg:justify-center">
-            <JapaneseText
-              text="ケン"
-              border
-              color="black"
-              className="text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] xl:text-[11.5rem] font-bold text-foreground [writing-mode:vertical-rl]"
-            />
+            {/* From lg (where the jet is): stacked in one grid cell, the solid glyph (with its ring) stays below the jet (z-50) and the outline ring is repeated above it (z-60). Below lg there is no jet, so only the plain glyph is shown (no ring, no outline layer). */}
+            <span className="inline-grid">
+              <JapaneseText
+                text="ケン"
+                border
+                color="black"
+                className="[grid-area:1/1] max-lg:[filter:none]! text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] xl:text-[11.5rem] font-bold text-foreground [writing-mode:vertical-rl]"
+              />
+              <JapaneseText
+                text="ケン"
+                layer="outline"
+                color="black"
+                className="[grid-area:1/1] z-60 max-lg:hidden text-8xl sm:text-9xl lg:text-[clamp(8rem,23vh,250px)] xl:text-[11.5rem] font-bold text-foreground [writing-mode:vertical-rl]"
+              />
+            </span>
           </div>
         </div>
 

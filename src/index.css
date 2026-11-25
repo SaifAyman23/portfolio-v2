@@ -526,3 +526,24 @@ textarea:active {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* ============================================================
+   OUTER TEXT STROKE UTILITIES
+   True outer perimeter strokes (dilates raster alpha, preserves
+   font counter spaces without drawing internal shape strokes).
+   ============================================================ */
+.outer-stroke-3 {
+  filter: url(#outer-stroke-3);
+}
+
+.outer-stroke-2 {
+  filter: url(#outer-stroke-2);
+}
+
+.outer-stroke-fill-3 {
+  filter: url(#outer-stroke-fill-3);
+}
+
+.outer-stroke-fill-2 {
+  filter: url(#outer-stroke-fill-2);
+}

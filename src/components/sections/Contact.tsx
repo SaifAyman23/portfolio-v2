@@ -12,6 +12,9 @@ gsap.registerPlugin(Observer)
 /** How many shapes to show on small screens (12 per row → 4 rows). */
 const MOBILE_SHAPES = 48
 
+/** From lg the 100 shapes sit in a square-ish 10 × 10 grid that always fits the section. */
+const DESKTOP_COLS = 10
+
 /** True from the `lg` breakpoint (1024px) and up. */
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(
@@ -53,7 +56,7 @@ export function Contact() {
     }
     for (let row = 6; row < 8; row++) {
       for (let col = 0; col < 4; col++) {
-        const idx = row * 12 + col
+        const idx = row * DESKTOP_COLS + col
         if (idx < arr.length) arr[idx] = 'white'
       }
     }
@@ -160,30 +163,32 @@ export function Contact() {
             project into a live service that holds, scales, and ships.
           </p>
         </div>
-        <h1
-          className="max-w-7xl text-start max-sm:text-5xl sm:max-lg:text-6xl lg:m-10 lg:text-7xl xl:text-8xl"
-          style={{ WebkitTextStroke: '2px var(--foreground)' }}
-        >
+        <h1 className="max-w-7xl text-start text-foreground max-sm:text-5xl sm:max-lg:text-6xl lg:m-10 lg:text-7xl xl:text-8xl outer-stroke-fill-2 max-lg:[filter:none]!">
           Let’s Work Together
         </h1>
       </div>
 
       {/*
         Small screens: the shapes fill the full width below the text (12 per row, no gaps).
-        lg and up: original layout.
+        lg and up: a 10 × 10 grid inside a box that fills its column. The grid is 4:5 and as wide as
+        the column or as tall as the section allows (container units), so it scales down to fit
+        and never overflows. From lg up to xl the chamfers use a smaller scale (xl+ keeps the
+        global --ui-scale), because the cells are narrower there.
       */}
-      <div className="flex h-auto w-full flex-wrap content-start gap-0 p-0 max-lg:order-first lg:h-full lg:w-auto lg:gap-3 lg:p-10">
-        {(isDesktop ? fills : fills.slice(0, MOBILE_SHAPES)).map((fill, i) => (
-          <CyberFrame
-            key={i}
-            className="size-1/12 hover:scale-75 max-lg:aspect-square max-lg:h-auto"
-            chamferX={isDesktop ? 40 : 14}
-            chamferY={isDesktop ? 30 : 12}
-            strokeWidth={0}
-            stroke="transparent"
-            fill={fill}
-          />
-        ))}
+      <div className="flex h-auto w-full flex-wrap content-start gap-0 p-0 max-lg:order-first lg:size-full lg:content-center lg:items-center lg:justify-center lg:p-10 lg:[container-type:size]">
+        <div className="contents lg:grid lg:aspect-[4/5] lg:w-[min(100cqw,80cqh)] lg:grid-cols-10 lg:grid-rows-10 lg:gap-2 max-xl:lg:[--ui-scale:0.7] xl:gap-3">
+          {(isDesktop ? fills : fills.slice(0, MOBILE_SHAPES)).map((fill, i) => (
+            <CyberFrame
+              key={i}
+              className="size-1/12 hover:scale-75 max-lg:aspect-square max-lg:h-auto lg:size-full"
+              chamferX={isDesktop ? 40 : 14}
+              chamferY={isDesktop ? 30 : 12}
+              strokeWidth={0}
+              stroke="transparent"
+              fill={fill}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )
